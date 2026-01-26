@@ -1,6 +1,5 @@
 #!/bin/bash
 source "$(dirname "$0")/00_common.sh"
-
 info "Checking cron jobs..."
 
 found=0
@@ -13,23 +12,10 @@ for d in /etc/cron.d /etc/cron.daily /etc/cron.hourly /var/spool/cron/crontabs; 
     fi
 done
 
-# Check writable cron files
-for f in /etc/crontab /etc/cron.d/*; do
-    if [ -w "$f" ] 2>/dev/null; then
-        success "WRITABLE: $f"
-        found=1
-    fi
-done
-
-# Check cron jobs running as root with writable scripts
-crontab -l 2>/dev/null | grep -v '^#' | while read -r line; do
-    script=$(echo "$line" | grep -oE '/[^ ]+')
-    if [ -n "$script" ] && [ -w "$script" ] 2>/dev/null; then
-        success "WRITABLE SCRIPT in cron: $script"
-        found=1
-    fi
-done
-
-if [ $found -eq 0 ]; then
-    fail "No exploitable cron jobs found"
+# Check crontab
+if crontab -l 2>/dev/null | grep -v '^#' | grep -q '.'; then
+    info "User crontab entries:"
+    crontab -l 2>/dev/null | grep -v '^#' | head -5
 fi
+
+[ $found -eq 0 ] && fail "No writable cron directories"

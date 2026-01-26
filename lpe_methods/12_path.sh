@@ -1,6 +1,5 @@
 #!/bin/bash
 source "$(dirname "$0")/00_common.sh"
-
 info "Checking PATH hijacking..."
 
 found=0
@@ -11,7 +10,4 @@ for d in "${DIRS[@]}"; do
         found=1
     fi
 done
-
-if [ $found -eq 0 ]; then
-    fail "No writable PATH directories"
-fi
+[ $found -eq 0 ] && fail "No writable PATH"
