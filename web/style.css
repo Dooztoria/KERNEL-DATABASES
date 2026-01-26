@@ -175,3 +175,37 @@ main{flex:1;padding:20px;overflow-y:auto;max-height:100vh}
 .sidebar{width:50px}
 main{padding:12px}
 }
+
+/* Session Timer */
+.session-timer-box{
+    text-align:center;
+    margin:16px 0;
+    padding:8px 4px;
+    background:rgba(0,0,0,0.3);
+    border-radius:8px;
+    border:1px solid var(--border);
+}
+.session-timer{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14px;
+    font-weight:600;
+    color:var(--green);
+}
+.session-timer.warning{color:#f59e0b}
+.session-timer.danger{color:var(--red);animation:pulse 1s infinite}
+.session-label{
+    font-size:8px;
+    color:var(--dim);
+    letter-spacing:1px;
+    margin-top:2px;
+}
+
+/* Mode badge */
+.mode-badge{
+    font-size:9px;
+    padding:3px 8px;
+    background:rgba(168,85,247,0.2);
+    color:#a855f7;
+    border-radius:4px;
+    margin-right:8px;
+}

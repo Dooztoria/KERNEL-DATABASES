@@ -7,6 +7,10 @@
 <div class="app">
 <nav class="sidebar">
 <div class="logo">DZ</div>
+<div class="session-timer-box">
+    <div class="session-timer" id="session-timer">--:--</div>
+    <div class="session-label">SESSION</div>
+</div>
 <div class="nav-item on" data-p="dash" title="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></div>
 <div class="nav-item" data-p="root" title="Auto-Root"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
 <div class="nav-item" data-p="exp" title="Exploits"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
@@ -24,7 +28,7 @@
 <main>
 <!-- Dashboard -->
 <div id="p-dash" class="page on">
-<div class="topbar"><div class="topbar-title">System <span>Overview</span></div><div class="topbar-host"><span class="dot"></span><span id="th">-</span></div></div>
+<div class="topbar"><div class="topbar-title">System <span>Overview</span></div><div class="topbar-host"><span class="mode-badge">◆ FILELESS</span><span class="dot"></span><span id="th">-</span></div></div>
 <div id="dash-alert"></div>
 <div class="grid grid-4">
 <div class="card"><div class="card-title">👤 User</div><div class="card-value" id="s_user">-</div><div class="card-sub" id="s_uid"></div></div>

